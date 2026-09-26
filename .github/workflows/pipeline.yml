@@ -26,6 +26,7 @@ jobs:
       - run: python -m engine.run
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
           AI_MODEL_ANALYSIS: ${{ vars.AI_MODEL_ANALYSIS || 'gemini-flash-lite-latest' }}
       - name: Commit des données
         run: |

@@ -201,7 +201,7 @@ def test_run_publishes_football_data_when_a_token_is_given(tmp_path):
     data = json.loads((tmp_path / "site" / "data" / "football.json").read_text("utf-8"))
     validate("football", data)
     assert data["competitions"][0]["standings"][0]["team"] == "Monaco" and data["results"][0]["home"] == "Lens"
-    assert report["football"] == {"ok": 3, "failed": 0}
+    assert report["football"] == {"ok": 4, "failed": 0}      # 1 classement + résultats + calendrier vide + fenêtre suivante
 
 
 def test_run_without_a_token_reports_it_and_publishes_nothing(tmp_path):

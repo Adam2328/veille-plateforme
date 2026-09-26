@@ -92,6 +92,32 @@ def test_match_windows_respect_the_ten_day_limit_of_the_free_plan():
     assert "dateFrom=2026-09-26" in windows[1] and "dateTo=2026-10-05" in windows[1]
 
 
+def test_empty_fixture_window_looks_at_the_next_ten_days_once():
+    urls = []
+    later = {"matches": [match(9, "TIMED", "Lens", "Lyon", None, None, "2026-10-09T18:45:00Z")]}
+
+    def break_week(url, t):
+        urls.append(url)
+        if "/standings" in url:
+            return standings(row(1, "X"))
+        if "dateFrom=2026-09-26" in url:
+            return {"matches": []}            # trêve internationale : rien dans les 9 jours
+        return later if "dateFrom=2026-10-06" in url else MATCHES
+
+    data, health = collect_football(CFG, "secret", None, NOW, break_week)
+    assert [m["id"] for m in data["fixtures"]] == [9]
+    windows = [u for u in urls if "/matches" in u]
+    assert len(windows) == 3 and "dateFrom=2026-10-06" in windows[2] and "dateTo=2026-10-15" in windows[2]
+    assert len(urls) <= 9                      # budget du plan gratuit : 10 requêtes par minute
+    validate("football", data)
+
+
+def test_no_extra_request_when_the_first_fixture_window_has_matches():
+    urls = []
+    collect_football(CFG, "secret", None, NOW, lambda url, t: urls.append(url) or fake(url, t))
+    assert len([u for u in urls if "/matches" in u]) == 2
+
+
 def test_without_a_token_nothing_is_requested_and_nothing_is_published():
     def never(url, t):
         raise AssertionError("aucun appel attendu")
@@ -139,3 +165,22 @@ def test_lists_are_capped_at_forty_entries():
     many = {"matches": [match(i, "FINISHED", "A", "B", 1, 0, f"2026-09-{(i % 9) + 17:02d}T18:00:00Z") for i in range(60)]}
     data, _ = collect_football(CFG, "secret", None, NOW, lambda url, t: standings(row(1, "X")) if "/standings" in url else many)
     assert len(data["results"]) == 40
+
+
+def _fixture(name):
+    import json
+    import pathlib
+    return json.loads((pathlib.Path(__file__).parent / "fixtures" / name).read_text("utf-8"))
+
+
+def test_real_standings_response_is_parsed():
+    rows = parse_standings(_fixture("football_data_standings.json"))
+    assert len(rows) == 3 and [r["position"] for r in rows] == [1, 2, 3]
+    assert all(isinstance(r["team"], str) and r["team"] and isinstance(r["points"], int) for r in rows)
+    assert all(isinstance(r["form"], str) for r in rows)          # l'API renvoie form = null
+
+
+def test_real_matches_response_is_parsed():
+    matches = parse_matches(_fixture("football_data_matches.json"), {"FINISHED"})
+    assert matches and all(isinstance(m["home_score"], int) and m["date"].endswith("+00:00") for m in matches)
+    assert {m["competition"] for m in matches} <= {"FL1", "PL"}

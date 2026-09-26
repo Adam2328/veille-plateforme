@@ -81,9 +81,15 @@ def collect_football(cfg: dict, token: str | None, previous: dict | None, now: d
     played = _try(health, "football:matches:results", lambda: sorted(parse_matches(
         fetch(window(today - timedelta(days=cfg.get("results_days", 9)), today), token), {"FINISHED"}),
         key=lambda m: m["date"], reverse=True)[:_KEEP])
-    upcoming = _try(health, "football:matches:fixtures", lambda: sorted(parse_matches(
-        fetch(window(today, today + timedelta(days=cfg.get("fixtures_days", 9))), token), _FIXTURE_STATUSES),
-        key=lambda m: m["date"])[:_KEEP])
+    ahead = cfg.get("fixtures_days", 9)
+
+    def fixtures(start, end) -> list:
+        return sorted(parse_matches(fetch(window(start, end), token), _FIXTURE_STATUSES), key=lambda m: m["date"])[:_KEEP]
+
+    upcoming = _try(health, "football:matches:fixtures", lambda: fixtures(today, today + timedelta(days=ahead)))
+    if upcoming == []:      # trêve : une seule requête de plus sur les 10 jours suivants (9 requêtes au plus par cycle)
+        start = today + timedelta(days=ahead + 1)
+        upcoming = _try(health, "football:matches:fixtures-next", lambda: fixtures(start, start + timedelta(days=9)))
     return {"checked_at": iso(now), "competitions": comps,
             "results": played if played is not None else old.get("results", []),
             "fixtures": upcoming if upcoming is not None else old.get("fixtures", [])}, health
