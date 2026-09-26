@@ -47,8 +47,8 @@ plateforme/
   data/
     raw/                     # items bruts, purgés après 14 jours
     events/                  # 1 JSONL par mois, source de vérité
-    public/                  # ce que lit le site
   site/                      # HTML + CSS + modules JS natifs, sans build
+    data/                    # JSON publiés par le pipeline, servis tels quels (Vercel ne sert que site/)
   tests/                     # pytest + fixtures
   .github/workflows/pipeline.yml
 ```
@@ -86,7 +86,7 @@ Cadence : toutes les 30 min de 6h à 23h (heure de Paris), avec un déclencheur 
 4. **score + fiabilité** : voir sections 6 et 7.
 5. **structured** : adapters API, sans LLM.
 6. **summarize** : voir section 8.
-7. **publish** : validation de schéma, écriture de `data/public/*`. Jamais de publication d'un JSON invalide : le dernier bon état est conservé et affiché « périmé depuis X ».
+7. **publish** : validation de schéma, écriture de `site/data/*`. Jamais de publication d'un JSON invalide : le dernier bon état est conservé et affiché « périmé depuis X ».
 
 ## 6. Score d'importance
 
