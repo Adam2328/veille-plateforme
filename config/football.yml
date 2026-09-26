@@ -1,0 +1,10 @@
+competitions:                  # plan gratuit de football-data.org : 10 requêtes par minute, donc 6 classements + 2 fenêtres de matchs
+  # flashscore : page de la compétition sur flashscore.fr (lien « approfondir » ; adresses testées le 26/09/2026)
+  - {code: FL1, name: "Ligue 1", flashscore: "https://www.flashscore.fr/football/france/ligue-1/"}
+  - {code: PL, name: "Premier League", flashscore: "https://www.flashscore.fr/football/angleterre/premier-league/"}
+  - {code: PD, name: "Liga", flashscore: "https://www.flashscore.fr/football/espagne/laliga/"}
+  - {code: SA, name: "Serie A", flashscore: "https://www.flashscore.fr/football/italie/serie-a/"}
+  - {code: BL1, name: "Bundesliga", flashscore: "https://www.flashscore.fr/football/allemagne/bundesliga/"}
+  - {code: CL, name: "Ligue des champions", flashscore: "https://www.flashscore.fr/football/europe/ligue-des-champions/"}
+results_days: 9                # les fenêtres de /matches sont limitées à 10 jours par le plan gratuit
+fixtures_days: 9

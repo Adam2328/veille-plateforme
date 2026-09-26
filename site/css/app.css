@@ -99,3 +99,26 @@ button.link { background: none; border: 0; color: var(--accent); font: inherit; 
 .layer-analyse { border-left-color: var(--accent); }
 .layer-interpretation { border-left-color: var(--amber); }
 .layer-incertitude { border-left-color: var(--red); }
+
+.tabs { display: flex; gap: 4px; overflow-x: auto; margin: 10px 0 18px; border-bottom: 1px solid var(--line); scrollbar-width: thin; }
+.tabs a { flex: none; padding: 8px 12px; text-decoration: none; color: var(--soft); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabs a[aria-current="page"] { color: var(--text); border-bottom-color: var(--dom, var(--accent)); font-weight: 600; }
+.tabs.sub { border-bottom: 0; margin-top: 0; }
+.tabs.sub a { border: 1px solid var(--line); border-radius: var(--radius); margin: 0; }
+.tabs.sub a[aria-current="page"] { border-color: var(--dom, var(--accent)); }
+
+.cmp { font: 600 12px var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--soft); margin: 18px 0 6px; }
+.matches { list-style: none; padding: 0; margin: 0; }
+.match { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: baseline; padding: 7px 10px; border: 1px solid var(--line); background: var(--card); margin-bottom: 4px; border-radius: var(--radius); }
+.match .mh { text-align: right; }
+.match .ms { font: 500 13px var(--mono); min-width: 84px; text-align: center; }
+.match.next .ms { color: var(--soft); font-weight: 400; font-size: 12px; }
+.fs { font: 500 11px var(--sans); text-transform: none; letter-spacing: 0; margin-left: 8px; color: var(--accent); }
+.fb-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0 20px; margin-top: 10px; }
+
+.standings { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); font-size: 14px; }
+.standings th, .standings td { padding: 6px 8px; text-align: center; border-bottom: 1px solid var(--line); }
+.standings th { font: 500 11px var(--mono); text-transform: uppercase; color: var(--soft); }
+.standings .tn { text-align: left; }
+.standings .form { font-family: var(--mono); letter-spacing: 1px; color: var(--soft); }
+@media (max-width: 768px) { .standings .form { display: none; } .standings th:last-child { display: none; } .match .ms { min-width: 70px; } }

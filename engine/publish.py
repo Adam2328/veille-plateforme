@@ -114,3 +114,8 @@ def publish(root: Path, home: dict, domain_files: list) -> None:
 def publish_quotes(root: Path, quotes: dict) -> None:
     validate("quotes", quotes)
     write_if_changed(root / "site" / "data" / "quotes.json", quotes)
+
+
+def publish_football(root: Path, data: dict) -> None:
+    validate("football", data)
+    write_if_changed(root / "site" / "data" / "football.json", data)

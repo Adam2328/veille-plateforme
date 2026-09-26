@@ -14,4 +14,6 @@ def load_config(root: pathlib.Path | str = ROOT) -> dict:
         domains[d["id"]] = d
     quotes_path = root / "config" / "quotes.yml"
     quotes = yaml.safe_load(quotes_path.read_text("utf-8"))["symbols"] if quotes_path.exists() else []
-    return {"global": g, "domains": domains, "quotes": quotes}
+    football_path = root / "config" / "football.yml"
+    football = yaml.safe_load(football_path.read_text("utf-8")) if football_path.exists() else None
+    return {"global": g, "domains": domains, "quotes": quotes, "football": football}

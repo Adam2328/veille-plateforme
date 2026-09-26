@@ -43,3 +43,20 @@ def test_every_summary_profile_used_by_a_domain_exists():
 def test_publishers_cover_the_main_financial_outlets():
     publishers = load_config()["global"]["publishers"]
     assert {"bloomberg", "wsj", "cnbc", "marketwatch", "financial times"} <= set(publishers)
+
+
+def test_football_domain_is_configured_with_rumor_rules_and_noise_filters():
+    cfg = load_config()
+    fb = cfg["domains"]["football"]
+    assert fb["order"] > cfg["domains"]["finance"]["order"] and fb["relevance"] is True
+    assert {"transfer", "injury", "suspension", "result", "coach"} <= set(fb["kinds"])
+    assert len({s["tier"] for s in fb["sources"]}) >= 3 and len(fb["sources"]) >= 12
+    assert fb["rumor_markers"] and fb["confirm_markers"]
+    assert not set(m.lower() for m in fb["rumor_markers"]) & set(m.lower() for m in fb["confirm_markers"])
+    for word in ("pronostic", "bookmaker", "ea fc"):
+        assert any(word in e.lower() for e in fb["exclude"]), word
+
+
+def test_publishers_cover_the_main_football_outlets():
+    publishers = load_config()["global"]["publishers"]
+    assert {"rmc sport", "eurosport", "sky sports", "bbc sport", "espn", "marca"} <= set(publishers)

@@ -181,3 +181,49 @@ def test_relevance_filter_drops_articles_matching_no_keyword_or_entity(tmp_path)
     shutil.rmtree(tmp_path / "data")
     write(DOM)
     assert run(tmp_path, now=NOW, fetch=lambda url: RSS_MIXED)["new_items"] == 2
+
+
+FB_CFG = {"competitions": [{"code": "FL1", "name": "Ligue 1"}], "results_days": 9, "fixtures_days": 9}
+
+
+def fb_fetch(url, token):
+    if "/standings" in url:
+        return {"standings": [{"type": "TOTAL", "table": [{"position": 1, "team": {"shortName": "Monaco"}, "playedGames": 5,
+                "won": 4, "draw": 1, "lost": 0, "goalsFor": 8, "goalsAgainst": 3, "goalDifference": 5, "points": 13, "form": "W,D"}]}]}
+    return {"matches": [{"id": 1, "utcDate": "2026-09-25T18:45:00Z", "status": "FINISHED", "matchday": 5, "competition": {"code": "FL1"},
+                         "homeTeam": {"shortName": "Lens"}, "awayTeam": {"shortName": "Lille"}, "score": {"fullTime": {"home": 0, "away": 0}}}]}
+
+
+def test_run_publishes_football_data_when_a_token_is_given(tmp_path):
+    setup(tmp_path)
+    (tmp_path / "config" / "football.yml").write_text(yaml.safe_dump(FB_CFG), "utf-8")
+    report = run(tmp_path, now=NOW, fetch=fake_fetch, football_token="secret", football_fetch=fb_fetch)
+    data = json.loads((tmp_path / "site" / "data" / "football.json").read_text("utf-8"))
+    validate("football", data)
+    assert data["competitions"][0]["standings"][0]["team"] == "Monaco" and data["results"][0]["home"] == "Lens"
+    assert report["football"] == {"ok": 4, "failed": 0}      # 1 classement + résultats + calendrier vide + fenêtre suivante
+
+
+def test_run_without_a_token_reports_it_and_publishes_nothing(tmp_path):
+    setup(tmp_path)
+    (tmp_path / "config" / "football.yml").write_text(yaml.safe_dump(FB_CFG), "utf-8")
+    report = run(tmp_path, now=NOW, fetch=fake_fetch, football_token=None, football_fetch=fb_fetch)
+    assert not (tmp_path / "site" / "data" / "football.json").exists()
+    assert "football-data" in report["sources_failed"] and report["football"] == {"ok": 0, "failed": 1}
+
+
+def test_football_data_is_skipped_when_only_names_other_domains(tmp_path):
+    setup(tmp_path)
+    (tmp_path / "config" / "football.yml").write_text(yaml.safe_dump(FB_CFG), "utf-8")
+    run(tmp_path, now=NOW, fetch=fake_fetch, only=["ia"], football_token="secret", football_fetch=fb_fetch)
+    assert not (tmp_path / "site" / "data" / "football.json").exists()
+
+
+def test_football_file_is_not_rewritten_when_nothing_changed(tmp_path):
+    setup(tmp_path)
+    (tmp_path / "config" / "football.yml").write_text(yaml.safe_dump(FB_CFG), "utf-8")
+    path = tmp_path / "site" / "data" / "football.json"
+    run(tmp_path, now=NOW, fetch=fake_fetch, football_token="secret", football_fetch=fb_fetch)
+    first = path.read_bytes()
+    run(tmp_path, now=NOW.replace(hour=13), fetch=fake_fetch, football_token="secret", football_fetch=fb_fetch)
+    assert path.read_bytes() == first
