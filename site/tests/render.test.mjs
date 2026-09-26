@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { defaultState } from '../js/state.js';
-import { esc, safeUrl, timeAgo, badges, card, domainBlock, renderHome, renderEvent, renderNav } from '../js/render.js';
+import { esc, safeUrl, timeAgo, badges, card, domainBlock, renderHome, renderEvent, renderNav, renderQuotes, renderDomain } from '../js/render.js';
 
 const NOW = Date.parse('2026-09-26T12:00:00Z');
 const SRC = { name: 'S', tier: 2, url: 'https://ex.com/a', title: 'x', published_at: '2026-09-26T10:30:00Z' };
@@ -103,4 +103,68 @@ test('la carte n’affiche pas deux fois le titre quand « à retenir » le rép
   const html = card(e, 'seen', NOW);
   assert.equal(html.split('Même texte').length - 1, 1);
   assert.match(html, /Première phrase utile\./);
+});
+
+const Q = (o = {}) => ({ symbol: '^FCHI', name: 'CAC 40', group: 'Indices', price: 8077.8, change: -3.63, change_pct: -0.04, currency: 'EUR', as_of: '2026-09-26T10:00:00Z', stale: false, ...o });
+const LAYERS = { faits: ['Un fait.'], analyse: ['Une analyse.'], interpretation: [], incertitude: ['Un doute.'], actifs: ['Obligations'], favorables: [], risques: [], a_surveiller: [] };
+
+test('le ruban affiche nom, prix et variation avec la bonne classe', () => {
+  const html = renderQuotes({ checked_at: 'x', quotes: [Q(), Q({ name: 'Nasdaq', change_pct: 1.2 }), Q({ name: 'VIX', change_pct: 0 })] }, NOW);
+  assert.match(html, /CAC 40/);
+  assert.match(html, /8\s077,8/);
+  assert.match(html, /class="q down"/);
+  assert.match(html, /class="q up"/);
+  assert.match(html, /class="q flat"/);
+});
+
+test('le groupe Taux affiche la variation en points et une variation nulle un tiret', () => {
+  const html = renderQuotes({ checked_at: 'x', quotes: [Q({ group: 'Taux', name: 'US 10 ans', price: 5.18, change: 0.22, change_pct: 4.4 }), Q({ name: 'Or', change: null, change_pct: null })] }, NOW);
+  assert.match(html, /\+0,22 pt/);
+  assert.ok(!html.includes('4,4'));
+  assert.match(html, /—/);
+});
+
+test('une valeur périmée est signalée', () => {
+  const html = renderQuotes({ checked_at: 'x', quotes: [Q({ stale: true })] }, NOW);
+  assert.match(html, /≈/);
+  assert.match(html, /non actualisée/);
+});
+
+test('sans cours le ruban est vide et un nom malveillant est inerte', () => {
+  assert.equal(renderQuotes(null, NOW), '');
+  assert.equal(renderQuotes({ checked_at: 'x', quotes: [] }, NOW), '');
+  const html = renderQuotes({ checked_at: 'x', quotes: [Q({ name: '<img src=x onerror=alert(1)>' })] }, NOW);
+  assert.ok(!html.includes('<img'));
+});
+
+test('le ruban n’apparaît que dans le bloc finance et sur la page de la veille', () => {
+  const quotes = { checked_at: 'x', quotes: [Q()] };
+  const fin = domainBlock(dom({ id: 'finance', name: 'Finance' }), {}, defaultState(), NOW, quotes);
+  const ia = domainBlock(dom(), {}, defaultState(), NOW, quotes);
+  assert.match(fin, /class="quotes"/);
+  assert.ok(!ia.includes('class="quotes"'));
+  const page = renderDomain({ domain: { id: 'finance', name: 'Finance', accent: '#1A3A6B' }, events: [], upcoming: [] }, defaultState(), NOW, quotes);
+  assert.match(page, /class="quotes"/);
+});
+
+test('la fiche affiche les couches non vides avec le rappel « pas un conseil »', () => {
+  const html = renderEvent(ev({ layers: LAYERS }), defaultState(), NOW);
+  for (const title of ['Faits', 'Analyse', 'Incertitude', 'Actifs concernés']) assert.ok(html.includes(title), title);
+  assert.ok(!html.includes('Interprétation'));
+  assert.ok(!html.includes('Risques'));
+  assert.match(html, /ne constitue pas un conseil en investissement/);
+});
+
+test('la fiche n’affiche aucun bloc couches sans couches ou avec des listes vides', () => {
+  const empty = Object.fromEntries(Object.keys(LAYERS).map((k) => [k, []]));
+  for (const layers of [undefined, null, empty]) {
+    const html = renderEvent(ev({ layers }), defaultState(), NOW);
+    assert.ok(!html.includes('class="layers"'));
+    assert.ok(!html.includes('conseil en investissement'));
+  }
+});
+
+test('les puces des couches sont échappées', () => {
+  const html = renderEvent(ev({ layers: { ...LAYERS, faits: ['<script>alert(1)</script>'] } }), defaultState(), NOW);
+  assert.ok(!html.includes('<script>'));
 });

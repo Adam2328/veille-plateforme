@@ -78,6 +78,42 @@ const events = [
 const byDomain = (id) => events.filter((e) => e.domain === id);
 const upcoming = { ia: [{ date: ago(-72), title: 'Conférence développeurs d’un grand laboratoire' }], finance: [{ date: ago(-48), title: 'Publication de l’inflation mensuelle' }, { date: ago(-120), title: 'Réunion de la banque centrale' }], football: [{ date: ago(-24), title: 'Journée de championnat' }] };
 
+const layers = (o) => ({ faits: [], analyse: [], interpretation: [], incertitude: [], actifs: [], favorables: [], risques: [], a_surveiller: [], ...o });
+const byId = (id) => events.find((e) => e.id === id);
+byId('sample_6').layers = layers({
+  faits: ['Taux directeurs maintenus à l’issue de la réunion.', 'Le communiqué décrit une inflation encore au-dessus de la cible.'],
+  analyse: ['Des économistes cités par la presse y voient un signal de prudence.'],
+  interpretation: ['Le marché pourrait décaler ses anticipations de baisse de taux.'],
+  incertitude: ['Le calendrier des prochaines décisions dépend des chiffres d’inflation.'],
+  actifs: ['Obligations souveraines', 'Banques'],
+  favorables: ['Visibilité sur la politique monétaire'],
+  risques: ['Repli des marchés obligataires si le ton se durcit'],
+  a_surveiller: ['Prochaine publication de l’inflation'],
+});
+byId('sample_7').layers = layers({
+  faits: ['Prévision annuelle de chiffre d’affaires relevée.'],
+  analyse: ['Un courtier cité par la presse juge le trimestre solide.'],
+  incertitude: ['La durabilité de la demande au trimestre suivant reste à confirmer.'],
+  actifs: ['Groupe Tech'],
+  a_surveiller: ['Réaction du titre à l’ouverture'],
+});
+const quote = (symbol, name, group, price, change, change_pct, extra = {}) => ({
+  symbol, name, group, price, change, change_pct, currency: '', as_of: ago(2), stale: false, ...extra,
+});
+const quotes = {
+  checked_at: now.toISOString(),
+  quotes: [
+    quote('^FCHI', 'CAC 40', 'Indices', 8077.8, -3.63, -0.04),
+    quote('^GSPC', 'S&P 500', 'Indices', 7743.41, 92.91, 1.21),
+    quote('^GDAXI', 'DAX', 'Indices', 25408.64, 104.5, 0.41),
+    quote('EURUSD=X', 'EUR/USD', 'Devises', 1.14, -0.0079, -0.69),
+    quote('^TNX', 'Taux US 10 ans', 'Taux', 5.18, 0.22, 4.45),
+    quote('GC=F', 'Or', 'Matières premières', 4321.2, -62.7, -1.43, { stale: true }),
+    quote('BTC-USD', 'Bitcoin', 'Crypto', 83973.18, -2199.1, -2.55),
+    quote('^VIX', 'VIX', 'Volatilité', 14.87, 0, 0),
+  ],
+};
+
 const home = {
   generated_at: now.toISOString(),
   sample: true,
@@ -95,6 +131,7 @@ const OUT = process.argv[2] ? pathToFileURL(resolve(process.argv[2]) + '/') : ne
 mkdirSync(new URL('domains/', OUT), { recursive: true });
 const write = (rel, obj) => writeFileSync(new URL(rel, OUT), JSON.stringify(obj, null, 1) + '\n');
 write('home.json', home);
+write('quotes.json', quotes);
 for (const d of DOMAINS) {
   write(`domains/${d.id}.json`, { generated_at: home.generated_at, domain: d, events: byDomain(d.id), upcoming: upcoming[d.id] });
 }

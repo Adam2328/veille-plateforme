@@ -65,7 +65,35 @@ const upcomingList = (items) =>
     ? `<ul class="upcoming">${items.map((u) => `<li><b>${esc(fmtDate(u.date))}</b> ${esc(u.title)}</li>`).join('')}</ul>`
     : '';
 
-export function domainBlock(dom, events, state, now) {
+const nf = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 });
+const signed = (n, suffix) => `${n > 0 ? '+' : ''}${nf.format(n)}${suffix}`;
+
+export function renderQuotes(quotes, now = Date.now()) {
+  if (!quotes || !quotes.quotes || !quotes.quotes.length) return '';
+  const item = (x) => {
+    const rate = x.group === 'Taux';
+    const delta = rate ? x.change : x.change_pct;
+    const dir = delta == null ? 'flat' : delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat';
+    const txt = delta == null ? '—' : signed(delta, rate ? ' pt' : ' %');
+    const tip = `${x.symbol} · ${timeAgo(x.as_of, now)}${x.stale ? ' · valeur non actualisée' : ''}`;
+    return `<li class="q ${dir}" title="${esc(tip)}"><span class="qn">${esc(x.name)}</span><span class="qp">${esc(nf.format(x.price))}</span><span class="qc">${esc(txt)}</span>${x.stale ? '<span class="qs">≈</span>' : ''}</li>`;
+  };
+  return `<ul class="quotes" aria-label="Cours de marché">${quotes.quotes.map(item).join('')}</ul>`;
+}
+
+const LAYER_SECTIONS = [['faits', 'Faits'], ['analyse', 'Analyse'], ['interpretation', 'Interprétation'], ['incertitude', 'Incertitude'],
+  ['actifs', 'Actifs concernés'], ['favorables', 'Éléments favorables'], ['risques', 'Risques'], ['a_surveiller', 'À surveiller']];
+
+function layersBlock(layers) {
+  if (!layers) return '';
+  const sections = LAYER_SECTIONS
+    .filter(([key]) => Array.isArray(layers[key]) && layers[key].length)
+    .map(([key, title]) => `<section class="layer layer-${key}"><h3>${title}</h3><ul>${layers[key].map((b) => `<li>${esc(b)}</li>`).join('')}</ul></section>`);
+  if (!sections.length) return '';
+  return `<div class="layers">${sections.join('')}<p class="meta">Synthèse générée automatiquement à partir des sources. Elle ne constitue pas un conseil en investissement.</p></div>`;
+}
+
+export function domainBlock(dom, events, state, now, quotes = null) {
   const pick = (n) => (dom.levels[n] ?? []).map((id) => events[id]).filter(Boolean);
   const [l1, l2, l3] = [pick(1), pick(2), pick(3)];
   const st = (e) => eventStatus(state, e);
@@ -75,6 +103,7 @@ export function domainBlock(dom, events, state, now) {
     : '';
   return `<section class="block" style="--dom:${color(dom.accent)}">
     <h2><a href="#/d/${enc(dom.id)}">${esc(dom.name)}</a></h2>
+    ${dom.id === 'finance' ? renderQuotes(quotes, now) : ''}
     ${empty ? '<p class="meta">Rien d’important pour l’instant.</p>' : ''}
     ${l1.map((e) => card(e, st(e), now)).join('')}
     ${l2.map((e) => row(e, st(e), now)).join('')}
@@ -83,7 +112,7 @@ export function domainBlock(dom, events, state, now) {
   </section>`;
 }
 
-export function renderHome(home, state, now, since = null) {
+export function renderHome(home, state, now, since = null, quotes = null) {
   const { fresh, updated } = countChanges(state, Object.values(home.events));
   const retain = home.retain.map((id) => home.events[id]).filter(Boolean);
   const sinceTxt = since && fmtDateTime(since) ? ` (dernière visite : ${esc(fmtDateTime(since))})` : '';
@@ -92,16 +121,17 @@ export function renderHome(home, state, now, since = null) {
     <p class="meta">Dernier changement de contenu : ${esc(timeAgo(home.generated_at, now))}</p>
     <div class="since"><span>Depuis ta dernière visite${sinceTxt} : <b>${fresh}</b> nouveauté${fresh > 1 ? 's' : ''} · <b>${updated}</b> mise${updated > 1 ? 's' : ''} à jour</span>${fresh + updated ? '<button class="link" data-action="mark-all">Tout marquer comme vu</button>' : ''}</div>
     ${retain.length ? `<section class="retain"><h2>À retenir aujourd’hui</h2><ol>${retain.map((e) => `<li>${badges(e, eventStatus(state, e))}<a href="${href(e)}">${esc(e.title)}</a><div class="meta">${esc(e.summary?.retenir ?? '')}</div></li>`).join('')}</ol></section>` : ''}
-    ${home.domains.map((d) => domainBlock(d, home.events, state, now)).join('')}`;
+    ${home.domains.map((d) => domainBlock(d, home.events, state, now, quotes)).join('')}`;
 }
 
-export function renderDomain(file, state, now) {
+export function renderDomain(file, state, now, quotes = null) {
   const by = (n) => file.events.filter((e) => e.level === n);
   const st = (e) => eventStatus(state, e);
   const section = (title, list, fn) => (list.length ? `<h2>${title}</h2>${list.map((e) => fn(e, st(e), now)).join('')}` : '');
   const empty = !file.events.length;
   return `<div style="--dom:${color(file.domain.accent)}"><a class="back" href="#/">← Accueil</a>
     <h1>${esc(file.domain.name)}</h1>
+    ${file.domain.id === 'finance' ? renderQuotes(quotes, now) : ''}
     ${empty ? '<p class="meta">Rien d’important pour l’instant.</p>' : ''}
     ${section('Incontournable', by(1), card)}
     ${section('Important', by(2), row)}
@@ -125,6 +155,7 @@ export function renderEvent(ev, state, now) {
     <h1>${esc(ev.title)}</h1>
     <p class="meta">Fiabilité : ${esc(ev.reliability_reason)} · première détection ${esc(timeAgo(ev.first_seen, now))} · mis à jour ${esc(timeAgo(ev.updated_at, now))}</p>
     ${fields.length ? `<dl>${fields.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>` : '<p class="meta">Événement secondaire : pas de synthèse, voir les sources.</p>'}
+    ${layersBlock(ev.layers)}
     <h2>Sources (${sorted.length})</h2>
     <ul class="sources">${main.map(li).join('')}</ul>
     ${social.length ? `<details class="more"><summary>Réseaux sociaux (${social.length})</summary><ul class="sources">${social.map(li).join('')}</ul></details>` : ''}
