@@ -68,3 +68,9 @@ def test_fingerprint_ignores_order_and_changes_with_new_items():
     a, b = mk_item("a", "x"), mk_item("b", "y")
     assert fingerprint(mk_event([a, b])) == fingerprint(mk_event([b, a]))
     assert fingerprint(mk_event([a])) != fingerprint(mk_event([a, b]))
+
+
+def test_prompt_gives_the_model_each_source_publication_date():
+    seen = []
+    summarize([ev("ev_1", "Titre un")], lambda prompt: seen.append(prompt) or json.dumps({"ev_1": GOOD}))
+    assert "2026-09-26" in seen[0]

@@ -13,7 +13,7 @@ Date : 2026-09-26. Exécution : `python -m engine.run --only ia --no-ai` sur les
 | Rumeurs en niveau 1 | 0 | 0 |
 | Fusions abusives (événements à 3 sources et plus) | 0 observée | 0 |
 | Doublons visibles | 3 paires (Pentagone/Anthropic 11+7 sources, agents OpenAI, DeepSeek) sur 42 événements | ≤ 3 sur 30 |
-| Synthèses llm / extractif | 0 / 15 (exécution sans clé Gemini) | à mesurer avec la clé |
+| Synthèses llm / extractif | 15 / 0, 0 erreur (GitHub Actions, 26/09/2026 19:19 UTC) ; 0 / 15 sans clé | 100 % llm |
 | Durée d'un cycle | ~27 s | < 3 min |
 
 ## Réglages retenus après mesure
@@ -30,8 +30,8 @@ Date : 2026-09-26. Exécution : `python -m engine.run --only ia --no-ai` sur les
 
 - Le regroupement reste par paraphrase lexicale : une même histoire peut rester en 2 événements (fusion événement-à-événement non implémentée). Piste : second passage comparant les centroïdes des événements ouverts, ou embeddings multilingues locaux (option prévue par la spec).
 - Google Actualités impose un éditeur par article mais son tier est 4 par défaut : seuls les éditeurs de la liste `publishers` (`config/global.yml`) ont un tier 2/3.
-- Les synthèses Gemini n'ont pas encore été mesurées (pas de clé dans l'environnement local) : qualité, nombre d'appels et quota restent à vérifier.
+- Synthèses Gemini (`gemini-flash-lite-latest`) : 15 événements en un cycle, sans erreur, en français, sans invention constatée sur 4 relus. Défauts : « quand » valait toujours « Non précisé » (corrigé : la date de publication est maintenant dans le prompt, ne s'applique qu'aux nouveaux événements car les synthèses existantes sont en cache) ; certains « pourquoi » restent génériques. Le quota consommé (1 appel par lot de 15) reste à suivre sur plusieurs jours.
 
 ## Décision
 
-Le socle est assez bon pour poursuivre. Avant le jalon 3 : mesurer les synthèses avec la clé Gemini, puis décider si le second passage de fusion est nécessaire.
+Le socle est assez bon pour poursuivre. Avant le jalon 3 : suivre le quota Gemini sur quelques jours, puis décider si le second passage de fusion est nécessaire.
