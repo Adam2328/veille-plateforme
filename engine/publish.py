@@ -108,3 +108,8 @@ def publish(root: Path, home: dict, domain_files: list) -> None:
     write_if_changed(out / "home.json", home)
     for d in domain_files:
         write_if_changed(out / "domains" / f"{d['domain']['id']}.json", d)
+
+
+def publish_quotes(root: Path, quotes: dict) -> None:
+    validate("quotes", quotes)
+    write_if_changed(root / "site" / "data" / "quotes.json", quotes)

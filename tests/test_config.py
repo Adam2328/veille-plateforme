@@ -18,3 +18,13 @@ def test_real_global_config_has_every_scoring_key():
             "velocity_bonus", "freshness_max", "freshness_half_life_h", "freshness_bucket_h",
             "social_only_penalty"} <= set(g["score"])
     assert set(g["score"]["authority"]) == {1, 2, 3, 4, 5}
+
+
+def test_quotes_config_is_optional_and_the_real_one_is_well_formed(tmp_path):
+    (tmp_path / "config" / "domains").mkdir(parents=True)
+    (tmp_path / "config" / "global.yml").write_text("cluster: {threshold: 0.5}\n", "utf-8")
+    assert load_config(tmp_path)["quotes"] == []
+    real = load_config()["quotes"]
+    symbols = [q["symbol"] for q in real]
+    assert real and len(symbols) == len(set(symbols)) <= 20          # le relais accepte 20 symboles au plus
+    assert all(q["name"].strip() and q["group"].strip() for q in real)
