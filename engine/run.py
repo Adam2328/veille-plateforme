@@ -37,7 +37,7 @@ def collect_domain(dom: dict, g: dict, now: datetime, fetch: Callable[[str], byt
 def rescore(events: list, dom: dict, g: dict, now: datetime) -> list:
     out = []
     for ev in events:
-        label, reason = classify(ev["items"], now)
+        label, reason = classify(ev["items"], now, dom)
         scored = {**ev, "reliability": label, "reliability_reason": reason}
         out.append({**scored, "importance": importance(scored, dom, g, now)})
     return assign_levels(out, dom)

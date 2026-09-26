@@ -67,3 +67,44 @@ def test_three_distinct_media_with_hedging_stay_a_rumor():
 
 def test_social_posts_do_not_count_as_media():
     assert label([mk_item(i, "Un tribunal donne raison", tier=5) for i in "abc"]) == "non_confirmé"
+
+
+DOM_FB = {"rumor_markers": ["serait", "intéress", "dans le viseur"], "confirm_markers": ["officiel", "here we go"]}
+
+
+def test_hedged_single_source_transfer_is_a_rumor_even_from_a_reliable_outlet():
+    items = [mk_item("a", "Mbappé serait dans le viseur du Real", tier=2)]
+    assert classify(items, NOW, DOM_FB)[0] == "rumeur"
+    assert classify(items, NOW)[0] == "rapporté"                       # sans config, comportement inchangé
+    assert classify([mk_item("a", "Un joueur intéressé par un départ", tier=3)], NOW, DOM_FB)[0] == "rumeur"
+
+
+def test_confirmation_markers_win_over_rumor_markers():
+    items = [mk_item("a", "Officiel : le Real annonce l'arrivée, le PSG était intéressé", tier=2)]
+    assert classify(items, NOW, DOM_FB)[0] == "rapporté"
+    assert classify([mk_item("a", "Here we go, il serait proche de signer", tier=2)], NOW, DOM_FB)[0] == "rapporté"
+
+
+def test_strong_labels_are_never_downgraded_by_rumor_markers():
+    two = [mk_item("a", "Il serait intéressé", tier=2), mk_item("b", "Il serait intéressé", tier=2)]
+    assert classify(two, NOW, DOM_FB)[0] == "confirmé"
+    assert classify([mk_item("a", "Il serait intéressé", tier=1)], NOW, DOM_FB)[0] == "officiel"
+
+
+def test_markers_match_word_starts_only():
+    assert classify([mk_item("a", "Le désintéressement du club est total", tier=2)], NOW, DOM_FB)[0] == "rapporté"
+    assert classify([mk_item("a", "SERAIT-il prêt ?", tier=2)], NOW, DOM_FB)[0] == "rumeur"
+
+
+def test_missing_marker_lists_change_nothing():
+    items = [mk_item("a", "Il serait intéressé", tier=2)]
+    assert classify(items, NOW, {})[0] == "rapporté"
+    assert classify(items, NOW, {"rumor_markers": ["serait"]})[0] == "rumeur"
+
+
+def test_rescore_passes_the_domain_markers_to_the_classifier():
+    from engine.run import rescore
+    from tests.helpers import DOM, G, mk_event
+    ev = mk_event([mk_item("a", "Le club serait intéressé par le joueur", tier=2)], id="ev_r", entities=[])
+    assert rescore([ev], {**DOM, "rumor_markers": ["serait"]}, G, NOW)[0]["reliability"] == "rumeur"
+    assert rescore([ev], DOM, G, NOW)[0]["reliability"] == "rapporté"
