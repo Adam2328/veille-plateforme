@@ -35,3 +35,19 @@ Date : 2026-09-26. Exécution : `python -m engine.run --no-ai` sur les vraies so
 ## Décision
 
 Le socle Finance est utilisable au quotidien. Restent à valider en production (tâche 8) : les synthèses Gemini en couches (qualité, part rejetée par le garde-fou anti-conseil), la disponibilité du relais et de l'agenda depuis GitHub Actions, et la durée d'un cycle avec le réveil du relais.
+
+## Résultats de production (26/09/2026, 20h21 UTC, GitHub Actions)
+
+| Mesure | Valeur |
+|---|---|
+| Durée du workflow | 54 s (le relais était éveillé) |
+| Cours obtenus depuis GitHub | 18 / 18, relais `ok`, aucun périmé |
+| Agenda importé | `agenda:finance` ok, 158 points |
+| Synthèses Gemini, tous domaines | 23 `llm`, 0 `extractif`, 0 erreur |
+| Finance : événements de niveau 1 et 2 | 8 avec couches, 8 en `llm`, aucun rejeté par le garde-fou anti-conseil |
+| Phrases de conseil dans les données publiées | 0 (contrôle par expression régulière sur les résumés et les couches) |
+| Site en production | 2 veilles dans la navigation, ruban de 18 cours, 6 entrées d'agenda, fiche Finance avec les couches et la mention « ne constitue pas un conseil en investissement », aucune erreur console |
+
+Qualité relue sur 3 événements : les faits sont attribuables aux sources, l'interprétation est formulée avec prudence (« pourrait », « à confirmer »), la couche « analyse » reste vide quand aucune source n'attribue d'avis (rien n'est inventé). Défaut mineur : certaines interprétations sont génériques (« le marché pourrait continuer à surveiller… »).
+
+À surveiller sur plusieurs jours : quota Gemini avec deux veilles, durée d'un cycle quand le relais Render est endormi (jusqu'à 60 s de plus), part de synthèses rejetées par le garde-fou.
