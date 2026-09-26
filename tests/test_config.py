@@ -28,3 +28,16 @@ def test_quotes_config_is_optional_and_the_real_one_is_well_formed(tmp_path):
     symbols = [q["symbol"] for q in real]
     assert real and len(symbols) == len(set(symbols)) <= 20          # le relais accepte 20 symboles au plus
     assert all(q["name"].strip() and q["group"].strip() for q in real)
+
+
+def test_football_config_is_optional_and_the_real_one_is_well_formed(tmp_path):
+    (tmp_path / "config" / "domains").mkdir(parents=True)
+    (tmp_path / "config" / "global.yml").write_text("cluster: {threshold: 0.5}\n", "utf-8")
+    assert load_config(tmp_path)["football"] is None
+    real = load_config()["football"]
+    codes = [c["code"] for c in real["competitions"]]
+    assert len(codes) == len(set(codes)) and 1 <= len(codes) <= 6      # budget : 6 classements + 2 fenêtres = 8 requêtes par minute
+    assert all(c["name"].strip() for c in real["competitions"])
+    assert all(c["flashscore"].startswith("https://www.flashscore.fr/football/") and c["flashscore"].endswith("/")
+               for c in real["competitions"])
+    assert 1 <= real["results_days"] <= 9 and 1 <= real["fixtures_days"] <= 9      # limite de 10 jours du plan gratuit

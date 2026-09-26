@@ -12,7 +12,8 @@ from .collect import collect_source, fetch_bytes
 from .config import ROOT, load_config
 from .enrich import is_relevant
 from .normalize import dedupe, excluded, normalize, recent
-from .publish import build_domain, build_home, publish, publish_quotes, write_if_changed
+from .football_data import collect_football, fetch_fd
+from .publish import build_domain, build_home, publish, publish_football, publish_quotes, write_if_changed
 from .quotes import collect_quotes, fetch_relay
 from .reliability import classify
 from .score import assign_levels, importance
@@ -68,8 +69,8 @@ def _tally(report: dict, events: list, errors: list) -> None:
     report["ai"]["errors"] += errors
 
 
-def _previous_quotes(root: Path) -> dict | None:
-    path = root / "site" / "data" / "quotes.json"
+def _previous(root: Path, name: str) -> dict | None:
+    path = root / "site" / "data" / name
     try:
         return json.loads(path.read_text("utf-8")) if path.exists() else None
     except ValueError:
@@ -93,13 +94,16 @@ def _import_agendas(cfg: dict, only: list[str] | None, fetch_agenda: Callable[[s
 def run(root: Path = ROOT, now: datetime | None = None, only: list[str] | None = None,
         call: Callable[[str], str] | None = None, fetch: Callable[[str], bytes] = fetch_bytes,
         quote_fetch: Callable[[str], dict] = fetch_relay,
-        agenda_fetch: Callable[[str], list[str]] = fetch_points) -> dict:
+        agenda_fetch: Callable[[str], list[str]] = fetch_points,
+        football_token: str | None = None,
+        football_fetch: Callable[[str, str], dict] = fetch_fd) -> dict:
     now = now or now_utc()
     cfg = load_config(root)
     g = cfg["global"]
     stored = load_recent(root, now)
     report = {"collected": 0, "new_items": 0, "events": {"1": 0, "2": 0, "3": 0}, "reliability": {},
-              "ai": {"llm": 0, "extractif": 0, "errors": []}, "quotes": {"ok": 0, "failed": 0}, "sources_failed": []}
+              "ai": {"llm": 0, "extractif": 0, "errors": []}, "quotes": {"ok": 0, "failed": 0},
+              "football": {"ok": 0, "failed": 0}, "sources_failed": []}
     health, by_domain = [], {}
     for dom in sorted(cfg["domains"].values(), key=lambda d: d["order"]):
         mine = [e for e in stored if e["domain"] == dom["id"]]
@@ -120,11 +124,17 @@ def run(root: Path = ROOT, now: datetime | None = None, only: list[str] | None =
     publish(root, build_home(cfg, by_domain, now, agendas),
             [build_domain(cfg["domains"][d], evs, now, agendas.get(d)) for d, evs in by_domain.items()])
     if cfg["quotes"] and (only is None or "quotes" in only):
-        quotes, qhealth = collect_quotes(cfg["quotes"], _previous_quotes(root), now, quote_fetch)
+        quotes, qhealth = collect_quotes(cfg["quotes"], _previous(root, "quotes.json"), now, quote_fetch)
         publish_quotes(root, quotes)
         health += qhealth
         symbols = [h for h in qhealth if h["source"] != "quote-relay"]
         report["quotes"] = {"ok": sum(h["ok"] for h in symbols), "failed": sum(not h["ok"] for h in qhealth)}
+    if cfg["football"] and (only is None or "football-data" in only):
+        data, fhealth = collect_football(cfg["football"], football_token, _previous(root, "football.json"), now, football_fetch)
+        if data is not None:
+            publish_football(root, data)
+        health += fhealth
+        report["football"] = {"ok": sum(h["ok"] for h in fhealth), "failed": sum(not h["ok"] for h in fhealth)}
     report["sources_failed"] = [h["source"] for h in health if not h["ok"]]
     write_if_changed(root / "site" / "data" / "health.json",
                      {"checked_at": iso(now), "sources": health, "ai": report["ai"]}, now, max_age_min=55)
@@ -139,11 +149,12 @@ def main() -> None:
         pass
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
-    ap.add_argument("--only", nargs="*", help="ids des veilles à collecter, ou « quotes » (défaut : tout)")
+    ap.add_argument("--only", nargs="*", help="ids des veilles à collecter, « quotes » ou « football-data » (défaut : tout)")
     ap.add_argument("--no-ai", action="store_true", help="résumés extractifs uniquement")
     args = ap.parse_args()
     call = gemini_call() if os.environ.get("GEMINI_API_KEY") and not args.no_ai else None
-    print(json.dumps(run(only=args.only, call=call), ensure_ascii=False, indent=2))
+    report = run(only=args.only, call=call, football_token=os.environ.get("FOOTBALL_DATA_TOKEN"))
+    print(json.dumps(report, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
