@@ -46,6 +46,9 @@ def _matches(text: str, markers: list[str]) -> bool:
 
 def classify(items: list, now: datetime, dom: dict | None = None) -> tuple[str, str]:
     label, reason = _classify(items, now)
+    titles = " ".join(i["title"] for i in items)
+    if dom and label != "officiel" and _matches(titles, dom.get("explicit_rumor_markers", [])):
+        return "rumeur", "l'article se présente lui-même comme une rumeur"
     if dom and label in ("rapporté", "non_confirmé"):
         text = " ".join(f"{i['title']} {i['snippet']}" for i in items)
         if _matches(text, dom.get("rumor_markers", [])) and not _matches(text, dom.get("confirm_markers", [])):

@@ -62,3 +62,10 @@ def test_excluded_matches_case_insensitive_substrings_in_title_or_snippet():
     assert excluded(it, ["prix réduit"]) is True
     assert excluded(it, ["nvidia"]) is False
     assert excluded(it, []) is False
+
+
+def test_excluded_also_matches_the_url():
+    from engine.normalize import excluded
+    tag_page = {**mk_item("a", "Real Madrid"), "url": "https://rmcsport.bfmtv.com/football/liga/real-madrid_DN-202304140701.html"}
+    assert excluded(tag_page, ["_dn-"]) is True
+    assert excluded(mk_item("b", "Real Madrid gagne"), ["_dn-"]) is False

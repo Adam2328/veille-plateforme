@@ -108,3 +108,21 @@ def test_rescore_passes_the_domain_markers_to_the_classifier():
     ev = mk_event([mk_item("a", "Le club serait intéressé par le joueur", tier=2)], id="ev_r", entities=[])
     assert rescore([ev], {**DOM, "rumor_markers": ["serait"]}, G, NOW)[0]["reliability"] == "rumeur"
     assert rescore([ev], DOM, G, NOW)[0]["reliability"] == "rapporté"
+
+
+DOM_EXPLICIT = {**DOM_FB, "explicit_rumor_markers": ["rumeur", "rumour", "rumor"]}
+
+
+def test_a_story_that_calls_itself_a_rumor_stays_a_rumor_even_when_widely_relayed():
+    title = "Transfer rumors, news: Arsenal eye winger"
+    items = [mk_item("a", title, tier=2), mk_item("b", title, tier=2), mk_item("c", title, tier=3)]
+    assert classify(items, NOW)[0] == "confirmé"
+    lab, why = classify(items, NOW, DOM_EXPLICIT)
+    assert lab == "rumeur" and "rumeur" in why
+
+
+def test_explicit_rumor_markers_apply_to_titles_only_and_never_override_official():
+    snippet_only = [mk_item("a", "Arsenal signe un ailier", tier=2, snippet="Fin des rumeurs"), mk_item("b", "Arsenal signe un ailier", tier=2)]
+    assert classify(snippet_only, NOW, DOM_EXPLICIT)[0] == "confirmé"
+    official = [mk_item("a", "Le club dément les rumeurs", tier=1)]
+    assert classify(official, NOW, DOM_EXPLICIT)[0] == "officiel"

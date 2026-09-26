@@ -4,17 +4,21 @@ accent: "#0B6E4F"
 order: 3
 quota: 12
 max_l1: 4
-thresholds: {l1: 60, l2: 50, l3: 40}   # valeurs de départ, calibrées à la tâche 6
+thresholds: {l1: 76, l2: 70, l3: 60}   # calibrés le 26/09/2026 sur les scores observés (41 à 84)
 relevance: true
 
 exclude: ["pronostic", "prono ", "cote ", "cotes ", "bookmaker", "paris sportifs", "betting", "betclic", "winamax", "unibet", "odds",
-          "jeu concours", "quiz", "ea fc", "ea sports fc", "fifa 2", "fantasy", "promo code", "sponsored"]      # paris, jeux vidéo, promotions
+          "jeu concours", "quiz", "ea fc", "ea sports fc", "fifa 2", "fantasy", "promo code", "sponsored",
+          "_dn-"]      # paris, jeux vidéo, promotions ; « _dn- » : pages-dossiers de RMC Sport (titre = simple nom de club ou de joueur)
 
 # Rumeurs de mercato : un événement à source unique formulé comme une piste est une rumeur, sauf marqueur de confirmation.
 # Un marqueur correspond au début d'un mot (« intéress » couvre « intéressé », « intéresse »).
-rumor_markers: ["serait", "seraient", "aurait", "pourrait", "pourraient", "piste", "pisteur", "intéress", "dans le viseur", "sur les tablettes",
-                "envisage", "tenterait", "tenter", "courtise", "convoit", "souhaite recruter", "would", "could", "reportedly", "linked with",
-                "interested in", "eyeing", "considering", "target", "monitoring", "keen on", "rumour", "rumor"]
+# Retirés après mesure (26/09/2026) : « would », « could », « aurait », « pourrait », « tenter », trop fréquents dans des faits ou des analyses.
+rumor_markers: ["serait", "seraient", "piste", "pisteur", "intéress", "dans le viseur", "sur les tablettes",
+                "envisage", "tenterait", "courtise", "convoit", "souhaite recruter", "reportedly", "linked with",
+                "interested in", "eyeing", "eye winger", "considering", "target", "monitoring", "keen on"]
+# Un titre qui se présente lui-même comme une rumeur le reste, même repris par plusieurs médias (seul « officiel » l'emporte).
+explicit_rumor_markers: ["rumeur", "rumour", "rumor", "gossip", "transfer news live", "mercato en direct"]   # dont les directs mercato, compilations de pistes
 confirm_markers: ["officiel", "officialise", "officialisé", "official", "here we go", "a signé", "vient de signer", "signs", "signed",
                   "confirme", "confirmed", "présenté", "unveiled", "prolonge", "extends his contract"]
 
@@ -62,7 +66,7 @@ kinds:
     keywords: ["ligue des champions", "champions league", "coupe du monde", "world cup", euro, "ligue des nations", "nations league", "europa league", "conference league", "tirage au sort", "coupe de france", "fa cup", "copa"]
   transfer:
     weight: 20
-    keywords: [transfert, transfer, mercato, recrue, prêt, loan, "here we go", officialise, prolonge, prolongation, "release clause", "clause libératoire", signe, signs, signing, "va signer", "bid", offre]
+    keywords: [transfert, transfer, mercato, loan, "here we go", officialise, prolonge, prolongation, "release clause", "clause libératoire", signs, signing, "va signer", "a signé", "sporting director", "directeur sportif"]   # « offre », « signe », « prêt », « recrue » retirés : trop ambigus (« s'offre », « un signe »)
   injury:
     weight: 18
     keywords: [blessure, blessé, blessés, injury, injured, forfait, indisponible, "out for", ligaments, "rupture"]

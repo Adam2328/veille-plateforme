@@ -60,5 +60,5 @@ def recent(items: list, now: datetime, hours: int) -> list:
 
 
 def excluded(item: dict, patterns: list[str]) -> bool:
-    text = f"{item['title']} {item['snippet']}".lower()
+    text = f"{item['title']} {item['snippet']} {item.get('url', '')}".lower()
     return any(p.lower() in text for p in patterns)
