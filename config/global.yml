@@ -1,0 +1,37 @@
+cluster:
+  threshold: 0.45        # similarité minimale (cosinus TF-IDF + bonus d'entités) pour rattacher un article à un événement
+  window_hours: 48       # un événement reste ouvert au regroupement 48 h après sa dernière évolution
+collect:
+  max_age_hours: 36      # les articles plus anciens sont ignorés
+score:
+  authority: {1: 25, 2: 18, 3: 10, 4: 5, 5: 2}
+  coverage_per_log2: 10
+  coverage_cap: 25
+  default_kind_weight: 5
+  entity_bonus: 8
+  velocity_bonus: 5
+  freshness_max: 10
+  freshness_half_life_h: 12
+  freshness_bucket_h: 3  # la fraîcheur décroît par paliers de 3 h : évite de réécrire les JSON à chaque cycle
+  social_only_penalty: 15
+home:
+  window_hours: 36
+  retain_max: 7
+ai:
+  max_events_per_run: 30
+publishers:              # tier attribué aux éditeurs repérés dans les agrégateurs (Google Actualités)
+  the verge: 2
+  techcrunch: 2
+  ars technica: 2
+  venturebeat: 2
+  wired: 2
+  mit technology review: 2
+  reuters: 2
+  bloomberg: 2
+  financial times: 2
+  the information: 2
+  cnbc: 2
+  bbc news: 2
+  the guardian: 3
+  le monde: 2
+  les echos: 2
