@@ -1,8 +1,10 @@
 import json
 import os
-from datetime import datetime, timedelta
+import re
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
+from .agenda import imported_events
 from .contract import validate
 from .timeutil import iso, parse
 
@@ -26,14 +28,45 @@ def project(ev: dict) -> dict:
     return p
 
 
-def build_domain(dom: dict, events: list, now: datetime) -> dict:
+def _agenda_key(title: str, keywords: list[str]) -> str:
+    low = title.lower()
+    for k in keywords:
+        if re.search(rf"{re.escape(k.lower())}", low):
+            return k.lower()
+    return low
+
+
+def upcoming_events(dom: dict, now: datetime, imported: list[str] | None = None,
+                    horizon_days: int = 21, limit: int = 6) -> list[dict]:
+    today = now.date()
+    keywords = dom.get("agenda_keywords", [])
+    official = []
+    for entry in dom.get("agenda", []):
+        try:
+            day = date.fromisoformat(str(entry["date"]))
+            title = str(entry["title"])
+        except (KeyError, ValueError, TypeError):
+            continue
+        if today <= day <= today + timedelta(days=horizon_days):
+            official.append({"date": day.isoformat(), "title": title})
+    extra = imported_events(imported or [], keywords, today, horizon_days) if keywords else []
+    seen, out = set(), []
+    for entry in [*official, *extra]:                     # le calendrier officiel est prioritaire
+        key = (entry["date"], _agenda_key(entry["title"], keywords))
+        if key not in seen:
+            seen.add(key)
+            out.append(entry)
+    return sorted(out, key=lambda a: (a["date"], a["title"]))[:limit]
+
+
+def build_domain(dom: dict, events: list, now: datetime, imported: list[str] | None = None) -> dict:
     cutoff = now - timedelta(days=7)
     shown = sorted((e for e in events if e["level"] >= 1 and parse(e["updated_at"]) >= cutoff), key=lambda e: -e["importance"])
     return {"generated_at": iso(now), "domain": {k: dom[k] for k in ("id", "name", "accent")},
-            "events": [project(e) for e in shown], "upcoming": []}
+            "events": [project(e) for e in shown], "upcoming": upcoming_events(dom, now, imported)}
 
 
-def build_home(cfg: dict, events_by_domain: dict, now: datetime) -> dict:
+def build_home(cfg: dict, events_by_domain: dict, now: datetime, agendas: dict | None = None) -> dict:
     h = cfg["global"]["home"]
     cutoff = now - timedelta(hours=h["window_hours"])
     domains, events = [], {}
@@ -42,7 +75,7 @@ def build_home(cfg: dict, events_by_domain: dict, now: datetime) -> dict:
                      key=lambda e: -e["importance"])[: dom["quota"]]
         levels = {str(n): [e["id"] for e in top if e["level"] == n] for n in (1, 2, 3)}
         events.update({e["id"]: project(e) for e in top})
-        domains.append({"id": dom["id"], "name": dom["name"], "accent": dom["accent"], "levels": levels, "upcoming": []})
+        domains.append({"id": dom["id"], "name": dom["name"], "accent": dom["accent"], "levels": levels, "upcoming": upcoming_events(dom, now, (agendas or {}).get(dom["id"]))})
     level_one = sorted((e for e in events.values() if e["level"] == 1), key=lambda e: -e["importance"])
     return {"generated_at": iso(now), "sample": False, "domains": domains,
             "retain": [e["id"] for e in level_one[: h["retain_max"]]], "events": events}
