@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": ["name", "tier", "url", "title", "published_at"],
+      "properties": {
+        "name": {"type": "string"},
+        "tier": {"type": "integer", "minimum": 1, "maximum": 5},
+        "url": {"type": "string"},
+        "title": {"type": "string"},
+        "published_at": {"type": "string"}
+      }
+    },
+    "summary": {
+      "type": ["object", "null"],
+      "required": ["quoi", "qui", "quand", "pourquoi", "retenir"],
+      "properties": {
+        "quoi": {"type": "string"}, "qui": {"type": "string"}, "quand": {"type": "string"},
+        "pourquoi": {"type": "string"}, "retenir": {"type": "string"}
+      }
+    },
+    "upcoming": {
+      "type": "array",
+      "items": {"type": "object", "required": ["date", "title"],
+                "properties": {"date": {"type": "string"}, "title": {"type": "string"}}}
+    },
+    "event": {
+      "type": "object",
+      "required": ["id", "rev", "domain", "kind", "title", "first_seen", "updated_at", "importance",
+                   "level", "reliability", "reliability_reason", "summary", "summary_mode",
+                   "entities", "sources"],
+      "properties": {
+        "id": {"type": "string"},
+        "rev": {"type": "integer", "minimum": 1},
+        "domain": {"type": "string"},
+        "kind": {"type": "string"},
+        "title": {"type": "string"},
+        "first_seen": {"type": "string"},
+        "updated_at": {"type": "string"},
+        "importance": {"type": "number", "minimum": 0, "maximum": 100},
+        "level": {"type": "integer", "enum": [1, 2, 3]},
+        "reliability": {"enum": ["officiel", "confirmé", "rapporté", "en_développement", "non_confirmé", "rumeur"]},
+        "reliability_reason": {"type": "string"},
+        "summary": {"$ref": "#/$defs/summary"},
+        "summary_mode": {"enum": ["llm", "extractif", "aucun"]},
+        "entities": {"type": "array", "items": {"type": "string"}},
+        "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
+      }
+    },
+    "domainRef": {
+      "type": "object",
+      "required": ["id", "name", "accent"],
+      "properties": {"id": {"type": "string"}, "name": {"type": "string"}, "accent": {"type": "string"}}
+    },
+    "home": {
+      "type": "object",
+      "required": ["generated_at", "sample", "domains", "retain", "events"],
+      "properties": {
+        "generated_at": {"type": "string"},
+        "sample": {"type": "boolean"},
+        "domains": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "name", "accent", "levels", "upcoming"],
+            "properties": {
+              "id": {"type": "string"}, "name": {"type": "string"}, "accent": {"type": "string"},
+              "levels": {
+                "type": "object",
+                "required": ["1", "2", "3"],
+                "properties": {
+                  "1": {"type": "array", "items": {"type": "string"}},
+                  "2": {"type": "array", "items": {"type": "string"}},
+                  "3": {"type": "array", "items": {"type": "string"}}
+                }
+              },
+              "upcoming": {"$ref": "#/$defs/upcoming"}
+            }
+          }
+        },
+        "retain": {"type": "array", "items": {"type": "string"}},
+        "events": {"type": "object", "additionalProperties": {"$ref": "#/$defs/event"}}
+      }
+    },
+    "domainFile": {
+      "type": "object",
+      "required": ["generated_at", "domain", "events", "upcoming"],
+      "properties": {
+        "generated_at": {"type": "string"},
+        "domain": {"$ref": "#/$defs/domainRef"},
+        "events": {"type": "array", "items": {"$ref": "#/$defs/event"}},
+        "upcoming": {"$ref": "#/$defs/upcoming"}
+      }
+    }
+  }
+}
