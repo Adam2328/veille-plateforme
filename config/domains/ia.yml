@@ -1,0 +1,56 @@
+id: ia
+name: IA
+accent: "#5B3FA8"
+order: 1
+quota: 12
+max_l1: 4
+thresholds: {l1: 70, l2: 50, l3: 30}   # valeurs de départ, calibrées à la tâche 9
+
+entities:                               # acteurs majeurs : un événement qui en cite un reçoit le bonus d'entité
+  OpenAI: [openai, chatgpt, sora, "gpt-5", "gpt-6"]
+  Anthropic: [anthropic, claude]
+  Google: [deepmind, gemini, "google ai", "google deepmind"]
+  Meta: ["meta ai", llama]
+  Microsoft: [microsoft, copilot]
+  xAI: [xai, grok]
+  Mistral: [mistral, "mistral ai"]
+  NVIDIA: [nvidia]
+  DeepSeek: [deepseek]
+  Alibaba: [alibaba, qwen]
+
+kinds:
+  model_release:
+    weight: 25
+    keywords: ["new model", "nouveau modèle", releases, unveils, introduces, launches, lance, dévoile, "open-weight", "open weights"]
+  funding_acquisition:
+    weight: 20
+    keywords: [raises, funding, acquires, acquisition, acquiert, lève, valuation, valorisation, invests]
+  regulation:
+    weight: 20
+    keywords: ["ai act", regulation, régulation, lawsuit, procès, "executive order", sanctions]
+  product_launch:
+    weight: 18
+    keywords: [agent, agents, api, sdk, feature, fonctionnalité, assistant, plugin]
+  research:
+    weight: 12
+    keywords: [paper, study, benchmark, étude, arxiv, research]
+
+sources:
+  - {id: openai-news, name: "OpenAI (blog officiel)", tier: 1, origin: openai, type: rss, url: "https://openai.com/news/rss.xml"}
+  - {id: deepmind, name: "Google DeepMind (blog)", tier: 1, origin: google, type: rss, url: "https://deepmind.google/blog/rss.xml"}
+  - {id: google-ai, name: "Google AI (blog)", tier: 1, origin: google, type: rss, url: "https://blog.google/technology/ai/rss/"}
+  - {id: nvidia-blog, name: "NVIDIA (blog)", tier: 1, origin: nvidia, type: rss, url: "https://blogs.nvidia.com/feed/"}
+  - {id: microsoft-ai, name: "Microsoft AI (blog)", tier: 1, origin: microsoft, type: rss, url: "https://blogs.microsoft.com/ai/feed/"}
+  - {id: huggingface, name: "Hugging Face (blog)", tier: 1, origin: huggingface, type: rss, url: "https://huggingface.co/blog/feed.xml"}
+  - {id: verge-ai, name: "The Verge (IA)", tier: 2, origin: the verge, type: rss, url: "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"}
+  - {id: techcrunch-ai, name: "TechCrunch (IA)", tier: 2, origin: techcrunch, type: rss, url: "https://techcrunch.com/category/artificial-intelligence/feed/"}
+  - {id: ars-technica, name: "Ars Technica", tier: 2, origin: ars technica, type: rss, url: "https://feeds.arstechnica.com/arstechnica/technology-lab"}
+  - {id: venturebeat-ai, name: "VentureBeat (IA)", tier: 2, origin: venturebeat, type: rss, url: "https://venturebeat.com/category/ai/feed/"}
+  - {id: mit-tr-ai, name: "MIT Technology Review (IA)", tier: 2, origin: mit technology review, type: rss, url: "https://www.technologyreview.com/topic/artificial-intelligence/feed"}
+  - {id: gn-anthropic, name: "Google Actualités : Anthropic", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=Anthropic+Claude+when:1d&hl=en-US&gl=US&ceid=US:en"}
+  - {id: gn-mistral, name: "Google Actualités : Mistral", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=Mistral+AI+when:1d&hl=en-US&gl=US&ceid=US:en"}
+  - {id: gn-deepseek, name: "Google Actualités : DeepSeek", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=DeepSeek+when:1d&hl=en-US&gl=US&ceid=US:en"}
+  - {id: gn-xai, name: "Google Actualités : xAI", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=xAI+Grok+when:1d&hl=en-US&gl=US&ceid=US:en"}
+  - {id: gn-meta, name: "Google Actualités : Meta AI", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=Meta+AI+Llama+when:1d&hl=en-US&gl=US&ceid=US:en"}
+  - {id: gn-ia-fr, name: "Google Actualités : IA (FR)", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=intelligence+artificielle+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
+  - {id: hackernews-ai, name: "Hacker News (IA)", tier: 5, origin: hacker news, type: rss, url: "https://hnrss.org/newest?q=OpenAI+OR+Anthropic+OR+Gemini+OR+LLM&points=150"}
