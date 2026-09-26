@@ -137,3 +137,9 @@ def test_home_and_domain_file_carry_the_agenda():
     f = build_domain(cfg["domains"]["ia"], [], NOW, ["30/09 :: usa :: macro :: Inflation PCE US"])
     validate("domainFile", f)
     assert f["upcoming"] == home["domains"][0]["upcoming"]
+
+
+def test_upcoming_events_applies_the_domain_agenda_exclusions():
+    dom = {"agenda_keywords": ["bce"], "agenda_exclude": ["discours"]}
+    imported = ["30/09 :: europe :: mkt-n :: Discours BCE", "30/09 :: europe :: mkt-n :: Décision BCE"]
+    assert [a["title"] for a in upcoming_events(dom, NOW, imported)] == ["Europe · Décision BCE"]

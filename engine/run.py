@@ -10,6 +10,7 @@ from .agenda import fetch_points
 from .cluster import cluster
 from .collect import collect_source, fetch_bytes
 from .config import ROOT, load_config
+from .enrich import is_relevant
 from .normalize import dedupe, excluded, normalize, recent
 from .publish import build_domain, build_home, publish, publish_quotes, write_if_changed
 from .quotes import collect_quotes, fetch_relay
@@ -27,7 +28,8 @@ def collect_domain(dom: dict, g: dict, now: datetime, fetch: Callable[[str], byt
         raws, h = collect_source(source, fetch)
         health.append(h)
         items += [i for i in (normalize(r, source, g.get("publishers")) for r in raws)
-                  if not excluded(i, dom.get("exclude", []))]
+                  if not excluded(i, dom.get("exclude", []))
+                  and (not dom.get("relevance") or is_relevant(f"{i['title']} {i['snippet']}", dom))]
     return recent(items, now, g["collect"]["max_age_hours"]), health
 
 

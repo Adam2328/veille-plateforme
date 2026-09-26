@@ -5,9 +5,11 @@ order: 2
 quota: 12
 max_l1: 4
 summary_profile: finance
-thresholds: {l1: 62, l2: 45, l3: 30}   # valeurs de départ, calibrées à la tâche 7
+thresholds: {l1: 53, l2: 50, l3: 44}   # calibrés le 26/09/2026 sur les scores observés (43 à 56)
+relevance: true                         # écarte les articles qui ne citent aucune entité ni aucun mot-clé (finance personnelle, météo, quiz...)
 
-exclude: ["sponsored", "promo code", "black friday", "webinar", "newsletter sign", "subscribe to"]
+exclude: ["sponsored", "promo code", "black friday", "webinar", "newsletter sign", "subscribe to",
+          "approval of application", "enforcement action", "in common stock", "insider"]      # promotions, communiqués administratifs de la Fed, transactions d'initiés
 
 entities:                               # entités majeures : un événement qui en cite une reçoit le bonus d'entité
   Fed: [fed, "federal reserve", fomc, powell]
@@ -54,13 +56,14 @@ kinds:
     keywords: [oil, pétrole, brent, opec, opep, gold, copper, cuivre, "natural gas", "gaz naturel"]
   markets:
     weight: 10
-    keywords: ["wall street", stocks, bourse, indices, "treasury yields", "bond yields", "taux obligataires", rally, selloff, krach]
+    keywords: ["wall street", stocks, "stock market", shares, bourse, indices, "treasury yields", "bond yields", yields, bond, bonds, obligations, "taux obligataires", treasury, investors, investisseurs, marchés, dollar, euro, "central bank", "banque centrale", rally, selloff, krach]
   crypto:
     weight: 10
     keywords: [bitcoin, ethereum, crypto, stablecoin, etf]
 
 agenda_url: "https://raw.githubusercontent.com/Adam2328/mon-brief-quotidien/main/agenda_events.json"   # agenda tenu à jour par l'ancien pipeline
-agenda_keywords: [fomc, fed, bce, ecb, boj, boe, inflation, cpi, pce, pib, gdp, emploi, payrolls, nfp, résultats, earnings, opep, opec]
+agenda_keywords: [fomc, jolts, nfp, payrolls, pce, cpi, pmi, ism, pib, gdp, inflation, chômage, emploi, fed, bce, ecb, boj, boe, opep, opec]   # les plus spécifiques d'abord : sert aussi à dédoublonner
+agenda_exclude: [discours, panel, speech, conférence, fireside, forum, summit, non-monétaire]     # entrées de faible valeur
 
 agenda:                                 # calendrier officiel vérifié (prioritaire sur l'import) ; à mettre à jour chaque année
   - {date: 2026-10-28, title: "Fed : décision de politique monétaire (FOMC)"}

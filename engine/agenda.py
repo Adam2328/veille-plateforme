@@ -32,11 +32,12 @@ def _has_keyword(title: str, keywords: list[str]) -> bool:
     return any(re.search(rf"\b{re.escape(k.lower())}\b", low) for k in keywords)
 
 
-def imported_events(points: list[str], keywords: list[str], today: date, horizon_days: int = 21) -> list[dict]:
+def imported_events(points: list[str], keywords: list[str], today: date, horizon_days: int = 21,
+                    exclude: list[str] | tuple[str, ...] = ()) -> list[dict]:
     out, limit = [], today + timedelta(days=horizon_days)
     for point in points:
         parsed = parse_point(point, today)
-        if not parsed or not _has_keyword(parsed["title"], keywords):
+        if not parsed or not _has_keyword(parsed["title"], keywords) or _has_keyword(parsed["title"], list(exclude)):
             continue
         if parsed["end"] < today or parsed["start"] > limit:
             continue

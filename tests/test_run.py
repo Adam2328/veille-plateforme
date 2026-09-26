@@ -163,3 +163,21 @@ def test_run_imports_the_agenda_and_survives_a_failing_import(tmp_path):
     report = run(tmp_path, now=NOW, fetch=fake_fetch, agenda_fetch=boom)
     assert "agenda:ia" in report["sources_failed"]
     assert json.loads(home_path.read_text("utf-8"))["domains"][0]["upcoming"] == []
+
+
+RSS_MIXED = b"""<?xml version="1.0"?><rss version="2.0"><channel><title>t</title>
+<item><title>OpenAI lance GPT-6 avec un contexte de deux millions de tokens</title><link>https://ex.com/1</link>
+<pubDate>Sat, 26 Sep 2026 10:30:00 GMT</pubDate><description>Details.</description></item>
+<item><title>Recette de cuisine du dimanche</title><link>https://ex.com/2</link>
+<pubDate>Sat, 26 Sep 2026 10:45:00 GMT</pubDate><description>Details.</description></item>
+</channel></rss>"""
+
+
+def test_relevance_filter_drops_articles_matching_no_keyword_or_entity(tmp_path):
+    setup(tmp_path)
+    write = lambda dom: (tmp_path / "config" / "domains" / "ia.yml").write_text(yaml.safe_dump(dom, allow_unicode=True), "utf-8")
+    write({**DOM, "relevance": True})
+    assert run(tmp_path, now=NOW, fetch=lambda url: RSS_MIXED)["new_items"] == 1
+    shutil.rmtree(tmp_path / "data")
+    write(DOM)
+    assert run(tmp_path, now=NOW, fetch=lambda url: RSS_MIXED)["new_items"] == 2

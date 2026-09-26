@@ -59,3 +59,10 @@ def test_garbage_input_is_ignored():
     assert imported_events(["", "n'importe quoi", "30/09 :: usa"], KW, TODAY) == []
     assert imported_events([], KW, TODAY) == []
     assert imported_events(["30/09 :: usa :: macro :: Inflation"], [], TODAY) == []
+
+
+def test_excluded_words_remove_low_value_entries():
+    points = ["30/09 :: europe :: mkt-n :: Discours BCE Lagarde", "30/09 :: europe :: mkt-n :: Décision BCE"]
+    got = imported_events(points, KW, TODAY, exclude=["discours", "panel"])
+    assert [e["title"] for e in got] == ["Europe · Décision BCE"]
+    assert len(imported_events(points, KW, TODAY)) == 2
