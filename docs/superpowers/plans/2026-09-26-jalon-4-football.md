@@ -21,6 +21,7 @@
 | TheSportsDB (clé publique gratuite) | répond, mais classement limité à 5 lignes et 1 seul match par requête | Écartée pour les classements |
 | **football-data.org** (v4) | répond 403 sans jeton ; le plan gratuit couvre Ligue 1, Premier League, Liga, Serie A, Bundesliga, Ligue des champions, Euro et Coupe du monde, à 10 requêtes par minute | **Retenue, exige une clé gratuite créée par l'utilisateur** (tâche 7) |
 | Comptes X d'actualité (Actu Foot, BeFootball) | pas d'API gratuite fiable | Non couverts (voir spec §11) ; Reddit et Google Actualités assurent la détection rapide |
+| **Flashscore** (demandé par l'utilisateur) | ni API publique ni flux RSS ; le flux interne (`d.flashscore.fr/x/feed`) exige une signature privée ; `robots.txt` interdit aux robots les pages de direct, résultats et classements | **Pas de collecte automatique** (contournement technique et conditions d'utilisation). **Utilisé comme destination « approfondir »** : chaque compétition du site renvoie vers ses pages Flashscore (résultats, calendrier, classement), qui s'ouvrent dans l'application sur le téléphone. Les 24 adresses (6 compétitions × 4 pages) ont été testées le 26/09/2026 |
 
 Le plan gratuit de football-data.org **ne couvre pas** la Ligue Europa, la Ligue Conférence, la Ligue des nations ni les compétitions féminines : leurs actualités passent par les flux RSS uniquement.
 
@@ -127,6 +128,7 @@ Dans `schemas/public.schema.json`, dans l'objet `"$defs"`, après la définition
             "required": ["code", "name", "stale", "standings"],
             "properties": {
               "code": {"type": "string"}, "name": {"type": "string"}, "stale": {"type": "boolean"},
+              "flashscore": {"type": "string"},
               "standings": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/standingRow"}}
             }
           }
@@ -250,6 +252,15 @@ def test_collect_builds_a_valid_sorted_file_with_one_request_per_call():
                                              "football:matches:results", "football:matches:fixtures"}
 
 
+def test_flashscore_link_is_copied_from_the_config_when_present():
+    cfg = {"competitions": [{"code": "FL1", "name": "Ligue 1", "flashscore": "https://www.flashscore.fr/football/france/ligue-1/"},
+                            {"code": "PL", "name": "Premier League"}]}
+    data, _ = collect_football(cfg, "secret", None, NOW, fake)
+    validate("football", data)
+    by = {c["code"]: c for c in data["competitions"]}
+    assert by["FL1"]["flashscore"] == "https://www.flashscore.fr/football/france/ligue-1/" and "flashscore" not in by["PL"]
+
+
 def test_match_windows_respect_the_ten_day_limit_of_the_free_plan():
     urls = []
     collect_football(CFG, "secret", None, NOW, lambda url, t: urls.append(url) or fake(url, t))
@@ -318,6 +329,8 @@ def test_football_config_is_optional_and_the_real_one_is_well_formed(tmp_path):
     codes = [c["code"] for c in real["competitions"]]
     assert len(codes) == len(set(codes)) and 1 <= len(codes) <= 6      # budget : 6 classements + 2 fenêtres = 8 requêtes par minute
     assert all(c["name"].strip() for c in real["competitions"])
+    assert all(c["flashscore"].startswith("https://www.flashscore.fr/football/") and c["flashscore"].endswith("/")
+               for c in real["competitions"])
     assert 1 <= real["results_days"] <= 9 and 1 <= real["fixtures_days"] <= 9      # limite de 10 jours du plan gratuit
 ```
 
@@ -378,12 +391,13 @@ Expected: FAIL (`ModuleNotFoundError: No module named 'engine.football_data'`).
 
 ```yaml
 competitions:                  # plan gratuit de football-data.org : 10 requêtes par minute, donc 6 classements + 2 fenêtres de matchs
-  - {code: FL1, name: "Ligue 1"}
-  - {code: PL, name: "Premier League"}
-  - {code: PD, name: "Liga"}
-  - {code: SA, name: "Serie A"}
-  - {code: BL1, name: "Bundesliga"}
-  - {code: CL, name: "Ligue des champions"}
+  # flashscore : page de la compétition sur flashscore.fr (lien « approfondir » ; adresses testées le 26/09/2026)
+  - {code: FL1, name: "Ligue 1", flashscore: "https://www.flashscore.fr/football/france/ligue-1/"}
+  - {code: PL, name: "Premier League", flashscore: "https://www.flashscore.fr/football/angleterre/premier-league/"}
+  - {code: PD, name: "Liga", flashscore: "https://www.flashscore.fr/football/espagne/laliga/"}
+  - {code: SA, name: "Serie A", flashscore: "https://www.flashscore.fr/football/italie/serie-a/"}
+  - {code: BL1, name: "Bundesliga", flashscore: "https://www.flashscore.fr/football/allemagne/bundesliga/"}
+  - {code: CL, name: "Ligue des champions", flashscore: "https://www.flashscore.fr/football/europe/ligue-des-champions/"}
 results_days: 9                # les fenêtres de /matches sont limitées à 10 jours par le plan gratuit
 fixtures_days: 9
 ```
@@ -460,10 +474,11 @@ def collect_football(cfg: dict, token: str | None, previous: dict | None, now: d
     for c in cfg["competitions"]:
         rows = _try(health, f"football:standings:{c['code']}",
                     lambda c=c: parse_standings(fetch(f"{_BASE}/competitions/{c['code']}/standings", token)))
+        links = {"flashscore": c["flashscore"]} if c.get("flashscore") else {}
         if rows:
-            comps.append({"code": c["code"], "name": c["name"], "standings": rows, "stale": False})
+            comps.append({"code": c["code"], "name": c["name"], "standings": rows, "stale": False, **links})
         elif c["code"] in old_comps:
-            comps.append({**old_comps[c["code"]], "name": c["name"], "stale": True})
+            comps.append({**old_comps[c["code"]], "name": c["name"], "stale": True, **links})
     codes = ",".join(c["code"] for c in cfg["competitions"])
     today = now.date()
 
@@ -717,6 +732,20 @@ test('le classement affiche les colonnes et signale un classement périmé', () 
   assert.ok(!renderStandings(FB().competitions[0]).includes('non actualisé'));
 });
 
+test('chaque compétition renvoie vers sa page Flashscore, jamais vers un autre domaine', () => {
+  const fb = FB({ competitions: [{ ...FB().competitions[0], flashscore: 'https://www.flashscore.fr/football/france/ligue-1/' },
+                                 { ...FB().competitions[1], flashscore: 'javascript:alert(1)//' }] });
+  const results = renderMatches(fb.results, fb, 'resultats/');
+  assert.match(results, /href="https:\/\/www\.flashscore\.fr\/football\/france\/ligue-1\/resultats\/"/);
+  assert.match(results, /rel="noopener noreferrer"/);
+  assert.match(renderStandings(fb.competitions[0]), /ligue-1\/classement\//);
+  assert.ok(!renderStandings(fb.competitions[1]).includes('javascript:'));
+  assert.ok(!renderStandings(fb.competitions[1]).includes('Flashscore'));
+  const evil = { ...fb.competitions[0], flashscore: 'https://evil.example/' };
+  assert.ok(!renderStandings(evil).includes('evil.example'));
+  assert.ok(!renderStandings(FB().competitions[0]).includes('Flashscore'));     // pas de lien si non configuré
+});
+
 test('la page Football propose les cinq onglets et marque l’onglet actif', () => {
   const html = renderFootball(fbFile(), FB(), 'resultats', null, defaultState(), NOW);
   for (const t of ['Actu', 'Résultats', 'Classements', 'Calendrier', 'Mercato']) assert.ok(html.includes(t), t);
@@ -809,6 +838,13 @@ Expected: FAIL (`matchLine` n'existe pas ; `football.json` absent de l'exemple).
 const FB_TABS = [['actu', 'Actu'], ['resultats', 'Résultats'], ['classements', 'Classements'], ['calendrier', 'Calendrier'], ['mercato', 'Mercato']];
 const HIDDEN_IN_MERCATO = ['rumeur', 'non_confirmé'];
 const compName = (football, code) => football?.competitions?.find((c) => c.code === code)?.name ?? code;
+// Lien « approfondir » vers Flashscore (s'ouvre dans l'application sur mobile) ; page = '' | 'resultats/' | 'calendrier/' | 'classement/'.
+function flashscoreLink(comp, page = '') {
+  const url = comp?.flashscore ? safeUrl(`${comp.flashscore}${page}`) : null;
+  return url && url.startsWith('https://www.flashscore.fr/')
+    ? `<a class="fs" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Voir sur Flashscore ↗</a>`
+    : '';
+}
 const fmtKickoff = (iso) => {
   const d = new Date(iso);
   return Number.isNaN(d.getTime()) ? '' : d.toLocaleString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
@@ -820,11 +856,12 @@ export function matchLine(m) {
   return `<li class="match${played ? '' : ' next'}"><span class="mh">${esc(m.home)}</span><span class="ms">${esc(middle)}</span><span class="ma">${esc(m.away)}</span></li>`;
 }
 
-export function renderMatches(list, football) {
+export function renderMatches(list, football, page = '') {
   if (!list || !list.length) return '<p class="meta">Aucun match à afficher.</p>';
   const codes = [...new Set(list.map((m) => m.competition))];
+  const comp = (code) => football?.competitions?.find((c) => c.code === code);
   return codes
-    .map((code) => `<h3 class="cmp">${esc(compName(football, code))}</h3><ul class="matches">${list.filter((m) => m.competition === code).map(matchLine).join('')}</ul>`)
+    .map((code) => `<h3 class="cmp">${esc(compName(football, code))} ${flashscoreLink(comp(code), page)}</h3><ul class="matches">${list.filter((m) => m.competition === code).map(matchLine).join('')}</ul>`)
     .join('');
 }
 
@@ -832,7 +869,7 @@ export function renderStandings(comp) {
   const rows = comp.standings
     .map((r) => `<tr><td>${esc(r.position)}</td><td class="tn">${esc(r.team)}</td><td>${esc(r.played)}</td><td>${esc(r.won)}</td><td>${esc(r.draw)}</td><td>${esc(r.lost)}</td><td>${esc(r.gd)}</td><td><b>${esc(r.points)}</b></td><td class="form">${esc(r.form)}</td></tr>`)
     .join('');
-  return `<table class="standings"><thead><tr><th>#</th><th>Équipe</th><th>J</th><th>G</th><th>N</th><th>P</th><th>Diff</th><th>Pts</th><th>Forme</th></tr></thead><tbody>${rows}</tbody></table>${comp.stale ? '<p class="meta">Classement non actualisé.</p>' : ''}`;
+  return `<table class="standings"><thead><tr><th>#</th><th>Équipe</th><th>J</th><th>G</th><th>N</th><th>P</th><th>Diff</th><th>Pts</th><th>Forme</th></tr></thead><tbody>${rows}</tbody></table>${comp.stale ? '<p class="meta">Classement non actualisé.</p>' : ''}<p class="meta">${flashscoreLink(comp, 'classement/')}</p>`;
 }
 
 export function footballStrip(football) {
@@ -858,9 +895,9 @@ export function renderFootball(file, football, tab, arg, state, now) {
   const unavailable = '<p class="meta">Données indisponibles pour le moment.</p>';
   let body;
   if (tab === 'resultats') {
-    body = football ? `<h2>Résultats récents</h2>${renderMatches(football.results, football)}` : unavailable;
+    body = football ? `<h2>Résultats récents</h2>${renderMatches(football.results, football, 'resultats/')}` : unavailable;
   } else if (tab === 'calendrier') {
-    body = football ? `<h2>Prochains matchs</h2>${renderMatches(football.fixtures, football)}` : unavailable;
+    body = football ? `<h2>Prochains matchs</h2>${renderMatches(football.fixtures, football, 'calendrier/')}` : unavailable;
   } else if (tab === 'classements') {
     const comps = football?.competitions ?? [];
     if (!comps.length) {
@@ -941,6 +978,7 @@ Dans `site/js/app.js` : importer `loadFootball` (`import { loadHome, loadDomain,
 .match .mh { text-align: right; }
 .match .ms { font: 500 13px var(--mono); min-width: 84px; text-align: center; }
 .match.next .ms { color: var(--soft); font-weight: 400; font-size: 12px; }
+.fs { font: 500 11px var(--sans); text-transform: none; letter-spacing: 0; margin-left: 8px; color: var(--accent); }
 .fb-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0 20px; margin-top: 10px; }
 
 .standings { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); font-size: 14px; }
@@ -1292,6 +1330,7 @@ Compléter `docs/superpowers/measurements/jalon-4.md` avec les résultats de pro
 - **Spec §7 fiabilité** : « une rumeur sans source fiable ne doit pas avoir la même importance qu'une information confirmée » : règle `rumor_markers` déterministe (tâche 3), plafond de niveau 2 déjà en place, onglet Mercato qui masque les rumeurs par défaut (tâche 4). Les étiquettes officiel / confirmé / rapporté / en développement / rumeur sont visibles sur chaque carte.
 - **Spec §10 UX** : onglets Actu, Résultats, Classements, Calendrier, Mercato, blessures et suspensions visibles dans Actu (kinds `injury` et `suspension`), bande résultats/prochains matchs sur l'Accueil. Non couverts : onglet « Compétitions » séparé, filtres par équipe et suivis (jalon 5).
 - **Spec §12 erreurs** : clé absente, quota, API en panne, format inattendu : dernières valeurs conservées et marquées non actualisées, échec dans `health.json`, jamais de fichier vide publié, jamais de blocage du cycle.
+- **Flashscore (demande de l'utilisateur)** : pas de collecte (aucune API, signature privée, `robots.txt`) ; lien « Voir sur Flashscore » par compétition dans Résultats, Calendrier et Classements, limité au domaine `www.flashscore.fr` (test). Au jalon Tennis, même principe pour les tournois.
 - **Risque assumé** : le format de football-data.org est supposé d'après sa documentation et n'a pas pu être testé sans clé ; la tâche 7 impose une validation sur la réponse réelle et des fixtures réelles avant toute mise en production.
 - **Types et noms** : `collect_football(cfg, token, previous, now, fetch)`, `parse_standings`, `parse_matches`, `fetch_fd`, `publish_football`, `football_token`, `football_fetch` (tâche 2) ; `classify(items, now, dom)` et `rescore` (tâche 3) ; `renderFootball`, `renderMatches`, `renderStandings`, `matchLine`, `footballStrip`, `renderDomain(..., football, tab, arg)`, `domainBlock(..., quotes, football)`, `renderHome(..., quotes, football)` (tâche 4), cohérents avec le `run.py` du jalon 3.
 - **Pas de placeholder** : les seuils sont des valeurs de départ avec procédure de calibrage chiffrée (tâche 6) ; les deux actions de l'utilisateur (clé, secret) et l'accord de poussée sont explicites (tâche 7).
