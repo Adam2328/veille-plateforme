@@ -8,6 +8,6 @@ _SCHEMA = json.loads(
 )
 
 
-def validate(kind, instance):
+def validate(kind: str, instance: dict) -> None:
     """Lève jsonschema.ValidationError si `instance` ne respecte pas le contrat `kind`."""
     Draft202012Validator({"$ref": f"#/$defs/{kind}", "$defs": _SCHEMA["$defs"]}).validate(instance)

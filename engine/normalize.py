@@ -1,7 +1,7 @@
 import hashlib
 import html
 import re
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from .timeutil import parse
 
@@ -12,20 +12,20 @@ _ATTR = re.compile(r"\b(?i:selon|d'après|d’après|according to|via)\s+(?:le |
                    r"([A-ZÀ-Ý][\w'’.&-]*(?: [A-ZÀ-Ý][\w'’.&-]*){0,2})")
 
 
-def clean(text):
+def clean(text: str | None) -> str:
     return _WS.sub(" ", html.unescape(_TAG.sub(" ", text or ""))).strip()
 
 
-def item_id(url):
+def item_id(url: str) -> str:
     return "it_" + hashlib.sha1(url.strip().lower().encode("utf-8")).hexdigest()[:12]
 
 
-def origin_of(default_origin, title, snippet):
+def origin_of(default_origin: str, title: str, snippet: str) -> str:
     m = _ATTR.search(f"{title}. {snippet}")
     return (m.group(1) if m else default_origin).lower()
 
 
-def normalize(raw, source, publishers=None):
+def normalize(raw: dict, source: dict, publishers: dict | None = None) -> dict:
     title = clean(raw["title"])
     snippet = clean(raw.get("snippet", ""))[:600]
     pub = raw.get("publisher")
@@ -38,11 +38,11 @@ def normalize(raw, source, publishers=None):
     }
 
 
-def _title_key(title):
+def _title_key(title: str) -> str:
     return re.sub(r"\W+", " ", title.lower()).strip()
 
 
-def dedupe(items, known_ids):
+def dedupe(items: list, known_ids: set) -> list:
     seen_ids, seen_titles, out = set(known_ids), set(), []
     for it in items:
         key = _title_key(it["title"])
@@ -54,11 +54,11 @@ def dedupe(items, known_ids):
     return out
 
 
-def recent(items, now, hours):
+def recent(items: list, now: datetime, hours: int) -> list:
     cutoff = now - timedelta(hours=hours)
     return [i for i in items if parse(i["published_at"]) >= cutoff]
 
 
-def excluded(item, patterns):
+def excluded(item: dict, patterns: list[str]) -> bool:
     text = f"{item['title']} {item['snippet']}".lower()
     return any(p.lower() in text for p in patterns)

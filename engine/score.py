@@ -1,10 +1,11 @@
 import math
+from datetime import datetime
 
 from .reliability import LOW
 from .timeutil import parse
 
 
-def importance(ev, dom, g, now):
+def importance(ev: dict, dom: dict, g: dict, now: datetime) -> float:
     s = g["score"]
     items = ev["items"]
     best = min(i["tier"] for i in items)
@@ -24,7 +25,7 @@ def importance(ev, dom, g, now):
     return round(max(0.0, min(100.0, total)), 1)
 
 
-def assign_levels(events, dom):
+def assign_levels(events: list, dom: dict) -> list:
     t, cap = dom["thresholds"], dom["max_l1"]
     out, n1 = [], 0
     for ev in sorted(events, key=lambda e: -e["importance"]):

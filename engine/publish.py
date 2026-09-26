@@ -1,6 +1,7 @@
 import json
 import os
-from datetime import timedelta
+from datetime import datetime, timedelta
+from pathlib import Path
 
 from .contract import validate
 from .timeutil import iso, parse
@@ -10,7 +11,7 @@ _PUBLIC = ("id", "rev", "domain", "kind", "title", "first_seen", "updated_at", "
 _STAMPS = ("generated_at", "checked_at")
 
 
-def project(ev):
+def project(ev: dict) -> dict:
     p = {k: ev[k] for k in _PUBLIC}
     p["importance"] = round(ev["importance"])
     p["summary"] = ev.get("summary")
@@ -22,14 +23,14 @@ def project(ev):
     return p
 
 
-def build_domain(dom, events, now):
+def build_domain(dom: dict, events: list, now: datetime) -> dict:
     cutoff = now - timedelta(days=7)
     shown = sorted((e for e in events if e["level"] >= 1 and parse(e["updated_at"]) >= cutoff), key=lambda e: -e["importance"])
     return {"generated_at": iso(now), "domain": {k: dom[k] for k in ("id", "name", "accent")},
             "events": [project(e) for e in shown], "upcoming": []}
 
 
-def build_home(cfg, events_by_domain, now):
+def build_home(cfg: dict, events_by_domain: dict, now: datetime) -> dict:
     h = cfg["global"]["home"]
     cutoff = now - timedelta(hours=h["window_hours"])
     domains, events = [], {}
@@ -44,14 +45,14 @@ def build_home(cfg, events_by_domain, now):
             "retain": [e["id"] for e in level_one[: h["retain_max"]]], "events": events}
 
 
-def write_json(path, obj):
+def write_json(path: Path, obj: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(".tmp")
     tmp.write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":")), "utf-8")
     os.replace(tmp, path)
 
 
-def write_if_changed(path, obj, now=None, max_age_min=None):
+def write_if_changed(path: Path, obj: dict, now: datetime | None = None, max_age_min: int | None = None) -> bool:
     stamp = next((k for k in _STAMPS if k in obj), None)
     if path.exists():
         old = json.loads(path.read_text("utf-8"))
@@ -63,7 +64,7 @@ def write_if_changed(path, obj, now=None, max_age_min=None):
     return True
 
 
-def publish(root, home, domain_files):
+def publish(root: Path, home: dict, domain_files: list) -> None:
     validate("home", home)
     for d in domain_files:
         validate("domainFile", d)

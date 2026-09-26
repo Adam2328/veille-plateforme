@@ -2,6 +2,9 @@ import argparse
 import json
 import os
 import sys
+from collections.abc import Callable
+from datetime import datetime
+from pathlib import Path
 
 from .cluster import cluster
 from .collect import collect_source, fetch_bytes
@@ -15,7 +18,7 @@ from .summarize import fingerprint, gemini_call, summarize
 from .timeutil import iso, now_utc
 
 
-def collect_domain(dom, g, now, fetch):
+def collect_domain(dom: dict, g: dict, now: datetime, fetch: Callable[[str], bytes]) -> tuple[list, list]:
     items, health = [], []
     for src in dom["sources"]:
         source = {**src, "domain": dom["id"]}
@@ -26,7 +29,7 @@ def collect_domain(dom, g, now, fetch):
     return recent(items, now, g["collect"]["max_age_hours"]), health
 
 
-def rescore(events, dom, g, now):
+def rescore(events: list, dom: dict, g: dict, now: datetime) -> list:
     out = []
     for ev in events:
         label, reason = classify(ev["items"], now)
@@ -35,7 +38,7 @@ def rescore(events, dom, g, now):
     return assign_levels(out, dom)
 
 
-def add_summaries(events, g, call):
+def add_summaries(events: list, g: dict, call: Callable[[str], str] | None) -> tuple[list, set, list]:
     need = sorted((e for e in events if e["level"] in (1, 2) and e.get("summary_fp") != fingerprint(e)),
                   key=lambda e: -e["importance"])[: g["ai"]["max_events_per_run"]]
     results, errors = summarize(need, call)
@@ -49,7 +52,7 @@ def add_summaries(events, g, call):
     return [done.get(e["id"], e) for e in events], touched, errors
 
 
-def _tally(report, events, errors):
+def _tally(report: dict, events: list, errors: list) -> None:
     for e in events:
         if e["level"] >= 1:
             report["events"][str(e["level"])] += 1
@@ -59,7 +62,8 @@ def _tally(report, events, errors):
     report["ai"]["errors"] += errors
 
 
-def run(root=ROOT, now=None, only=None, call=None, fetch=fetch_bytes):
+def run(root: Path = ROOT, now: datetime | None = None, only: list[str] | None = None,
+        call: Callable[[str], str] | None = None, fetch: Callable[[str], bytes] = fetch_bytes) -> dict:
     now = now or now_utc()
     cfg = load_config(root)
     g = cfg["global"]
@@ -90,7 +94,7 @@ def run(root=ROOT, now=None, only=None, call=None, fetch=fetch_bytes):
     return report
 
 
-def main():
+def main() -> None:
     try:
         from dotenv import load_dotenv
         load_dotenv(ROOT / ".env")

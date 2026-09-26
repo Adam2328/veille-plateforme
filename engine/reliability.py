@@ -1,5 +1,5 @@
 import re
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from .timeutil import parse
 
@@ -11,7 +11,7 @@ _HEDGE = re.compile(
     r"would|could|reportedly|rumou?rs?|allegedly|sources say|apparently)\b", re.I)
 
 
-def classify(items, now):
+def classify(items: list, now: datetime) -> tuple[str, str]:
     by_origin = {}
     for it in items:
         cur = by_origin.get(it["origin"])

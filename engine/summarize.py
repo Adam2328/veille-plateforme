@@ -2,6 +2,7 @@ import hashlib
 import json
 import os
 import re
+from collections.abc import Callable
 
 KEYS = ("quoi", "qui", "quand", "pourquoi", "retenir")
 _FENCE = "`" * 3
@@ -15,11 +16,11 @@ SYSTEM = (
 )
 
 
-def fingerprint(ev):
+def fingerprint(ev: dict) -> str:
     return hashlib.sha1("|".join(sorted(i["id"] for i in ev["items"])).encode("utf-8")).hexdigest()[:16]
 
 
-def extractive(ev):
+def extractive(ev: dict) -> dict:
     best = min(ev["items"], key=lambda i: (i["tier"], i["published_at"]))
     snippet = best["snippet"].strip()
     origins = {i["origin"] for i in ev["items"]}
@@ -32,7 +33,7 @@ def extractive(ev):
     }
 
 
-def _prompt(events):
+def _prompt(events: list) -> str:
     blocks = []
     for ev in events:
         lines = "\n".join(f"- [tier {i['tier']}] {i['source']} : {i['title']} — {i['snippet'][:300]}"
@@ -41,7 +42,7 @@ def _prompt(events):
     return f"{SYSTEM}\n\n" + "\n\n".join(blocks)
 
 
-def _parse(text, ids):
+def _parse(text: str, ids: list[str]) -> dict:
     text = text.strip().removeprefix(_FENCE + "json").removeprefix(_FENCE).removesuffix(_FENCE).strip()
     data = json.loads(text)
     if not isinstance(data, dict):
@@ -54,7 +55,7 @@ def _parse(text, ids):
     return ok
 
 
-def _ask(batch, call):
+def _ask(batch: list, call: Callable[[str], str]) -> tuple[dict, str | None]:
     prompt, error = _prompt(batch), None
     for _ in range(2):
         try:
@@ -67,7 +68,7 @@ def _ask(batch, call):
     return {}, error
 
 
-def summarize(events, call, batch_size=15):
+def summarize(events: list, call: Callable[[str], str] | None, batch_size: int = 15) -> tuple[dict, list]:
     results, errors, quota_hit = {}, [], False
     for start in range(0, len(events), batch_size):
         batch = events[start:start + batch_size]
@@ -82,12 +83,12 @@ def summarize(events, call, batch_size=15):
     return results, errors
 
 
-def gemini_call(model=None):
+def gemini_call(model: str | None = None) -> Callable[[str], str]:
     from google import genai
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
     name = model or os.environ.get("AI_MODEL_ANALYSIS", "gemini-flash-lite-latest")
 
-    def call(prompt):
+    def call(prompt: str) -> str:
         response = client.models.generate_content(
             model=name, contents=prompt, config={"response_mime_type": "application/json"})
         return response.text

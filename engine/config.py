@@ -5,7 +5,7 @@ import yaml
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 
-def load_config(root=ROOT):
+def load_config(root: pathlib.Path | str = ROOT) -> dict:
     root = pathlib.Path(root)
     g = yaml.safe_load((root / "config" / "global.yml").read_text("utf-8"))
     domains = {}

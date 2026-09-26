@@ -1,5 +1,5 @@
 import hashlib
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from scipy.sparse import vstack
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -13,15 +13,15 @@ _STOP = ["le", "la", "les", "un", "une", "des", "du", "de", "et", "en", "au", "a
          "as", "at", "by", "its", "it"]
 
 
-def _text(it):
+def _text(it: dict) -> str:
     return f"{it['title']} {it['snippet'][:300]}"
 
 
-def _event_text(ev):
+def _event_text(ev: dict) -> str:
     return " ".join(_text(i) for i in ev["items"])
 
 
-def _new_event(it, dom, now):
+def _new_event(it: dict, dom: dict, now: datetime) -> dict:
     text = _text(it)
     return {
         "id": "ev_" + hashlib.sha1(it["id"].encode("utf-8")).hexdigest()[:12], "rev": 1, "domain": dom["id"],
@@ -30,7 +30,7 @@ def _new_event(it, dom, now):
     }
 
 
-def _attach(ev, it, dom, now):
+def _attach(ev: dict, it: dict, dom: dict, now: datetime) -> dict:
     best = min(i["tier"] for i in ev["items"])
     grew = it["origin"] not in {i["origin"] for i in ev["items"]} or it["tier"] < best
     text = _text(it)
@@ -44,7 +44,7 @@ def _attach(ev, it, dom, now):
     }
 
 
-def cluster(items, events, dom, g, now):
+def cluster(items: list, events: list, dom: dict, g: dict, now: datetime) -> tuple[list, set]:
     known = {i["id"] for e in events for i in e["items"]}
     new = sorted((i for i in items if i["id"] not in known), key=lambda i: i["published_at"])
     if not new:
