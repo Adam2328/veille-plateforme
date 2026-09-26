@@ -20,6 +20,22 @@
         "pourquoi": {"type": "string"}, "retenir": {"type": "string"}
       }
     },
+    "bullets": {"type": "array", "maxItems": 8, "items": {"type": "string"}},
+    "layers": {
+      "type": ["object", "null"],
+      "required": ["faits", "analyse", "interpretation", "incertitude", "actifs", "favorables", "risques", "a_surveiller"],
+      "additionalProperties": false,
+      "properties": {
+        "faits": {"$ref": "#/$defs/bullets"},
+        "analyse": {"$ref": "#/$defs/bullets"},
+        "interpretation": {"$ref": "#/$defs/bullets"},
+        "incertitude": {"$ref": "#/$defs/bullets"},
+        "actifs": {"$ref": "#/$defs/bullets"},
+        "favorables": {"$ref": "#/$defs/bullets"},
+        "risques": {"$ref": "#/$defs/bullets"},
+        "a_surveiller": {"$ref": "#/$defs/bullets"}
+      }
+    },
     "upcoming": {
       "type": "array",
       "items": {"type": "object", "required": ["date", "title"],
@@ -44,6 +60,7 @@
         "reliability_reason": {"type": "string"},
         "summary": {"$ref": "#/$defs/summary"},
         "summary_mode": {"enum": ["llm", "extractif", "aucun"]},
+        "layers": {"$ref": "#/$defs/layers"},
         "entities": {"type": "array", "items": {"type": "string"}},
         "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}}
       }
@@ -91,6 +108,29 @@
         "domain": {"$ref": "#/$defs/domainRef"},
         "events": {"type": "array", "items": {"$ref": "#/$defs/event"}},
         "upcoming": {"$ref": "#/$defs/upcoming"}
+      }
+    },
+    "quote": {
+      "type": "object",
+      "required": ["symbol", "name", "group", "price", "change", "change_pct", "currency", "as_of", "stale"],
+      "properties": {
+        "symbol": {"type": "string"},
+        "name": {"type": "string"},
+        "group": {"type": "string"},
+        "price": {"type": "number"},
+        "change": {"type": ["number", "null"]},
+        "change_pct": {"type": ["number", "null"]},
+        "currency": {"type": "string"},
+        "as_of": {"type": "string"},
+        "stale": {"type": "boolean"}
+      }
+    },
+    "quotes": {
+      "type": "object",
+      "required": ["checked_at", "quotes"],
+      "properties": {
+        "checked_at": {"type": "string"},
+        "quotes": {"type": "array", "items": {"$ref": "#/$defs/quote"}}
       }
     }
   }
