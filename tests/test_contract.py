@@ -91,3 +91,28 @@ def test_quote_missing_field_or_wrong_type_fails():
             validate("quotes", {"checked_at": "t", "quotes": [bad]})
     with pytest.raises(ValidationError):
         validate("quotes", {"quotes": [QUOTE]})
+
+
+MATCH = {"id": 501, "competition": "FL1", "date": "2026-09-20T18:45:00+00:00", "home": "Marseille", "away": "PSG",
+         "home_score": 1, "away_score": 2, "status": "FINISHED", "matchday": 5}
+ROW = {"position": 1, "team": "Monaco", "played": 5, "won": 4, "draw": 1, "lost": 0, "gf": 8, "ga": 3, "gd": 5, "points": 13, "form": "WDWWW"}
+FOOTBALL = {"checked_at": "2026-09-26T12:00:00+00:00",
+            "competitions": [{"code": "FL1", "name": "Ligue 1", "stale": False, "standings": [ROW]}],
+            "results": [MATCH], "fixtures": [{**MATCH, "id": 502, "home_score": None, "away_score": None, "status": "SCHEDULED", "matchday": None}]}
+
+
+def test_football_file_is_valid_with_unplayed_matches_and_empty_lists():
+    validate("football", FOOTBALL)
+    validate("football", {"checked_at": "t", "competitions": [], "results": [], "fixtures": []})
+
+
+def test_football_rejects_missing_fields_and_wrong_types():
+    bad_row = {**ROW, "points": "13"}
+    bad_match = {k: v for k, v in MATCH.items() if k != "home"}
+    for bad in ({"competitions": [], "results": [], "fixtures": []},
+                {**FOOTBALL, "competitions": [{"code": "FL1", "name": "L1", "stale": False, "standings": [bad_row]}]},
+                {**FOOTBALL, "results": [bad_match]},
+                {**FOOTBALL, "results": [{**MATCH, "home_score": "1"}]},
+                {**FOOTBALL, "competitions": [{"code": "FL1", "name": "L1", "standings": []}]}):
+        with pytest.raises(ValidationError):
+            validate("football", bad)
