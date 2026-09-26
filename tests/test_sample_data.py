@@ -48,3 +48,10 @@ def test_sample_includes_layers_and_valid_quotes(data):
     quotes = json.loads((data / "quotes.json").read_text("utf-8"))
     validate("quotes", quotes)
     assert any(q["stale"] for q in quotes["quotes"]) and any(q["group"] == "Taux" for q in quotes["quotes"])
+
+
+def test_sample_includes_valid_football_data(data):
+    football = json.loads((data / "football.json").read_text("utf-8"))
+    validate("football", football)
+    assert any(c["stale"] for c in football["competitions"]) and football["results"] and football["fixtures"]
+    assert any(m["home_score"] is None for m in football["fixtures"])

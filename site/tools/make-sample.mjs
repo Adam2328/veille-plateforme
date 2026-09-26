@@ -113,6 +113,21 @@ const quotes = {
     quote('^VIX', 'VIX', 'Volatilité', 14.87, 0, 0),
   ],
 };
+const row = (position, team, played, won, draw, lost, gf, ga, points, form) => ({ position, team, played, won, draw, lost, gf, ga, gd: gf - ga, points, form });
+const mtch = (id, competition, home, away, hs, as, h, status = 'FINISHED') => ({
+  id, competition, date: ago(h), home, away, home_score: hs, away_score: as, status, matchday: 7,
+});
+const football = {
+  checked_at: now.toISOString(),
+  competitions: [
+    { code: 'FL1', name: 'Ligue 1', stale: false, flashscore: 'https://www.flashscore.fr/football/france/ligue-1/',
+      standings: [row(1, 'Monaco', 5, 4, 1, 0, 8, 3, 13, 'WDWWW'), row(2, 'PSG', 5, 4, 0, 1, 11, 4, 12, 'WWLWW'), row(3, 'Lens', 5, 3, 2, 0, 7, 2, 11, 'DWWDW'), row(4, 'Marseille', 5, 3, 1, 1, 9, 6, 10, 'WLDWW')] },
+    { code: 'PL', name: 'Premier League', stale: true, flashscore: 'https://www.flashscore.fr/football/angleterre/premier-league/',
+      standings: [row(1, 'Arsenal', 6, 5, 1, 0, 14, 3, 16, 'WWDWW'), row(2, 'Liverpool', 6, 5, 0, 1, 12, 5, 15, 'WWWLW')] },
+  ],
+  results: [mtch(1, 'FL1', 'Marseille', 'PSG', 1, 2, 20), mtch(2, 'FL1', 'Lens', 'Lille', 0, 0, 44), mtch(3, 'PL', 'Arsenal', 'Chelsea', 2, 1, 30)],
+  fixtures: [mtch(4, 'FL1', 'Nice', 'Brest', null, null, -30, 'TIMED'), mtch(5, 'FL1', 'Lyon', 'Metz', null, null, -54, 'SCHEDULED'), mtch(6, 'PL', 'Liverpool', 'Spurs', null, null, -60, 'TIMED')],
+};
 
 const home = {
   generated_at: now.toISOString(),
@@ -132,6 +147,7 @@ mkdirSync(new URL('domains/', OUT), { recursive: true });
 const write = (rel, obj) => writeFileSync(new URL(rel, OUT), JSON.stringify(obj, null, 1) + '\n');
 write('home.json', home);
 write('quotes.json', quotes);
+write('football.json', football);
 for (const d of DOMAINS) {
   write(`domains/${d.id}.json`, { generated_at: home.generated_at, domain: d, events: byDomain(d.id), upcoming: upcoming[d.id] });
 }

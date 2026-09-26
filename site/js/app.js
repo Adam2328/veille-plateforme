@@ -1,5 +1,5 @@
 import { loadState, saveState, resetState, markSeen, pruneSeen, defaultState } from './state.js';
-import { loadHome, loadDomain, loadQuotes } from './data.js';
+import { loadHome, loadDomain, loadQuotes, loadFootball } from './data.js';
 import { renderHome, renderDomain, renderEvent, renderNav, renderError } from './render.js';
 
 const storage = (() => {
@@ -13,6 +13,7 @@ let home = null;
 let state = defaultState();
 let previousVisit = null;
 let quotes = null;
+let football = null;
 
 const persist = (next) => { state = next; saveState(storage, state); };
 
@@ -35,7 +36,8 @@ async function route() {
   const now = Date.now();
   try {
     if (hash.startsWith('#/d/')) {
-      $main.innerHTML = renderDomain(await domainFile(decodeURIComponent(hash.slice(4))), state, now, quotes);
+      const [id, tab = 'actu', arg = null] = hash.slice(4).split('/').map(decodeURIComponent);
+      $main.innerHTML = renderDomain(await domainFile(id), state, now, quotes, football, tab, arg);
     } else if (hash.startsWith('#/e/')) {
       const ev = await findEvent(decodeURIComponent(hash.slice(4)));
       if (!ev) {
@@ -45,7 +47,7 @@ async function route() {
         persist(markSeen(state, [ev]));
       }
     } else {
-      $main.innerHTML = renderHome(home, state, now, previousVisit, quotes);
+      $main.innerHTML = renderHome(home, state, now, previousVisit, quotes, football);
     }
   } catch (err) {
     $main.innerHTML = renderError(`Impossible de charger les données (${err.message}).`, true);
@@ -62,6 +64,7 @@ async function init() {
     return;
   }
   quotes = await loadQuotes().catch(() => null);
+  football = await loadFootball().catch(() => null);
   if (new URLSearchParams(location.search).has('reset')) resetState(storage);
   state = loadState(storage);
   previousVisit = state.lastVisit;

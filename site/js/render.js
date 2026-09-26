@@ -93,7 +93,98 @@ function layersBlock(layers) {
   return `<div class="layers">${sections.join('')}<p class="meta">Synthèse générée automatiquement à partir des sources. Elle ne constitue pas un conseil en investissement.</p></div>`;
 }
 
-export function domainBlock(dom, events, state, now, quotes = null) {
+const FB_TABS = [['actu', 'Actu'], ['resultats', 'Résultats'], ['classements', 'Classements'], ['calendrier', 'Calendrier'], ['mercato', 'Mercato']];
+const HIDDEN_IN_MERCATO = ['rumeur', 'non_confirmé'];
+const compName = (football, code) => football?.competitions?.find((c) => c.code === code)?.name ?? code;
+const fmtKickoff = (iso) => {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? '' : d.toLocaleString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+};
+
+// Lien « approfondir » vers Flashscore (s'ouvre dans l'application sur mobile) ; page = '' | 'resultats/' | 'calendrier/' | 'classement/'.
+function flashscoreLink(comp, page = '') {
+  const url = comp?.flashscore ? safeUrl(`${comp.flashscore}${page}`) : null;
+  return url && url.startsWith('https://www.flashscore.fr/')
+    ? `<a class="fs" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Voir sur Flashscore ↗</a>`
+    : '';
+}
+
+export function matchLine(m) {
+  const played = Number.isInteger(m.home_score) && Number.isInteger(m.away_score);
+  const middle = played ? `${m.home_score} – ${m.away_score}` : fmtKickoff(m.date);
+  return `<li class="match${played ? '' : ' next'}"><span class="mh">${esc(m.home)}</span><span class="ms">${esc(middle)}</span><span class="ma">${esc(m.away)}</span></li>`;
+}
+
+export function renderMatches(list, football, page = '') {
+  if (!list || !list.length) return '<p class="meta">Aucun match à afficher.</p>';
+  const codes = [...new Set(list.map((m) => m.competition))];
+  const comp = (code) => football?.competitions?.find((c) => c.code === code);
+  return codes
+    .map((code) => `<h3 class="cmp">${esc(compName(football, code))} ${flashscoreLink(comp(code), page)}</h3><ul class="matches">${list.filter((m) => m.competition === code).map(matchLine).join('')}</ul>`)
+    .join('');
+}
+
+export function renderStandings(comp) {
+  const rows = comp.standings
+    .map((r) => `<tr><td>${esc(r.position)}</td><td class="tn">${esc(r.team)}</td><td>${esc(r.played)}</td><td>${esc(r.won)}</td><td>${esc(r.draw)}</td><td>${esc(r.lost)}</td><td>${esc(r.gd)}</td><td><b>${esc(r.points)}</b></td><td class="form">${esc(r.form)}</td></tr>`)
+    .join('');
+  const link = flashscoreLink(comp, 'classement/');
+  return `<table class="standings"><thead><tr><th>#</th><th>Équipe</th><th>J</th><th>G</th><th>N</th><th>P</th><th>Diff</th><th>Pts</th><th>Forme</th></tr></thead><tbody>${rows}</tbody></table>${comp.stale ? '<p class="meta">Classement non actualisé.</p>' : ''}${link ? `<p class="meta">${link}</p>` : ''}`;
+}
+
+export function footballStrip(football) {
+  if (!football) return '';
+  const last = (football.results ?? []).slice(0, 6);
+  const next = (football.fixtures ?? []).slice(0, 6);
+  if (!last.length && !next.length) return '';
+  const col = (title, list) => (list.length ? `<div><h3 class="cmp">${title}</h3><ul class="matches">${list.map(matchLine).join('')}</ul></div>` : '');
+  return `<div class="fb-strip">${col('Derniers résultats', last)}${col('Prochains matchs', next)}</div>`;
+}
+
+function eventSections(events, state, now) {
+  const by = (n) => events.filter((e) => e.level === n);
+  const st = (e) => eventStatus(state, e);
+  const section = (title, list, fn) => (list.length ? `<h2>${title}</h2>${list.map((e) => fn(e, st(e), now)).join('')}` : '');
+  return `${section('Incontournable', by(1), card)}${section('Important', by(2), row)}${section('À savoir', by(3), row)}`;
+}
+
+const fbTabs = (tab) =>
+  `<div class="tabs">${FB_TABS.map(([k, t]) => `<a href="#/d/football${k === 'actu' ? '' : `/${k}`}"${k === tab ? ' aria-current="page"' : ''}>${t}</a>`).join('')}</div>`;
+
+export function renderFootball(file, football, tab, arg, state, now) {
+  const unavailable = '<p class="meta">Données indisponibles pour le moment.</p>';
+  let body;
+  if (tab === 'resultats') {
+    body = football ? `<h2>Résultats récents</h2>${renderMatches(football.results, football, 'resultats/')}` : unavailable;
+  } else if (tab === 'calendrier') {
+    body = football ? `<h2>Prochains matchs</h2>${renderMatches(football.fixtures, football, 'calendrier/')}` : unavailable;
+  } else if (tab === 'classements') {
+    const comps = football?.competitions ?? [];
+    if (!comps.length) {
+      body = unavailable;
+    } else {
+      const cur = comps.find((c) => c.code === arg) ?? comps[0];
+      const subtabs = comps.map((c) => `<a href="#/d/football/classements/${enc(c.code)}"${c.code === cur.code ? ' aria-current="page"' : ''}>${esc(c.name)}</a>`).join('');
+      body = `<div class="tabs sub">${subtabs}</div><h2>${esc(cur.name)}</h2>${renderStandings(cur)}`;
+    }
+  } else if (tab === 'mercato') {
+    const all = file.events.filter((e) => e.kind === 'transfer');
+    const showAll = arg === 'rumeurs';
+    const shown = showAll ? all : all.filter((e) => !HIDDEN_IN_MERCATO.includes(e.reliability));
+    const hidden = all.length - shown.length;
+    const toggle = hidden
+      ? `<p class="meta"><a href="#/d/football/mercato/rumeurs">Afficher les rumeurs (${plural(hidden, 'masquée')})</a></p>`
+      : showAll ? '<p class="meta"><a href="#/d/football/mercato">Masquer les rumeurs</a></p>' : '';
+    body = `${toggle}${shown.length ? eventSections(shown, state, now) : '<p class="meta">Aucune information de mercato pour l’instant.</p>'}`;
+  } else {
+    const news = file.events.filter((e) => e.kind !== 'transfer');
+    body = `${news.length ? eventSections(news, state, now) : '<p class="meta">Rien d’important pour l’instant.</p>'}${upcomingList(file.upcoming)}`;
+  }
+  const tabName = FB_TABS.some(([k]) => k === tab) ? tab : 'actu';
+  return `<div style="--dom:${color(file.domain.accent)}"><a class="back" href="#/">← Accueil</a><h1>${esc(file.domain.name)}</h1>${fbTabs(tabName)}${body}</div>`;
+}
+
+export function domainBlock(dom, events, state, now, quotes = null, football = null) {
   const pick = (n) => (dom.levels[n] ?? []).map((id) => events[id]).filter(Boolean);
   const [l1, l2, l3] = [pick(1), pick(2), pick(3)];
   const st = (e) => eventStatus(state, e);
@@ -108,11 +199,12 @@ export function domainBlock(dom, events, state, now, quotes = null) {
     ${l1.map((e) => card(e, st(e), now)).join('')}
     ${l2.map((e) => row(e, st(e), now)).join('')}
     ${more}
+    ${dom.id === 'football' ? footballStrip(football) : ''}
     ${upcomingList(dom.upcoming)}
   </section>`;
 }
 
-export function renderHome(home, state, now, since = null, quotes = null) {
+export function renderHome(home, state, now, since = null, quotes = null, football = null) {
   const { fresh, updated } = countChanges(state, Object.values(home.events));
   const retain = home.retain.map((id) => home.events[id]).filter(Boolean);
   const sinceTxt = since && fmtDateTime(since) ? ` (dernière visite : ${esc(fmtDateTime(since))})` : '';
@@ -121,21 +213,17 @@ export function renderHome(home, state, now, since = null, quotes = null) {
     <p class="meta">Dernier changement de contenu : ${esc(timeAgo(home.generated_at, now))}</p>
     <div class="since"><span>Depuis ta dernière visite${sinceTxt} : <b>${fresh}</b> nouveauté${fresh > 1 ? 's' : ''} · <b>${updated}</b> mise${updated > 1 ? 's' : ''} à jour</span>${fresh + updated ? '<button class="link" data-action="mark-all">Tout marquer comme vu</button>' : ''}</div>
     ${retain.length ? `<section class="retain"><h2>À retenir aujourd’hui</h2><ol>${retain.map((e) => `<li>${badges(e, eventStatus(state, e))}<a href="${href(e)}">${esc(e.title)}</a><div class="meta">${esc(e.summary?.retenir ?? '')}</div></li>`).join('')}</ol></section>` : ''}
-    ${home.domains.map((d) => domainBlock(d, home.events, state, now, quotes)).join('')}`;
+    ${home.domains.map((d) => domainBlock(d, home.events, state, now, quotes, football)).join('')}`;
 }
 
-export function renderDomain(file, state, now, quotes = null) {
-  const by = (n) => file.events.filter((e) => e.level === n);
-  const st = (e) => eventStatus(state, e);
-  const section = (title, list, fn) => (list.length ? `<h2>${title}</h2>${list.map((e) => fn(e, st(e), now)).join('')}` : '');
+export function renderDomain(file, state, now, quotes = null, football = null, tab = 'actu', arg = null) {
+  if (file.domain.id === 'football') return renderFootball(file, football, tab, arg, state, now);
   const empty = !file.events.length;
   return `<div style="--dom:${color(file.domain.accent)}"><a class="back" href="#/">← Accueil</a>
     <h1>${esc(file.domain.name)}</h1>
     ${file.domain.id === 'finance' ? renderQuotes(quotes, now) : ''}
     ${empty ? '<p class="meta">Rien d’important pour l’instant.</p>' : ''}
-    ${section('Incontournable', by(1), card)}
-    ${section('Important', by(2), row)}
-    ${section('À savoir', by(3), row)}
+    ${eventSections(file.events, state, now)}
     ${upcomingList(file.upcoming)}</div>`;
 }
 
@@ -165,8 +253,9 @@ export function renderEvent(ev, state, now) {
 export function renderNav(home, state, activeHash) {
   const changed = (d) =>
     [1, 2, 3].flatMap((n) => d.levels[n] ?? []).map((id) => home.events[id]).filter((e) => e && eventStatus(state, e) !== 'seen').length;
+  const isActive = (h) => (h === '#/' ? activeHash === h : activeHash === h || activeHash.startsWith(`${h}/`));
   const link = (h, label, n) =>
-    `<a href="${h}"${activeHash === h ? ' aria-current="page"' : ''}><span>${esc(label)}</span>${n ? `<span class="count">${n}</span>` : ''}</a>`;
+    `<a href="${h}"${isActive(h) ? ' aria-current="page"' : ''}><span>${esc(label)}</span>${n ? `<span class="count">${n}</span>` : ''}</a>`;
   return `<div class="brand">Veille</div>${link('#/', 'Accueil', 0)}${home.domains.map((d) => link(`#/d/${enc(d.id)}`, d.name, changed(d))).join('')}`;
 }
 
