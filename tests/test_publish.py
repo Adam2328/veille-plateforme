@@ -82,3 +82,14 @@ def test_write_if_changed_refreshes_a_stale_stamp_when_asked(tmp_path):
     assert write_if_changed(p, {"checked_at": iso(later), "x": 1}, later, max_age_min=55) is False
     much_later = NOW + timedelta(minutes=90)
     assert write_if_changed(p, {"checked_at": iso(much_later), "x": 1}, much_later, max_age_min=55) is True
+
+
+def test_project_includes_layers_only_when_they_have_content():
+    layers = {k: [] for k in ("faits", "analyse", "interpretation", "incertitude", "actifs", "favorables", "risques", "a_surveiller")}
+    assert "layers" not in project(full("ev_a", 80, 1))
+    assert "layers" not in project(full("ev_a", 80, 1, layers=None))
+    assert "layers" not in project(full("ev_a", 80, 1, layers=layers))
+    filled = {**layers, "faits": ["Un fait."]}
+    p = project(full("ev_a", 80, 1, layers=filled))
+    validate("event", p)
+    assert p["layers"] == filled

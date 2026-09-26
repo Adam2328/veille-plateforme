@@ -16,6 +16,9 @@ def project(ev: dict) -> dict:
     p["importance"] = round(ev["importance"])
     p["summary"] = ev.get("summary")
     p["summary_mode"] = ev.get("summary_mode", "aucun") if p["summary"] else "aucun"
+    layers = ev.get("layers")
+    if layers and any(layers.values()):
+        p["layers"] = layers
     p["sources"] = [
         {"name": i["source"], "tier": i["tier"], "url": i["url"], "title": i["title"], "published_at": i["published_at"]}
         for i in sorted(ev["items"], key=lambda i: (i["tier"], i["published_at"]))

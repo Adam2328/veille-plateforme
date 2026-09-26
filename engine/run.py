@@ -38,16 +38,18 @@ def rescore(events: list, dom: dict, g: dict, now: datetime) -> list:
     return assign_levels(out, dom)
 
 
-def add_summaries(events: list, g: dict, call: Callable[[str], str] | None) -> tuple[list, set, list]:
+def add_summaries(events: list, dom: dict, g: dict, call: Callable[[str], str] | None) -> tuple[list, set, list]:
     need = sorted((e for e in events if e["level"] in (1, 2) and e.get("summary_fp") != fingerprint(e)),
                   key=lambda e: -e["importance"])[: g["ai"]["max_events_per_run"]]
-    results, errors = summarize(need, call)
+    results, errors = summarize(need, call, profile=dom.get("summary_profile", "default"))
     done, touched = {}, set()
     for e in need:
         summary, mode = results[e["id"]]
-        done[e["id"]] = {**e, "summary": summary, "summary_mode": mode,
+        summary = dict(summary)
+        layers = summary.pop("layers", None)
+        done[e["id"]] = {**e, "summary": summary, "summary_mode": mode, "layers": layers,
                          "summary_fp": fingerprint(e) if mode == "llm" else None}
-        if (summary, mode) != (e.get("summary"), e.get("summary_mode")):
+        if (summary, mode, layers) != (e.get("summary"), e.get("summary_mode"), e.get("layers")):
             touched.add(e["id"])
     return [done.get(e["id"], e) for e in events], touched, errors
 
@@ -82,7 +84,7 @@ def run(root: Path = ROOT, now: datetime | None = None, only: list[str] | None =
             report["new_items"] += len(fresh)
             mine, changed = cluster(fresh, mine, dom, g, now)
         mine = rescore(mine, dom, g, now)
-        mine, touched, errors = add_summaries(mine, g, call)
+        mine, touched, errors = add_summaries(mine, dom, g, call)
         append(root, [e for e in mine if e["id"] in changed | touched], now)
         by_domain[dom["id"]] = mine
         _tally(report, mine, errors)

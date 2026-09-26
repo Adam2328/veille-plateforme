@@ -84,3 +84,25 @@ def test_llm_summary_is_used_and_not_requested_twice(tmp_path):
     home = json.loads((tmp_path / "site" / "data" / "home.json").read_text("utf-8"))
     assert next(iter(home["events"].values()))["summary_mode"] == "llm"
     assert len(calls) == 1
+
+
+FIN_LAYERS = {k: [f"{k} un"] for k in ("faits", "analyse", "interpretation", "incertitude", "actifs", "favorables", "risques", "a_surveiller")}
+
+
+def test_finance_profile_publishes_layers_and_stays_idempotent(tmp_path):
+    setup(tmp_path)
+    (tmp_path / "config" / "domains" / "ia.yml").write_text(
+        yaml.safe_dump({**DOM, "summary_profile": "finance"}, allow_unicode=True), "utf-8")
+
+    def call(prompt):
+        ev_id = prompt.split("## ")[1].split("\n")[0]
+        return json.dumps({ev_id: {**{k: f"llm {k}" for k in ("quoi", "qui", "quand", "pourquoi", "retenir")}, "layers": FIN_LAYERS}})
+
+    run(tmp_path, now=NOW, fetch=fake_fetch, call=call)
+    before = snapshot(tmp_path)
+    run(tmp_path, now=NOW, fetch=fake_fetch, call=call)
+    home = json.loads((tmp_path / "site" / "data" / "home.json").read_text("utf-8"))
+    validate("home", home)
+    ev = next(iter(home["events"].values()))
+    assert ev["layers"]["faits"] == ["faits un"] and "layers" not in ev["summary"]
+    assert snapshot(tmp_path) == before
