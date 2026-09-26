@@ -1,0 +1,107 @@
+id: football
+name: Football
+accent: "#0B6E4F"
+order: 3
+quota: 12
+max_l1: 4
+thresholds: {l1: 60, l2: 50, l3: 40}   # valeurs de départ, calibrées à la tâche 6
+relevance: true
+
+exclude: ["pronostic", "prono ", "cote ", "cotes ", "bookmaker", "paris sportifs", "betting", "betclic", "winamax", "unibet", "odds",
+          "jeu concours", "quiz", "ea fc", "ea sports fc", "fifa 2", "fantasy", "promo code", "sponsored"]      # paris, jeux vidéo, promotions
+
+# Rumeurs de mercato : un événement à source unique formulé comme une piste est une rumeur, sauf marqueur de confirmation.
+# Un marqueur correspond au début d'un mot (« intéress » couvre « intéressé », « intéresse »).
+rumor_markers: ["serait", "seraient", "aurait", "pourrait", "pourraient", "piste", "pisteur", "intéress", "dans le viseur", "sur les tablettes",
+                "envisage", "tenterait", "tenter", "courtise", "convoit", "souhaite recruter", "would", "could", "reportedly", "linked with",
+                "interested in", "eyeing", "considering", "target", "monitoring", "keen on", "rumour", "rumor"]
+confirm_markers: ["officiel", "officialise", "officialisé", "official", "here we go", "a signé", "vient de signer", "signs", "signed",
+                  "confirme", "confirmed", "présenté", "unveiled", "prolonge", "extends his contract"]
+
+entities:                               # entités majeures : un événement qui en cite une reçoit le bonus d'entité
+  PSG: [psg, "paris saint-germain", "paris sg"]
+  OM: ["olympique de marseille", "om "]
+  OL: ["olympique lyonnais"]
+  Monaco: ["as monaco"]
+  Lille: [losc]
+  Lens: ["rc lens"]
+  Real Madrid: ["real madrid"]
+  FC Barcelone: [barça, barca, "fc barcelona", "fc barcelone"]
+  Atlético: ["atlético", "atletico madrid"]
+  Manchester City: ["manchester city", "man city"]
+  Manchester United: ["manchester united", "man united", "man utd"]
+  Liverpool: [liverpool]
+  Arsenal: [arsenal]
+  Chelsea: [chelsea]
+  Tottenham: [tottenham, spurs]
+  Bayern: ["bayern munich", "bayern munchen", "bayern münchen"]
+  Dortmund: ["borussia dortmund"]
+  Juventus: [juventus, juve]
+  Inter: ["inter milan", "inter de milan"]
+  Milan AC: ["ac milan"]
+  Napoli: [napoli, naples]
+  Équipe de France: ["équipe de france", "bleus", "les bleus", "france team", "france national team"]
+  Mbappé: [mbappé, mbappe]
+  Haaland: [haaland]
+  Messi: [messi]
+  Ronaldo: [ronaldo]
+  Vinícius: [vinicius, vinícius]
+  Bellingham: [bellingham]
+  Yamal: [yamal]
+  Dembélé: [dembélé, dembele]
+  Salah: [salah]
+  Ligue des champions: ["ligue des champions", "champions league"]
+  Coupe du monde: ["coupe du monde", "world cup"]
+
+kinds:
+  result:
+    weight: 22
+    keywords: [victoire, défaite, "match nul", "s'impose", "s'incline", "l'emporte", wins, beat, beats, draw, defeat, "full-time", "full time", triumph]
+  competition:
+    weight: 20
+    keywords: ["ligue des champions", "champions league", "coupe du monde", "world cup", euro, "ligue des nations", "nations league", "europa league", "conference league", "tirage au sort", "coupe de france", "fa cup", "copa"]
+  transfer:
+    weight: 20
+    keywords: [transfert, transfer, mercato, recrue, prêt, loan, "here we go", officialise, prolonge, prolongation, "release clause", "clause libératoire", signe, signs, signing, "va signer", "bid", offre]
+  injury:
+    weight: 18
+    keywords: [blessure, blessé, blessés, injury, injured, forfait, indisponible, "out for", ligaments, "rupture"]
+  suspension:
+    weight: 18
+    keywords: [suspendu, suspension, "carton rouge", "red card", disciplinaire, "commission de discipline", "banned", "suspended"]
+  coach:
+    weight: 15
+    keywords: [entraîneur, coach, limogé, limogeage, sacked, "appointed", "nommé", "manager"]
+  national_team:
+    weight: 15
+    keywords: ["équipe de france", bleus, "sélection", "national team", "convoqué", "liste des"]
+  record:
+    weight: 12
+    keywords: [record, historique, "all-time", "meilleur buteur", "plus jeune", "plus ancien"]
+  women:
+    weight: 10
+    keywords: [féminin, féminine, "women's", "women’s", "wsl", "d1 arkema"]
+  statement:
+    weight: 10
+    keywords: [polémique, controversy, "dénonce", "réagit", "déclaration", "critique"]
+
+sources:                                # flux testés le 26/09/2026 ; Eurosport (404), UEFA (injoignable), FIFA (HTML) écartés
+  - {id: lequipe-foot, name: "L'Équipe (football)", tier: 2, origin: "l'équipe", type: rss, url: "https://dwh.lequipe.fr/api/edito/rss?path=/Football/"}
+  - {id: rmc-foot, name: "RMC Sport (football)", tier: 2, origin: rmc sport, type: rss, url: "https://rmcsport.bfmtv.com/rss/football/"}
+  - {id: figaro-foot, name: "Le Figaro (football)", tier: 2, origin: le figaro, type: rss, url: "https://www.lefigaro.fr/rss/figaro_football.xml"}
+  - {id: footmercato, name: "Foot Mercato", tier: 3, origin: foot mercato, type: rss, url: "https://www.footmercato.net/flux-rss/"}
+  - {id: bbc-foot, name: "BBC Sport (football)", tier: 2, origin: bbc sport, type: rss, url: "https://feeds.bbci.co.uk/sport/football/rss.xml"}
+  - {id: sky-foot, name: "Sky Sports (football)", tier: 2, origin: sky sports, type: rss, url: "https://www.skysports.com/rss/12040"}
+  - {id: espn-foot, name: "ESPN (football)", tier: 2, origin: espn, type: rss, url: "https://www.espn.com/espn/rss/soccer/news"}
+  - {id: guardian-foot, name: "The Guardian (football)", tier: 2, origin: the guardian, type: rss, url: "https://www.theguardian.com/football/rss"}
+  - {id: marca-liga, name: "Marca (Liga)", tier: 2, origin: marca, type: rss, url: "https://e00-marca.uecdn.es/rss/futbol/primera-division.xml"}
+  - {id: gazzetta-calcio, name: "La Gazzetta dello Sport (calcio)", tier: 2, origin: la gazzetta dello sport, type: rss, url: "https://www.gazzetta.it/rss/calcio.xml"}
+  - {id: kicker-foot, name: "Kicker (Fussball)", tier: 2, origin: kicker, type: rss, url: "https://newsfeed.kicker.de/news/fussball"}
+  - {id: reddit-soccer, name: "Reddit r/soccer", tier: 5, origin: reddit, type: rss, url: "https://www.reddit.com/r/soccer/.rss"}
+  - {id: gn-mercato-fr, name: "Google Actualités : mercato", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=mercato+transfert+football+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
+  - {id: gn-transfers-en, name: "Google Actualités : transfers", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=football+transfer+news+when:1d&hl=en-GB&gl=GB&ceid=GB:en"}
+  - {id: gn-blessures, name: "Google Actualités : blessures et suspensions", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=football+blessure+OR+suspension+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
+  - {id: gn-ligue1, name: "Google Actualités : Ligue 1", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=Ligue+1+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
+  - {id: gn-champions, name: "Google Actualités : Ligue des champions", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=Ligue+des+champions+OR+Champions+League+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
+  - {id: gn-bleus, name: "Google Actualités : équipe de France", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=%C3%A9quipe+de+France+football+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
+  - {id: gn-feminin, name: "Google Actualités : football féminin", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=football+f%C3%A9minin+when:1d&hl=fr&gl=FR&ceid=FR:fr"}

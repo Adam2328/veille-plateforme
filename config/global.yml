@@ -48,3 +48,23 @@ publishers:              # tier attribué aux éditeurs repérés dans les agré
   zonebourse: 3
   associated press: 2
   ap news: 2
+  rmc sport: 2
+  eurosport: 2
+  sky sports: 2
+  bbc sport: 2
+  espn: 2
+  the athletic: 2
+  marca: 2
+  france football: 2
+  la gazzetta dello sport: 2
+  kicker: 2
+  as.com: 3
+  goal.com: 3
+  onefootball: 3
+  transfermarkt: 3
+  foot mercato: 3
+  footmercato: 3
+  so foot: 3
+  le parisien: 3
+  ouest-france: 3
+  foot01: 4
