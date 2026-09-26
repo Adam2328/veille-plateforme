@@ -1,0 +1,197 @@
+{
+ "generated_at": "2026-09-26T18:28:37.963Z",
+ "domain": {
+  "id": "football",
+  "name": "Football",
+  "accent": "#0B6E4F"
+ },
+ "events": [
+  {
+   "id": "sample_10",
+   "rev": 1,
+   "domain": "football",
+   "kind": "result",
+   "title": "Finale de la coupe : victoire 2-1 après prolongation",
+   "first_seen": "2026-09-26T11:28:37.963Z",
+   "updated_at": "2026-09-26T14:58:37.963Z",
+   "importance": 91,
+   "level": 1,
+   "reliability": "officiel",
+   "reliability_reason": "Source officielle : site de la compétition",
+   "summary": {
+    "quoi": "Victoire 2-1 après prolongation en finale.",
+    "qui": "Le vainqueur et le finaliste",
+    "quand": "Hier soir",
+    "pourquoi": "Premier titre de la décennie pour le vainqueur.",
+    "retenir": "Score 2-1 a.p., but décisif à la 116e minute."
+   },
+   "summary_mode": "llm",
+   "entities": [
+    "Le vainqueur"
+   ],
+   "sources": [
+    {
+     "name": "Exemple Compétition (officiel)",
+     "tier": 1,
+     "url": "https://example.com/Exemple%20Comp%C3%A9tition%20(officiel)",
+     "title": "Résultat final",
+     "published_at": "2026-09-26T06:28:37.963Z"
+    },
+    {
+     "name": "Exemple Sport",
+     "tier": 2,
+     "url": "https://example.com/Exemple%20Sport",
+     "title": "Le récit de la finale",
+     "published_at": "2026-09-26T07:28:37.963Z"
+    },
+    {
+     "name": "Exemple Sport 2",
+     "tier": 2,
+     "url": "https://example.com/Exemple%20Sport%202",
+     "title": "Les notes du match",
+     "published_at": "2026-09-26T08:28:37.963Z"
+    }
+   ]
+  },
+  {
+   "id": "sample_11",
+   "rev": 1,
+   "domain": "football",
+   "kind": "transfer",
+   "title": "Transfert : un attaquant signe pour cinq saisons",
+   "first_seen": "2026-09-26T11:28:37.963Z",
+   "updated_at": "2026-09-26T14:43:37.963Z",
+   "importance": 80,
+   "level": 1,
+   "reliability": "confirmé",
+   "reliability_reason": "2 origines indépendantes de tier 2",
+   "summary": {
+    "quoi": "Signature d’un attaquant pour cinq saisons.",
+    "qui": "Un attaquant et son nouveau club",
+    "quand": "Aujourd’hui",
+    "pourquoi": "Le club renforce son secteur offensif avant la reprise.",
+    "retenir": "Contrat de cinq ans, visite médicale passée."
+   },
+   "summary_mode": "llm",
+   "entities": [
+    "Le club"
+   ],
+   "sources": [
+    {
+     "name": "Exemple Sport",
+     "tier": 2,
+     "url": "https://example.com/Exemple%20Sport",
+     "title": "C’est fait pour l’attaquant",
+     "published_at": "2026-09-26T15:28:37.963Z"
+    },
+    {
+     "name": "Exemple Mercato",
+     "tier": 2,
+     "url": "https://example.com/Exemple%20Mercato",
+     "title": "Signature officialisée",
+     "published_at": "2026-09-26T15:58:37.963Z"
+    }
+   ]
+  },
+  {
+   "id": "sample_12",
+   "rev": 1,
+   "domain": "football",
+   "kind": "transfer",
+   "title": "Un milieu de terrain serait proche d’un départ",
+   "first_seen": "2026-09-26T11:28:37.963Z",
+   "updated_at": "2026-09-26T14:28:37.963Z",
+   "importance": 57,
+   "level": 2,
+   "reliability": "rumeur",
+   "reliability_reason": "Formulation au conditionnel, sources tier 4-5 uniquement",
+   "summary": {
+    "quoi": "Un départ serait envisagé selon des sources non confirmées.",
+    "qui": "Un milieu de terrain",
+    "quand": "Non précisé",
+    "pourquoi": "Aucune confirmation du joueur ni du club.",
+    "retenir": "Rumeur : ne rien conclure avant confirmation."
+   },
+   "summary_mode": "llm",
+   "entities": [],
+   "sources": [
+    {
+     "name": "Exemple Réseau",
+     "tier": 5,
+     "url": "https://example.com/Exemple%20R%C3%A9seau",
+     "title": "Il pourrait partir",
+     "published_at": "2026-09-26T14:28:37.963Z"
+    },
+    {
+     "name": "Exemple Agrégateur",
+     "tier": 4,
+     "url": "https://example.com/Exemple%20Agr%C3%A9gateur",
+     "title": "Départ possible",
+     "published_at": "2026-09-26T15:28:37.963Z"
+    }
+   ]
+  },
+  {
+   "id": "sample_13",
+   "rev": 2,
+   "domain": "football",
+   "kind": "injury",
+   "title": "Blessure : un titulaire absent trois semaines",
+   "first_seen": "2026-09-26T11:28:37.963Z",
+   "updated_at": "2026-09-26T14:13:37.963Z",
+   "importance": 54,
+   "level": 2,
+   "reliability": "rapporté",
+   "reliability_reason": "1 origine fiable (média spécialisé)",
+   "summary": {
+    "quoi": "Absence estimée à trois semaines après un examen.",
+    "qui": "Un joueur titulaire",
+    "quand": "Cette semaine",
+    "pourquoi": "Il manquera les deux prochains matchs de championnat.",
+    "retenir": "Retour attendu dans trois semaines."
+   },
+   "summary_mode": "llm",
+   "entities": [],
+   "sources": [
+    {
+     "name": "Exemple Sport",
+     "tier": 2,
+     "url": "https://example.com/Exemple%20Sport",
+     "title": "Trois semaines d’absence",
+     "published_at": "2026-09-26T12:28:37.963Z"
+    }
+   ]
+  },
+  {
+   "id": "sample_14",
+   "rev": 1,
+   "domain": "football",
+   "kind": "fixtures",
+   "title": "Le calendrier de la prochaine journée est dévoilé",
+   "first_seen": "2026-09-26T11:28:37.963Z",
+   "updated_at": "2026-09-26T13:58:37.963Z",
+   "importance": 33,
+   "level": 3,
+   "reliability": "rapporté",
+   "reliability_reason": "1 origine fiable",
+   "summary": null,
+   "summary_mode": "aucun",
+   "entities": [],
+   "sources": [
+    {
+     "name": "Exemple Compétition (officiel)",
+     "tier": 1,
+     "url": "https://example.com/Exemple%20Comp%C3%A9tition%20(officiel)",
+     "title": "Calendrier de la journée",
+     "published_at": "2026-09-25T22:28:37.963Z"
+    }
+   ]
+  }
+ ],
+ "upcoming": [
+  {
+   "date": "2026-09-27T18:28:37.963Z",
+   "title": "Journée de championnat"
+  }
+ ]
+}

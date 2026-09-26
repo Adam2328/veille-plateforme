@@ -1,0 +1,163 @@
+{
+ "generated_at": "2026-09-26T18:28:37.963Z",
+ "domain": {
+  "id": "finance",
+  "name": "Finance & Marchés",
+  "accent": "#1A3A6B"
+ },
+ "events": [
+  {
+   "id": "sample_6",
+   "rev": 1,
+   "domain": "finance",
+   "kind": "central_bank",
+   "title": "La banque centrale maintient ses taux directeurs",
+   "first_seen": "2026-09-26T11:28:37.963Z",
+   "updated_at": "2026-09-26T15:58:37.963Z",
+   "importance": 90,
+   "level": 1,
+   "reliability": "officiel",
+   "reliability_reason": "Source officielle : communiqué de la banque centrale",
+   "summary": {
+    "quoi": "Maintien des taux directeurs, ton attentif sur l’inflation.",
+    "qui": "Banque centrale",
+    "quand": "Hier soir",
+    "pourquoi": "Les marchés obligataires ajustent leurs anticipations de baisse.",
+    "retenir": "Pas de changement de taux, le débat se déplace sur le calendrier."
+   },
+   "summary_mode": "llm",
+   "entities": [
+    "Banque centrale"
+   ],
+   "sources": [
+    {
+     "name": "Banque centrale (communiqué)",
+     "tier": 1,
+     "url": "https://example.com/Banque%20centrale%20(communiqu%C3%A9)",
+     "title": "Décision de politique monétaire",
+     "published_at": "2026-09-26T13:28:37.963Z"
+    },
+    {
+     "name": "Exemple Marchés",
+     "tier": 2,
+     "url": "https://example.com/Exemple%20March%C3%A9s",
+     "title": "Taux inchangés, ton prudent",
+     "published_at": "2026-09-26T14:28:37.963Z"
+    }
+   ]
+  },
+  {
+   "id": "sample_7",
+   "rev": 1,
+   "domain": "finance",
+   "kind": "earnings",
+   "title": "Un géant de la tech relève sa prévision annuelle",
+   "first_seen": "2026-09-26T11:28:37.963Z",
+   "updated_at": "2026-09-26T15:43:37.963Z",
+   "importance": 66,
+   "level": 2,
+   "reliability": "confirmé",
+   "reliability_reason": "2 origines indépendantes de tier 2",
+   "summary": {
+    "quoi": "Relèvement de la prévision de chiffre d’affaires annuel après un trimestre supérieur aux attentes.",
+    "qui": "Un groupe technologique",
+    "quand": "Après la clôture",
+    "pourquoi": "Le titre progresse dans les échanges hors séance.",
+    "retenir": "Attention à la réaction à l’ouverture."
+   },
+   "summary_mode": "llm",
+   "entities": [
+    "Groupe Tech"
+   ],
+   "sources": [
+    {
+     "name": "Exemple Marchés",
+     "tier": 2,
+     "url": "https://example.com/Exemple%20March%C3%A9s",
+     "title": "Prévision relevée",
+     "published_at": "2026-09-26T12:28:37.963Z"
+    },
+    {
+     "name": "Exemple Business",
+     "tier": 2,
+     "url": "https://example.com/Exemple%20Business",
+     "title": "Résultats supérieurs aux attentes",
+     "published_at": "2026-09-26T12:28:37.963Z"
+    }
+   ]
+  },
+  {
+   "id": "sample_8",
+   "rev": 1,
+   "domain": "finance",
+   "kind": "m_and_a",
+   "title": "Un rapprochement dans la banque serait à l’étude",
+   "first_seen": "2026-09-26T11:28:37.963Z",
+   "updated_at": "2026-09-26T15:28:37.963Z",
+   "importance": 52,
+   "level": 2,
+   "reliability": "rumeur",
+   "reliability_reason": "Formulation au conditionnel, sources tier 4-5 uniquement",
+   "summary": {
+    "quoi": "Des sources non identifiées évoquent une discussion préliminaire.",
+    "qui": "Deux banques (non confirmé)",
+    "quand": "Non précisé",
+    "pourquoi": "Aucune confirmation officielle : à traiter comme une rumeur.",
+    "retenir": "Ne pas considérer l’opération comme acquise."
+   },
+   "summary_mode": "llm",
+   "entities": [],
+   "sources": [
+    {
+     "name": "Exemple Agrégateur",
+     "tier": 4,
+     "url": "https://example.com/Exemple%20Agr%C3%A9gateur",
+     "title": "Une fusion serait envisagée",
+     "published_at": "2026-09-26T15:28:37.963Z"
+    },
+    {
+     "name": "Exemple Forum",
+     "tier": 5,
+     "url": "https://example.com/Exemple%20Forum",
+     "title": "Il paraît que…",
+     "published_at": "2026-09-26T16:28:37.963Z"
+    }
+   ]
+  },
+  {
+   "id": "sample_9",
+   "rev": 1,
+   "domain": "finance",
+   "kind": "commodities",
+   "title": "Le pétrole recule après la hausse des stocks",
+   "first_seen": "2026-09-26T11:28:37.963Z",
+   "updated_at": "2026-09-26T15:13:37.963Z",
+   "importance": 34,
+   "level": 3,
+   "reliability": "rapporté",
+   "reliability_reason": "1 origine fiable",
+   "summary": null,
+   "summary_mode": "aucun",
+   "entities": [],
+   "sources": [
+    {
+     "name": "Exemple Marchés",
+     "tier": 2,
+     "url": "https://example.com/Exemple%20March%C3%A9s",
+     "title": "Pétrole en baisse",
+     "published_at": "2026-09-26T10:28:37.963Z"
+    }
+   ]
+  }
+ ],
+ "upcoming": [
+  {
+   "date": "2026-09-28T18:28:37.963Z",
+   "title": "Publication de l’inflation mensuelle"
+  },
+  {
+   "date": "2026-10-01T18:28:37.963Z",
+   "title": "Réunion de la banque centrale"
+  }
+ ]
+}

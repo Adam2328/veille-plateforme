@@ -1,0 +1,213 @@
+{
+ "generated_at": "2026-09-26T18:28:37.963Z",
+ "domain": {
+  "id": "ia",
+  "name": "IA",
+  "accent": "#5B3FA8"
+ },
+ "events": [
+  {
+   "id": "sample_1",
+   "rev": 3,
+   "domain": "ia",
+   "kind": "model_release",
+   "title": "Un laboratoire majeur publie un nouveau modèle de raisonnement",
+   "first_seen": "2026-09-26T11:28:37.963Z",
+   "updated_at": "2026-09-26T17:13:37.963Z",
+   "importance": 92,
+   "level": 1,
+   "reliability": "officiel",
+   "reliability_reason": "Source officielle : blog du laboratoire",
+   "summary": {
+    "quoi": "Publication d’un modèle de raisonnement avec une fenêtre de contexte élargie.",
+    "qui": "Exemple Labs",
+    "quand": "Aujourd’hui",
+    "pourquoi": "Le modèle est disponible dans l’API dès aujourd’hui, à prix inchangé.",
+    "retenir": "Disponible tout de suite en API, sans surcoût."
+   },
+   "summary_mode": "llm",
+   "entities": [
+    "Exemple Labs"
+   ],
+   "sources": [
+    {
+     "name": "Exemple Labs (blog officiel)",
+     "tier": 1,
+     "url": "https://example.com/Exemple%20Labs%20(blog%20officiel)",
+     "title": "Présentation du nouveau modèle",
+     "published_at": "2026-09-26T15:28:37.963Z"
+    },
+    {
+     "name": "Exemple Tech Media",
+     "tier": 2,
+     "url": "https://example.com/Exemple%20Tech%20Media",
+     "title": "Ce que change le nouveau modèle",
+     "published_at": "2026-09-26T16:28:37.963Z"
+    },
+    {
+     "name": "Exemple Agrégateur",
+     "tier": 4,
+     "url": "https://example.com/Exemple%20Agr%C3%A9gateur",
+     "title": "Nouveau modèle : tout ce qu’il faut savoir",
+     "published_at": "2026-09-26T17:28:37.963Z"
+    }
+   ]
+  },
+  {
+   "id": "sample_2",
+   "rev": 1,
+   "domain": "ia",
+   "kind": "funding_acquisition",
+   "title": "Un accord de fourniture de puces d’IA de plusieurs milliards annoncé",
+   "first_seen": "2026-09-26T11:28:37.963Z",
+   "updated_at": "2026-09-26T16:58:37.963Z",
+   "importance": 84,
+   "level": 1,
+   "reliability": "confirmé",
+   "reliability_reason": "3 origines indépendantes dont 2 médias reconnus",
+   "summary": {
+    "quoi": "Accord pluriannuel de fourniture de puces pour l’entraînement de modèles.",
+    "qui": "Un fabricant de puces et un laboratoire",
+    "quand": "Cette semaine",
+    "pourquoi": "Il sécurise la capacité de calcul du laboratoire pour les prochains modèles.",
+    "retenir": "Le calcul reste le facteur limitant de la course aux modèles."
+   },
+   "summary_mode": "llm",
+   "entities": [
+    "Exemple Puces"
+   ],
+   "sources": [
+    {
+     "name": "Exemple Business",
+     "tier": 2,
+     "url": "https://example.com/Exemple%20Business",
+     "title": "Accord de puces à plusieurs milliards",
+     "published_at": "2026-09-26T14:28:37.963Z"
+    },
+    {
+     "name": "Exemple Presse Éco",
+     "tier": 2,
+     "url": "https://example.com/Exemple%20Presse%20%C3%89co",
+     "title": "Le laboratoire assure son calcul",
+     "published_at": "2026-09-26T15:28:37.963Z"
+    },
+    {
+     "name": "Exemple Généraliste",
+     "tier": 3,
+     "url": "https://example.com/Exemple%20G%C3%A9n%C3%A9raliste",
+     "title": "Un contrat record dans les puces",
+     "published_at": "2026-09-26T16:28:37.963Z"
+    }
+   ]
+  },
+  {
+   "id": "sample_3",
+   "rev": 1,
+   "domain": "ia",
+   "kind": "regulation",
+   "title": "Règlement européen sur l’IA : nouvelle étape du calendrier d’application",
+   "first_seen": "2026-09-26T11:28:37.963Z",
+   "updated_at": "2026-09-26T16:43:37.963Z",
+   "importance": 61,
+   "level": 2,
+   "reliability": "rapporté",
+   "reliability_reason": "1 origine fiable (média spécialisé)",
+   "summary": {
+    "quoi": "Publication du calendrier de la prochaine phase d’application.",
+    "qui": "Commission européenne (selon un média spécialisé)",
+    "quand": "Dans les prochains mois",
+    "pourquoi": "Les fournisseurs de modèles à usage général devront documenter leurs données d’entraînement.",
+    "retenir": "Prévoir la mise en conformité documentaire."
+   },
+   "summary_mode": "llm",
+   "entities": [
+    "UE"
+   ],
+   "sources": [
+    {
+     "name": "Exemple Tech Media",
+     "tier": 2,
+     "url": "https://example.com/Exemple%20Tech%20Media",
+     "title": "Le calendrier d’application se précise",
+     "published_at": "2026-09-26T13:28:37.963Z"
+    }
+   ]
+  },
+  {
+   "id": "sample_4",
+   "rev": 2,
+   "domain": "ia",
+   "kind": "product_launch",
+   "title": "Panne de plusieurs heures sur une API d’IA très utilisée",
+   "first_seen": "2026-09-26T11:28:37.963Z",
+   "updated_at": "2026-09-26T16:28:37.963Z",
+   "importance": 55,
+   "level": 2,
+   "reliability": "en_développement",
+   "reliability_reason": "Croissance rapide du nombre de sources",
+   "summary": {
+    "quoi": "Interruption de service de l’API, en cours de rétablissement.",
+    "qui": "Un fournisseur d’API",
+    "quand": "Ce matin",
+    "pourquoi": "Des applications tierces sont indisponibles.",
+    "retenir": "Situation en évolution, à suivre."
+   },
+   "summary_mode": "llm",
+   "entities": [],
+   "sources": [
+    {
+     "name": "Exemple Statut",
+     "tier": 1,
+     "url": "https://example.com/Exemple%20Statut",
+     "title": "Incident en cours d’investigation",
+     "published_at": "2026-09-26T17:28:37.963Z"
+    },
+    {
+     "name": "Exemple Forum",
+     "tier": 5,
+     "url": "https://example.com/Exemple%20Forum",
+     "title": "Tout est down chez moi",
+     "published_at": "2026-09-26T17:58:37.963Z"
+    },
+    {
+     "name": "Exemple Tech Media",
+     "tier": 2,
+     "url": "https://example.com/Exemple%20Tech%20Media",
+     "title": "Panne sur une API majeure",
+     "published_at": "2026-09-26T17:46:37.963Z"
+    }
+   ]
+  },
+  {
+   "id": "sample_5",
+   "rev": 1,
+   "domain": "ia",
+   "kind": "research",
+   "title": "Un benchmark ouvert classe dix nouveaux modèles",
+   "first_seen": "2026-09-26T11:28:37.963Z",
+   "updated_at": "2026-09-26T16:13:37.963Z",
+   "importance": 38,
+   "level": 3,
+   "reliability": "rapporté",
+   "reliability_reason": "1 origine fiable (média spécialisé)",
+   "summary": null,
+   "summary_mode": "aucun",
+   "entities": [],
+   "sources": [
+    {
+     "name": "Exemple Recherche",
+     "tier": 2,
+     "url": "https://example.com/Exemple%20Recherche",
+     "title": "Résultats du benchmark",
+     "published_at": "2026-09-26T09:28:37.963Z"
+    }
+   ]
+  }
+ ],
+ "upcoming": [
+  {
+   "date": "2026-09-29T18:28:37.963Z",
+   "title": "Conférence développeurs d’un grand laboratoire"
+  }
+ ]
+}
