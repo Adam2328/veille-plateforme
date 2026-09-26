@@ -1,0 +1,85 @@
+import hashlib
+from datetime import timedelta
+
+from scipy.sparse import vstack
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+from .enrich import detect_kind, extract_entities
+from .timeutil import iso, parse
+
+_STOP = ["le", "la", "les", "un", "une", "des", "du", "de", "et", "en", "au", "aux", "pour", "par", "sur", "dans",
+         "avec", "qui", "que", "ce", "ces", "the", "an", "of", "to", "and", "in", "for", "on", "with", "is", "are",
+         "as", "at", "by", "its", "it"]
+
+
+def _text(it):
+    return f"{it['title']} {it['snippet'][:300]}"
+
+
+def _event_text(ev):
+    return " ".join(_text(i) for i in ev["items"])
+
+
+def _new_event(it, dom, now):
+    text = _text(it)
+    return {
+        "id": "ev_" + hashlib.sha1(it["id"].encode("utf-8")).hexdigest()[:12], "rev": 1, "domain": dom["id"],
+        "kind": detect_kind(text, dom["kinds"]), "title": it["title"], "first_seen": iso(now), "updated_at": iso(now),
+        "entities": extract_entities(text, dom["entities"]), "items": [it],
+    }
+
+
+def _attach(ev, it, dom, now):
+    best = min(i["tier"] for i in ev["items"])
+    grew = it["origin"] not in {i["origin"] for i in ev["items"]} or it["tier"] < best
+    text = _text(it)
+    return {
+        **ev, "items": [*ev["items"], it],
+        "entities": sorted(set(ev["entities"]) | set(extract_entities(text, dom["entities"]))),
+        "title": it["title"] if it["tier"] < best else ev["title"],
+        "kind": ev["kind"] if ev["kind"] != "other" else detect_kind(text, dom["kinds"]),
+        "rev": ev["rev"] + (1 if grew else 0),
+        "updated_at": iso(now) if grew else ev["updated_at"],
+    }
+
+
+def _entity_bonus(shared):
+    return 0.25 if shared >= 2 else 0.15 if shared == 1 else 0.0
+
+
+def cluster(items, events, dom, g, now):
+    known = {i["id"] for e in events for i in e["items"]}
+    new = sorted((i for i in items if i["id"] not in known), key=lambda i: i["published_at"])
+    if not new:
+        return list(events), set()
+
+    by_id = {e["id"]: e for e in events}
+    window = timedelta(hours=g["cluster"]["window_hours"])
+    open_ids = [e["id"] for e in events if e["domain"] == dom["id"] and now - parse(e["updated_at"]) <= window]
+    vectorizer = TfidfVectorizer(strip_accents="unicode", stop_words=_STOP, sublinear_tf=True)
+    vectorizer.fit([_event_text(by_id[i]) for i in open_ids] + [_text(i) for i in new])
+    vecs = {i: vectorizer.transform([_event_text(by_id[i])]) for i in open_ids}
+    changed = set()
+
+    for it in new:
+        v = vectorizer.transform([_text(it)])
+        ents = set(extract_entities(_text(it), dom["entities"]))
+        best_id, best_score = None, 0.0
+        if open_ids:
+            sims = cosine_similarity(v, vstack([vecs[i] for i in open_ids]))[0]
+            for eid, sim in zip(open_ids, sims):
+                score = sim + _entity_bonus(len(ents & set(by_id[eid]["entities"])))
+                if score > best_score:
+                    best_id, best_score = eid, score
+        if best_id is not None and best_score >= g["cluster"]["threshold"]:
+            by_id[best_id] = _attach(by_id[best_id], it, dom, now)
+            target = best_id
+        else:
+            ev = _new_event(it, dom, now)
+            by_id[ev["id"]] = ev
+            open_ids.append(ev["id"])
+            target = ev["id"]
+        vecs[target] = vectorizer.transform([_event_text(by_id[target])])
+        changed.add(target)
+    return list(by_id.values()), changed
