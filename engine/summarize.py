@@ -5,6 +5,8 @@ import re
 from collections.abc import Callable
 
 KEYS = ("quoi", "qui", "quand", "pourquoi", "retenir")
+LAYER_KEYS = ("faits", "analyse", "interpretation", "incertitude", "actifs", "favorables", "risques", "a_surveiller")
+MAX_BULLETS = 4
 _FENCE = "`" * 3
 _SENTENCE = re.compile(r"(?<=[.!?])\s+")
 SYSTEM = (
@@ -14,6 +16,28 @@ SYSTEM = (
     "pourquoi : pourquoi c'est important, de façon concrète et sans généralité ; retenir : une phrase. "
     "Pour « quand », utilise les dates de publication indiquées. Si une autre information manque dans les sources, écris « Non précisé ». N'invente aucun chiffre ni aucun nom."
 )
+FINANCE_EXTRA = (
+    "Pour chaque événement, ajoute aussi une clé « layers » : {faits, analyse, interpretation, incertitude, actifs, "
+    "favorables, risques, a_surveiller}, chacune une liste de 0 à 4 puces courtes (une phrase). "
+    "faits : ce que les sources établissent (chiffres, décisions, annonces). "
+    "analyse : lectures d'analystes ou de médias, toujours attribuées à leur auteur. "
+    "interpretation : ton propre raisonnement sur ce que le marché peut regarder, formulé avec prudence (« pourrait », « à confirmer »). "
+    "incertitude : ce qui reste inconnu ou contesté. actifs : actifs, indices ou entreprises concernés. "
+    "favorables : éléments favorables. risques : risques identifiés. a_surveiller : prochaines informations à surveiller (dates, publications). "
+    "INTERDIT : recommander d'acheter, de vendre, de renforcer ou d'alléger un actif, donner un conseil personnalisé, "
+    "ou annoncer un cours cible qui ne figure pas dans les sources."
+)
+PROFILES = {
+    "default": {"layers": False, "extra": ""},
+    "finance": {"layers": True, "extra": FINANCE_EXTRA},
+}
+# Impératifs et recommandations à la première personne uniquement : rapporter la note d'un analyste
+# (« relève sa recommandation à l'achat ») ou un fait (« Apple va vendre ses parts ») reste permis.
+_ADVICE = re.compile(
+    r"\b(?:achetez|vendez|renforcez|allégez|"
+    r"il (?:faut|convient de|est conseillé de|vaut mieux) (?:acheter|vendre|renforcer|alléger)|"
+    r"nous recommandons|je recommande|opportunité d['’]achat|point d['’]entrée|"
+    r"you should (?:buy|sell)|we recommend|strong buy|must[- ]buy)\b", re.I)
 
 
 def fingerprint(ev: dict) -> str:
@@ -33,16 +57,37 @@ def extractive(ev: dict) -> dict:
     }
 
 
-def _prompt(events: list) -> str:
+def has_advice(summary: dict, layers: dict | None) -> bool:
+    """Vrai si le texte de synthèse ou l'analyse contient un conseil d'achat ou de vente (les « faits » et « quoi » sont exclus)."""
+    texts = [summary[k] for k in KEYS if k != "quoi"]
+    if layers:
+        texts += [b for k in LAYER_KEYS if k != "faits" for b in layers[k]]
+    return any(_ADVICE.search(t) for t in texts)
+
+
+def _prompt(events: list, profile: str = "default") -> str:
+    extra = PROFILES[profile]["extra"]
     blocks = []
     for ev in events:
         lines = "\n".join(f"- [tier {i['tier']}] {i['source']} (publié le {i['published_at'][:10]}) : {i['title']} — {i['snippet'][:300]}"
                           for i in sorted(ev["items"], key=lambda i: i["tier"])[:6])
         blocks.append(f"## {ev['id']}\nSujet : {ev['title']}\nFiabilité : {ev.get('reliability', '?')}\n{lines}")
-    return f"{SYSTEM}\n\n" + "\n\n".join(blocks)
+    return f"{SYSTEM}{' ' + extra if extra else ''}\n\n" + "\n\n".join(blocks)
 
 
-def _parse(text: str, ids: list[str]) -> dict:
+def _layers(raw: object) -> dict | None:
+    if not isinstance(raw, dict):
+        return None
+    out = {}
+    for key in LAYER_KEYS:
+        bullets = raw.get(key)
+        if not isinstance(bullets, list):
+            return None
+        out[key] = [b.strip()[:240] for b in bullets if isinstance(b, str) and b.strip()][:MAX_BULLETS]
+    return out if any(out.values()) else None
+
+
+def _parse(text: str, ids: list[str], profile: str = "default") -> dict:
     text = text.strip().removeprefix(_FENCE + "json").removeprefix(_FENCE).removesuffix(_FENCE).strip()
     data = json.loads(text)
     if not isinstance(data, dict):
@@ -50,16 +95,21 @@ def _parse(text: str, ids: list[str]) -> dict:
     ok = {}
     for i in ids:
         s = data.get(i)
-        if isinstance(s, dict) and all(isinstance(s.get(k), str) and s[k].strip() for k in KEYS):
-            ok[i] = {k: s[k].strip() for k in KEYS}
+        if not (isinstance(s, dict) and all(isinstance(s.get(k), str) and s[k].strip() for k in KEYS)):
+            continue
+        summary = {k: s[k].strip() for k in KEYS}
+        layers = _layers(s.get("layers")) if PROFILES[profile]["layers"] else None
+        if has_advice(summary, layers):
+            continue
+        ok[i] = {**summary, "layers": layers} if layers else summary
     return ok
 
 
-def _ask(batch: list, call: Callable[[str], str]) -> tuple[dict, str | None]:
-    prompt, error = _prompt(batch), None
+def _ask(batch: list, call: Callable[[str], str], profile: str = "default") -> tuple[dict, str | None]:
+    prompt, error = _prompt(batch, profile), None
     for _ in range(2):
         try:
-            return _parse(call(prompt), [e["id"] for e in batch]), None
+            return _parse(call(prompt), [e["id"] for e in batch], profile), None
         except Exception as exc:  # le repli extractif couvre tous les échecs, l'erreur est remontée
             msg = f"{type(exc).__name__}: {exc}"
             if "429" in msg or "RESOURCE_EXHAUSTED" in msg:
@@ -68,13 +118,14 @@ def _ask(batch: list, call: Callable[[str], str]) -> tuple[dict, str | None]:
     return {}, error
 
 
-def summarize(events: list, call: Callable[[str], str] | None, batch_size: int = 15) -> tuple[dict, list]:
+def summarize(events: list, call: Callable[[str], str] | None, batch_size: int = 15,
+              profile: str = "default") -> tuple[dict, list]:
     results, errors, quota_hit = {}, [], False
     for start in range(0, len(events), batch_size):
         batch = events[start:start + batch_size]
         got = {}
         if call is not None and not quota_hit:
-            got, error = _ask(batch, call)
+            got, error = _ask(batch, call, profile)
             if error:
                 errors.append(error)
                 quota_hit = error == "quota"

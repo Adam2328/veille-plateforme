@@ -82,3 +82,64 @@ def test_write_if_changed_refreshes_a_stale_stamp_when_asked(tmp_path):
     assert write_if_changed(p, {"checked_at": iso(later), "x": 1}, later, max_age_min=55) is False
     much_later = NOW + timedelta(minutes=90)
     assert write_if_changed(p, {"checked_at": iso(much_later), "x": 1}, much_later, max_age_min=55) is True
+
+
+def test_project_includes_layers_only_when_they_have_content():
+    layers = {k: [] for k in ("faits", "analyse", "interpretation", "incertitude", "actifs", "favorables", "risques", "a_surveiller")}
+    assert "layers" not in project(full("ev_a", 80, 1))
+    assert "layers" not in project(full("ev_a", 80, 1, layers=None))
+    assert "layers" not in project(full("ev_a", 80, 1, layers=layers))
+    filled = {**layers, "faits": ["Un fait."]}
+    p = project(full("ev_a", 80, 1, layers=filled))
+    validate("event", p)
+    assert p["layers"] == filled
+
+
+import datetime as dt
+
+from engine.publish import upcoming_events
+
+AGENDA_DOM = {"agenda_keywords": ["fomc", "bce", "pce"], "agenda": [
+    {"date": "2026-10-28", "title": "Fed : décision de politique monétaire (FOMC)"},
+    {"date": dt.date(2026, 10, 1), "title": "BCE : décision"},              # date YAML non guillemetée
+    {"date": "2026-09-25", "title": "Passé"},
+    {"date": "2026-10-18", "title": "Au-delà de l'horizon"},
+    {"date": "pas une date", "title": "x"}, {"title": "sans date"}, {"date": "2026-10-02"}, "texte",
+]}
+
+
+def test_upcoming_events_keeps_the_official_calendar_within_the_horizon():
+    got = upcoming_events({"agenda": AGENDA_DOM["agenda"]}, NOW)
+    assert [(a["date"], a["title"]) for a in got] == [("2026-10-01", "BCE : décision")]
+    assert upcoming_events({}, NOW) == []
+
+
+def test_imported_points_are_merged_and_the_official_entry_wins_on_the_same_date_and_keyword():
+    dom = {**AGENDA_DOM, "agenda": [{"date": "2026-10-01", "title": "BCE : décision de politique monétaire"}]}
+    imported = ["01/10 :: europe :: mkt-n :: Décision BCE", "30/09 :: usa :: macro :: Inflation PCE US", "not a point"]
+    got = upcoming_events(dom, NOW, imported)
+    assert [(a["date"], a["title"]) for a in got] == [("2026-09-30", "États-Unis · Inflation PCE US"),
+                                                    ("2026-10-01", "BCE : décision de politique monétaire")]
+
+
+def test_imported_points_are_ignored_without_keywords_and_the_result_is_capped():
+    assert upcoming_events({"agenda": []}, NOW, ["30/09 :: usa :: macro :: Inflation PCE"]) == []
+    many = [f"{d:02d}/10 :: usa :: macro :: Décision BCE {d}" for d in range(1, 15)]
+    got = upcoming_events({"agenda_keywords": ["bce"]}, NOW, many, horizon_days=30, limit=4)
+    assert len(got) == 4 and [a["date"] for a in got] == sorted(a["date"] for a in got)
+
+
+def test_home_and_domain_file_carry_the_agenda():
+    cfg = {"global": CFG["global"], "domains": {"ia": {**CFG["domains"]["ia"], **AGENDA_DOM}}}
+    home = build_home(cfg, {"ia": []}, NOW, {"ia": ["30/09 :: usa :: macro :: Inflation PCE US"]})
+    validate("home", home)
+    assert [a["date"] for a in home["domains"][0]["upcoming"]] == ["2026-09-30", "2026-10-01"]
+    f = build_domain(cfg["domains"]["ia"], [], NOW, ["30/09 :: usa :: macro :: Inflation PCE US"])
+    validate("domainFile", f)
+    assert f["upcoming"] == home["domains"][0]["upcoming"]
+
+
+def test_upcoming_events_applies_the_domain_agenda_exclusions():
+    dom = {"agenda_keywords": ["bce"], "agenda_exclude": ["discours"]}
+    imported = ["30/09 :: europe :: mkt-n :: Discours BCE", "30/09 :: europe :: mkt-n :: Décision BCE"]
+    assert [a["title"] for a in upcoming_events(dom, NOW, imported)] == ["Europe · Décision BCE"]

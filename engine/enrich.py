@@ -15,3 +15,8 @@ def detect_kind(text: str, kinds_cfg: dict) -> str:
     hits = [(cfg.get("weight", 0), name) for name, cfg in kinds_cfg.items()
             if any(_has(low, k) for k in cfg["keywords"])]
     return max(hits)[1] if hits else "other"
+
+
+def is_relevant(text: str, dom: dict) -> bool:
+    """Vrai si le texte cite une entité de la veille ou contient un mot-clé d'un de ses types d'événements."""
+    return bool(extract_entities(text, dom["entities"])) or detect_kind(text, dom["kinds"]) != "other"

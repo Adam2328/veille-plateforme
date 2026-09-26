@@ -6,3 +6,4 @@ async function get(path) {
 
 export const loadHome = () => get('data/home.json');
 export const loadDomain = (id) => get(`data/domains/${encodeURIComponent(id)}.json`);
+export const loadQuotes = () => get('data/quotes.json');

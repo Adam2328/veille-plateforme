@@ -59,3 +59,35 @@ def test_home_without_levels_key_fails():
     bad = {**HOME, "domains": [{**HOME["domains"][0], "levels": {"1": [], "2": []}}]}
     with pytest.raises(ValidationError):
         validate("home", bad)
+
+
+LAYER_KEYS = ("faits", "analyse", "interpretation", "incertitude", "actifs", "favorables", "risques", "a_surveiller")
+LAYERS = {k: ["puce"] for k in LAYER_KEYS}
+QUOTE = {"symbol": "^FCHI", "name": "CAC 40", "group": "Indices", "price": 8077.8, "change": -3.63,
+         "change_pct": -0.04, "currency": "EUR", "as_of": "2026-09-25T16:05:02+00:00", "stale": False}
+
+
+def test_layers_are_optional_nullable_and_may_have_empty_lists():
+    validate("event", {**EVENT, "layers": LAYERS})
+    validate("event", {**EVENT, "layers": None})
+    validate("event", {**EVENT, "layers": {k: [] for k in LAYER_KEYS}})
+
+
+def test_layers_must_be_complete_and_made_of_short_string_lists():
+    incomplete = {k: v for k, v in LAYERS.items() if k != "risques"}
+    for bad in (incomplete, {**LAYERS, "faits": [1]}, {**LAYERS, "faits": ["x"] * 9}, {**LAYERS, "extra": []}):
+        with pytest.raises(ValidationError):
+            validate("event", {**EVENT, "layers": bad})
+
+
+def test_quotes_file_is_valid_and_change_may_be_null():
+    validate("quotes", {"checked_at": "2026-09-26T12:00:00+00:00", "quotes": [QUOTE, {**QUOTE, "change": None, "change_pct": None}]})
+    validate("quotes", {"checked_at": "2026-09-26T12:00:00+00:00", "quotes": []})
+
+
+def test_quote_missing_field_or_wrong_type_fails():
+    for bad in ({k: v for k, v in QUOTE.items() if k != "as_of"}, {**QUOTE, "price": "8077"}, {**QUOTE, "stale": "non"}):
+        with pytest.raises(ValidationError):
+            validate("quotes", {"checked_at": "t", "quotes": [bad]})
+    with pytest.raises(ValidationError):
+        validate("quotes", {"quotes": [QUOTE]})

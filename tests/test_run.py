@@ -84,3 +84,100 @@ def test_llm_summary_is_used_and_not_requested_twice(tmp_path):
     home = json.loads((tmp_path / "site" / "data" / "home.json").read_text("utf-8"))
     assert next(iter(home["events"].values()))["summary_mode"] == "llm"
     assert len(calls) == 1
+
+
+FIN_LAYERS = {k: [f"{k} un"] for k in ("faits", "analyse", "interpretation", "incertitude", "actifs", "favorables", "risques", "a_surveiller")}
+
+
+def test_finance_profile_publishes_layers_and_stays_idempotent(tmp_path):
+    setup(tmp_path)
+    (tmp_path / "config" / "domains" / "ia.yml").write_text(
+        yaml.safe_dump({**DOM, "summary_profile": "finance"}, allow_unicode=True), "utf-8")
+
+    def call(prompt):
+        ev_id = prompt.split("## ")[1].split("\n")[0]
+        return json.dumps({ev_id: {**{k: f"llm {k}" for k in ("quoi", "qui", "quand", "pourquoi", "retenir")}, "layers": FIN_LAYERS}})
+
+    run(tmp_path, now=NOW, fetch=fake_fetch, call=call)
+    before = snapshot(tmp_path)
+    run(tmp_path, now=NOW, fetch=fake_fetch, call=call)
+    home = json.loads((tmp_path / "site" / "data" / "home.json").read_text("utf-8"))
+    validate("home", home)
+    ev = next(iter(home["events"].values()))
+    assert ev["layers"]["faits"] == ["faits un"] and "layers" not in ev["summary"]
+    assert snapshot(tmp_path) == before
+
+
+QSPECS = [{"symbol": "^GSPC", "name": "S&P 500", "group": "Indices"}, {"symbol": "^TNX", "name": "Taux US 10 ans", "group": "Taux"}]
+
+
+def relay_payload(*rows):
+    return {"derniere_maj": "x", "indices": [{"nom": s, "valeur": v, "variation": p} for s, v, p in rows]}
+
+
+def test_run_publishes_quotes_and_reports_a_symbol_without_value(tmp_path):
+    setup(tmp_path)
+    (tmp_path / "config" / "quotes.yml").write_text(yaml.safe_dump({"symbols": QSPECS}), "utf-8")
+    report = run(tmp_path, now=NOW, fetch=fake_fetch,
+                 quote_fetch=lambda url: relay_payload(("^GSPC", 5000.0, 0.5), ("^TNX", None, None)))
+    quotes = json.loads((tmp_path / "site" / "data" / "quotes.json").read_text("utf-8"))
+    validate("quotes", quotes)
+    assert [q["symbol"] for q in quotes["quotes"]] == ["^GSPC"]
+    assert report["quotes"] == {"ok": 1, "failed": 1} and "quote:^TNX" in report["sources_failed"]
+    health = json.loads((tmp_path / "site" / "data" / "health.json").read_text("utf-8"))
+    assert "quote-relay" in [s["source"] for s in health["sources"]]
+
+
+def test_quotes_are_skipped_when_only_names_other_domains(tmp_path):
+    setup(tmp_path)
+    (tmp_path / "config" / "quotes.yml").write_text(yaml.safe_dump({"symbols": QSPECS}), "utf-8")
+    run(tmp_path, now=NOW, fetch=fake_fetch, only=["ia"], quote_fetch=lambda url: relay_payload(("^GSPC", 1.0, 0.0)))
+    assert not (tmp_path / "site" / "data" / "quotes.json").exists()
+
+
+def test_second_run_rewrites_quotes_only_when_values_change(tmp_path):
+    setup(tmp_path)
+    (tmp_path / "config" / "quotes.yml").write_text(yaml.safe_dump({"symbols": QSPECS[:1]}), "utf-8")
+    path = tmp_path / "site" / "data" / "quotes.json"
+    run(tmp_path, now=NOW, fetch=fake_fetch, quote_fetch=lambda url: relay_payload(("^GSPC", 5000.0, 0.5)))
+    first = path.read_bytes()
+    later = NOW.replace(hour=13)
+    run(tmp_path, now=later, fetch=fake_fetch, quote_fetch=lambda url: relay_payload(("^GSPC", 5000.0, 0.5)))
+    assert path.read_bytes() == first
+    run(tmp_path, now=later, fetch=fake_fetch, quote_fetch=lambda url: relay_payload(("^GSPC", 5001.0, 0.6)))
+    assert path.read_bytes() != first
+
+
+def test_run_imports_the_agenda_and_survives_a_failing_import(tmp_path):
+    setup(tmp_path)
+    dom = {**DOM, "agenda_url": "mem://agenda", "agenda_keywords": ["inflation"]}
+    (tmp_path / "config" / "domains" / "ia.yml").write_text(yaml.safe_dump(dom, allow_unicode=True), "utf-8")
+    home_path = tmp_path / "site" / "data" / "home.json"
+    run(tmp_path, now=NOW, fetch=fake_fetch, agenda_fetch=lambda url: ["30/09 :: usa :: macro :: Inflation PCE US"])
+    assert json.loads(home_path.read_text("utf-8"))["domains"][0]["upcoming"] == [
+        {"date": "2026-09-30", "title": "États-Unis · Inflation PCE US"}]
+
+    def boom(url):
+        raise TimeoutError("boom")
+
+    report = run(tmp_path, now=NOW, fetch=fake_fetch, agenda_fetch=boom)
+    assert "agenda:ia" in report["sources_failed"]
+    assert json.loads(home_path.read_text("utf-8"))["domains"][0]["upcoming"] == []
+
+
+RSS_MIXED = b"""<?xml version="1.0"?><rss version="2.0"><channel><title>t</title>
+<item><title>OpenAI lance GPT-6 avec un contexte de deux millions de tokens</title><link>https://ex.com/1</link>
+<pubDate>Sat, 26 Sep 2026 10:30:00 GMT</pubDate><description>Details.</description></item>
+<item><title>Recette de cuisine du dimanche</title><link>https://ex.com/2</link>
+<pubDate>Sat, 26 Sep 2026 10:45:00 GMT</pubDate><description>Details.</description></item>
+</channel></rss>"""
+
+
+def test_relevance_filter_drops_articles_matching_no_keyword_or_entity(tmp_path):
+    setup(tmp_path)
+    write = lambda dom: (tmp_path / "config" / "domains" / "ia.yml").write_text(yaml.safe_dump(dom, allow_unicode=True), "utf-8")
+    write({**DOM, "relevance": True})
+    assert run(tmp_path, now=NOW, fetch=lambda url: RSS_MIXED)["new_items"] == 1
+    shutil.rmtree(tmp_path / "data")
+    write(DOM)
+    assert run(tmp_path, now=NOW, fetch=lambda url: RSS_MIXED)["new_items"] == 2

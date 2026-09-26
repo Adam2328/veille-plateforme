@@ -1,0 +1,95 @@
+id: finance
+name: Finance & Marchés
+accent: "#1A3A6B"
+order: 2
+quota: 12
+max_l1: 4
+summary_profile: finance
+thresholds: {l1: 53, l2: 50, l3: 44}   # calibrés le 26/09/2026 sur les scores observés (43 à 56)
+relevance: true                         # écarte les articles qui ne citent aucune entité ni aucun mot-clé (finance personnelle, météo, quiz...)
+
+exclude: ["sponsored", "promo code", "black friday", "webinar", "newsletter sign", "subscribe to",
+          "approval of application", "enforcement action", "in common stock", "insider"]      # promotions, communiqués administratifs de la Fed, transactions d'initiés
+
+entities:                               # entités majeures : un événement qui en cite une reçoit le bonus d'entité
+  Fed: [fed, "federal reserve", fomc, powell]
+  BCE: [bce, ecb, "banque centrale européenne", "european central bank", lagarde]
+  BoE: ["bank of england", boe]
+  BoJ: ["bank of japan", boj]
+  "S&P 500": ["s&p 500", "s&p500"]
+  Nasdaq: [nasdaq]
+  "CAC 40": ["cac 40", cac40]
+  Pétrole: [pétrole, oil, brent, wti, opep, opec]
+  Or: [gold, "cours de l'or"]
+  Bitcoin: [bitcoin, btc]
+  Apple: [apple, iphone]
+  Microsoft: [microsoft]
+  Nvidia: [nvidia]
+  Amazon: [amazon]
+  Alphabet: [alphabet, google]
+  Meta: ["meta platforms"]
+  Tesla: [tesla]
+  LVMH: [lvmh]
+  TotalEnergies: [totalenergies]
+  Airbus: [airbus]
+  Sanofi: [sanofi]
+  BNP Paribas: ["bnp paribas"]
+
+kinds:
+  central_bank:
+    weight: 25
+    keywords: ["rate decision", "interest rate", "rate cut", "rate hike", "rates unchanged", fomc, "taux directeurs", "politique monétaire", "monetary policy", "décision de taux"]
+  earnings:
+    weight: 20
+    keywords: [earnings, "résultats trimestriels", "résultats annuels", guidance, "profit warning", "avertissement sur résultats", "quarterly results", "raises forecast", "cuts forecast"]
+  m_and_a:
+    weight: 20
+    keywords: [acquisition, acquires, acquiert, merger, fusion, takeover, buyout, rachat, opa, "to buy", "agrees to buy"]
+  macro_data:
+    weight: 18
+    keywords: [inflation, cpi, gdp, pib, payrolls, unemployment, chômage, pmi, "jobs report", "retail sales", "consumer prices"]
+  regulation:
+    weight: 15
+    keywords: [sec, antitrust, tariffs, "droits de douane", sanctions, "ai act", regulator, régulateur, lawsuit, procès]
+  commodities:
+    weight: 12
+    keywords: [oil, pétrole, brent, opec, opep, gold, copper, cuivre, "natural gas", "gaz naturel"]
+  markets:
+    weight: 10
+    keywords: ["wall street", stocks, "stock market", shares, bourse, indices, "treasury yields", "bond yields", yields, bond, bonds, obligations, "taux obligataires", treasury, investors, investisseurs, marchés, dollar, euro, "central bank", "banque centrale", rally, selloff, krach]
+  crypto:
+    weight: 10
+    keywords: [bitcoin, ethereum, crypto, stablecoin, etf]
+
+agenda_url: "https://raw.githubusercontent.com/Adam2328/mon-brief-quotidien/main/agenda_events.json"   # agenda tenu à jour par l'ancien pipeline
+agenda_keywords: [fomc, jolts, nfp, payrolls, pce, cpi, pmi, ism, pib, gdp, inflation, chômage, emploi, fed, bce, ecb, boj, boe, opep, opec]   # les plus spécifiques d'abord : sert aussi à dédoublonner
+agenda_exclude: [discours, panel, speech, conférence, fireside, forum, summit, non-monétaire]     # entrées de faible valeur
+
+agenda:                                 # calendrier officiel vérifié (prioritaire sur l'import) ; à mettre à jour chaque année
+  - {date: 2026-10-28, title: "Fed : décision de politique monétaire (FOMC)"}
+  - {date: 2026-10-29, title: "BCE : décision de politique monétaire"}
+  - {date: 2026-12-09, title: "Fed : décision de politique monétaire (FOMC)"}
+  - {date: 2026-12-17, title: "BCE : décision de politique monétaire"}
+  - {date: 2027-02-04, title: "BCE : décision de politique monétaire"}
+  - {date: 2027-03-18, title: "BCE : décision de politique monétaire"}
+  - {date: 2027-04-29, title: "BCE : décision de politique monétaire"}
+  - {date: 2027-06-10, title: "BCE : décision de politique monétaire"}
+  - {date: 2027-07-22, title: "BCE : décision de politique monétaire"}
+  - {date: 2027-09-09, title: "BCE : décision de politique monétaire"}
+
+sources:                                # flux testés le 26/09/2026 ; Les Echos (403), FT (paywall) et Stooq (404) écartés
+  - {id: fed-press, name: "Réserve fédérale (communiqués)", tier: 1, origin: federal reserve, type: rss, url: "https://www.federalreserve.gov/feeds/press_all.xml"}
+  - {id: ecb-press, name: "BCE (communiqués)", tier: 1, origin: bce, type: rss, url: "https://www.ecb.europa.eu/rss/press.xml"}
+  - {id: boe-news, name: "Banque d'Angleterre", tier: 1, origin: bank of england, type: rss, url: "https://www.bankofengland.co.uk/rss/news"}
+  - {id: bloomberg-markets, name: "Bloomberg (marchés)", tier: 2, origin: bloomberg, type: rss, url: "https://feeds.bloomberg.com/markets/news.rss"}
+  - {id: economist-finance, name: "The Economist (finance)", tier: 2, origin: the economist, type: rss, url: "https://www.economist.com/finance-and-economics/rss.xml"}
+  - {id: wsj-markets, name: "Wall Street Journal (marchés)", tier: 2, origin: wsj, type: rss, url: "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"}
+  - {id: cnbc-finance, name: "CNBC (finance)", tier: 2, origin: cnbc, type: rss, url: "https://www.cnbc.com/id/10000664/device/rss/rss.html"}
+  - {id: marketwatch, name: "MarketWatch", tier: 2, origin: marketwatch, type: rss, url: "https://feeds.content.dowjones.io/public/rss/mw_topstories"}
+  - {id: investing-news, name: "Investing.com", tier: 3, origin: investing.com, type: rss, url: "https://www.investing.com/rss/news.rss"}
+  - {id: gn-banques-centrales, name: "Google Actualités : banques centrales", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=BCE+OR+Fed+OR+taux+directeurs+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
+  - {id: gn-resultats, name: "Google Actualités : résultats et guidance", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=earnings+guidance+OR+profit+warning+when:1d&hl=en-US&gl=US&ceid=US:en"}
+  - {id: gn-fusions, name: "Google Actualités : fusions-acquisitions", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=acquisition+OR+merger+OR+takeover+when:1d&hl=en-US&gl=US&ceid=US:en"}
+  - {id: gn-matieres, name: "Google Actualités : matières premières", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=oil+OR+OPEC+OR+gold+prices+when:1d&hl=en-US&gl=US&ceid=US:en"}
+  - {id: gn-taux, name: "Google Actualités : taux obligataires", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=Treasury+yields+OR+Bund+OR+OAT+when:1d&hl=en-US&gl=US&ceid=US:en"}
+  - {id: gn-bourse-fr, name: "Google Actualités : Bourse de Paris", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=CAC+40+bourse+when:1d&hl=fr&gl=FR&ceid=FR:fr"}

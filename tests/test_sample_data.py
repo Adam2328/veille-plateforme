@@ -40,3 +40,11 @@ def test_sample_domain_files_match_contract(data):
 def test_rumors_never_reach_level_one(data):
     home = json.loads((data / "home.json").read_text("utf-8"))
     assert all(e["level"] > 1 for e in home["events"].values() if e["reliability"] in ("rumeur", "non_confirmé"))
+
+
+def test_sample_includes_layers_and_valid_quotes(data):
+    home = json.loads((data / "home.json").read_text("utf-8"))
+    assert any(e.get("layers") for e in home["events"].values())
+    quotes = json.loads((data / "quotes.json").read_text("utf-8"))
+    validate("quotes", quotes)
+    assert any(q["stale"] for q in quotes["quotes"]) and any(q["group"] == "Taux" for q in quotes["quotes"])

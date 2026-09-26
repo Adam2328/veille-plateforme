@@ -35,3 +35,16 @@ publishers:              # tier attribué aux éditeurs repérés dans les agré
   the guardian: 3
   le monde: 2
   les echos: 2
+  wsj: 2
+  the wall street journal: 2
+  marketwatch: 2
+  barron's: 2
+  bloomberg.com: 2
+  investing.com: 3
+  yahoo finance: 3
+  boursorama: 3
+  le figaro: 3
+  capital: 3
+  zonebourse: 3
+  associated press: 2
+  ap news: 2

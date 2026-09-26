@@ -1,0 +1,19 @@
+symbols:
+  - {symbol: "^GSPC", name: "S&P 500", group: "Indices"}
+  - {symbol: "^DJI", name: "Dow Jones", group: "Indices"}
+  - {symbol: "^IXIC", name: "Nasdaq", group: "Indices"}
+  - {symbol: "^FCHI", name: "CAC 40", group: "Indices"}
+  - {symbol: "^GDAXI", name: "DAX", group: "Indices"}
+  - {symbol: "^STOXX50E", name: "Euro Stoxx 50", group: "Indices"}
+  - {symbol: "^FTSE", name: "FTSE 100", group: "Indices"}
+  - {symbol: "^N225", name: "Nikkei 225", group: "Indices"}
+  - {symbol: "^HSI", name: "Hang Seng", group: "Indices"}
+  - {symbol: "EURUSD=X", name: "EUR/USD", group: "Devises"}
+  - {symbol: "GBPUSD=X", name: "GBP/USD", group: "Devises"}
+  - {symbol: "USDJPY=X", name: "USD/JPY", group: "Devises"}
+  - {symbol: "^TNX", name: "Taux US 10 ans", group: "Taux"}
+  - {symbol: "GC=F", name: "Or", group: "Matières premières"}
+  - {symbol: "BZ=F", name: "Pétrole Brent", group: "Matières premières"}
+  - {symbol: "CL=F", name: "Pétrole WTI", group: "Matières premières"}
+  - {symbol: "BTC-USD", name: "Bitcoin", group: "Crypto"}
+  - {symbol: "^VIX", name: "VIX", group: "Volatilité"}
