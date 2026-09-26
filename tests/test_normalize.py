@@ -53,3 +53,12 @@ def test_recent_drops_items_older_than_the_window():
     fresh = mk_item("f", "x", minutes_ago=60)
     old = mk_item("o", "y", minutes_ago=37 * 60)
     assert [i["id"] for i in recent([fresh, old], NOW, 36)] == ["f"]
+
+
+def test_excluded_matches_case_insensitive_substrings_in_title_or_snippet():
+    from engine.normalize import excluded
+    it = mk_item("a", "Last 24 hours to save on TechCrunch Disrupt 2026", snippet="Un pass à prix réduit")
+    assert excluded(it, ["techcrunch disrupt"]) is True
+    assert excluded(it, ["prix réduit"]) is True
+    assert excluded(it, ["nvidia"]) is False
+    assert excluded(it, []) is False

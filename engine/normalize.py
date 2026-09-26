@@ -57,3 +57,8 @@ def dedupe(items, known_ids):
 def recent(items, now, hours):
     cutoff = now - timedelta(hours=hours)
     return [i for i in items if parse(i["published_at"]) >= cutoff]
+
+
+def excluded(item, patterns):
+    text = f"{item['title']} {item['snippet']}".lower()
+    return any(p.lower() in text for p in patterns)

@@ -44,10 +44,6 @@ def _attach(ev, it, dom, now):
     }
 
 
-def _entity_bonus(shared):
-    return 0.25 if shared >= 2 else 0.15 if shared == 1 else 0.0
-
-
 def cluster(items, events, dom, g, now):
     known = {i["id"] for e in events for i in e["items"]}
     new = sorted((i for i in items if i["id"] not in known), key=lambda i: i["published_at"])
@@ -64,14 +60,14 @@ def cluster(items, events, dom, g, now):
 
     for it in new:
         v = vectorizer.transform([_text(it)])
-        ents = set(extract_entities(_text(it), dom["entities"]))
         best_id, best_score = None, 0.0
         if open_ids:
             sims = cosine_similarity(v, vstack([vecs[i] for i in open_ids]))[0]
+            # les noms d'entités sont déjà des tokens du TF-IDF : un bonus supplémentaire faisait fusionner
+            # tout ce qui cite les mêmes grands noms (constaté sur les données réelles du 26/09/2026)
             for eid, sim in zip(open_ids, sims):
-                score = sim + _entity_bonus(len(ents & set(by_id[eid]["entities"])))
-                if score > best_score:
-                    best_id, best_score = eid, score
+                if sim > best_score:
+                    best_id, best_score = eid, sim
         if best_id is not None and best_score >= g["cluster"]["threshold"]:
             by_id[best_id] = _attach(by_id[best_id], it, dom, now)
             target = best_id

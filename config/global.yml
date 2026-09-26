@@ -1,5 +1,5 @@
 cluster:
-  threshold: 0.45        # similarité minimale (cosinus TF-IDF + bonus d'entités) pour rattacher un article à un événement
+  threshold: 0.25        # similarité cosinus TF-IDF minimale pour rattacher un article à un événement (calibré le 26/09/2026)
   window_hours: 48       # un événement reste ouvert au regroupement 48 h après sa dernière évolution
 collect:
   max_age_hours: 36      # les articles plus anciens sont ignorés

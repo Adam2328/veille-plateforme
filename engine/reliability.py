@@ -30,6 +30,10 @@ def classify(items, now):
         return "en_développement", f"{recent} publications en moins d'une heure"
     if best <= 2:
         return "rapporté", f"1 origine fiable : {top['source']}"
-    if best >= 4 and _HEDGE.search(" ".join(f"{i['title']} {i['snippet']}" for i in items)):
+    hedged = _HEDGE.search(" ".join(f"{i['title']} {i['snippet']}" for i in items))
+    if best >= 4 and hedged:
         return "rumeur", "formulation au conditionnel, sources tier 4-5 uniquement"
+    n_media = sum(1 for i in by_origin.values() if i["tier"] <= 4)     # les réseaux sociaux (tier 5) ne comptent pas
+    if n_media >= 3:
+        return "rapporté", f"{n_media} éditeurs distincts, sans formulation au conditionnel"
     return "non_confirmé", "aucune source fiable identifiée"

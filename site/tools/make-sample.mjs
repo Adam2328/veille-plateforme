@@ -1,5 +1,7 @@
 // Génère des données d'exemple conformes à schemas/public.schema.json (usage : design du site).
 import { mkdirSync, writeFileSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
+import { resolve } from 'node:path';
 
 const now = new Date();
 const ago = (h) => new Date(now - h * 3600e3).toISOString();
@@ -88,10 +90,12 @@ const home = {
   events: Object.fromEntries(events.map((e) => [e.id, e])),
 };
 
-mkdirSync(new URL('../data/domains/', import.meta.url), { recursive: true });
-const write = (rel, obj) => writeFileSync(new URL(`../data/${rel}`, import.meta.url), JSON.stringify(obj, null, 1) + '\n');
+// Dossier de sortie : argument optionnel, sinon site/data/ (attention : écrase les données publiées par le pipeline).
+const OUT = process.argv[2] ? pathToFileURL(resolve(process.argv[2]) + '/') : new URL('../data/', import.meta.url);
+mkdirSync(new URL('domains/', OUT), { recursive: true });
+const write = (rel, obj) => writeFileSync(new URL(rel, OUT), JSON.stringify(obj, null, 1) + '\n');
 write('home.json', home);
 for (const d of DOMAINS) {
   write(`domains/${d.id}.json`, { generated_at: home.generated_at, domain: d, events: byDomain(d.id), upcoming: upcoming[d.id] });
 }
-console.log(`${events.length} événements d’exemple écrits dans site/data/`);
+console.log(`${events.length} événements d’exemple écrits dans ${OUT.pathname}`);

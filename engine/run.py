@@ -6,7 +6,7 @@ import sys
 from .cluster import cluster
 from .collect import collect_source, fetch_bytes
 from .config import ROOT, load_config
-from .normalize import dedupe, normalize, recent
+from .normalize import dedupe, excluded, normalize, recent
 from .publish import build_domain, build_home, publish, write_if_changed
 from .reliability import classify
 from .score import assign_levels, importance
@@ -21,7 +21,8 @@ def collect_domain(dom, g, now, fetch):
         source = {**src, "domain": dom["id"]}
         raws, h = collect_source(source, fetch)
         health.append(h)
-        items += [normalize(r, source, g.get("publishers")) for r in raws]
+        items += [i for i in (normalize(r, source, g.get("publishers")) for r in raws)
+                  if not excluded(i, dom.get("exclude", []))]
     return recent(items, now, g["collect"]["max_age_hours"]), health
 
 

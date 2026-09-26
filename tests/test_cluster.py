@@ -73,3 +73,10 @@ def test_no_new_items_returns_events_untouched():
     first, _ = run([mk_item("a", A)])
     again, changed = run([], first)
     assert again == first and changed == set()
+
+
+def test_two_stories_sharing_only_big_names_do_not_merge():
+    p = mk_item("p", "OpenAI et NVIDIA annoncent un partenariat sur les puces")
+    q = mk_item("q", "OpenAI et NVIDIA visés par une plainte sur le droit d'auteur")
+    events, _ = run([p, q])
+    assert len(events) == 2

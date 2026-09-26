@@ -49,3 +49,21 @@ def test_low_tier_without_hedging_is_unconfirmed_not_rumor():
 @pytest.mark.parametrize("hedge", ["would join", "reportedly close", "il pourrait signer", "selon nos informations"])
 def test_hedging_lexicon_detected(hedge):
     assert label([mk_item("a", f"Player {hedge}", tier=5)]) == "rumeur"
+
+
+def test_three_distinct_media_without_hedging_are_reported_not_unconfirmed():
+    items = [mk_item(i, "Un tribunal donne raison au Pentagone", tier=4) for i in "abc"]
+    lab, why = classify(items, NOW)
+    assert lab == "rapporté" and "3" in why
+
+
+def test_two_low_tier_media_stay_unconfirmed():
+    assert label([mk_item(i, "Un tribunal donne raison", tier=4) for i in "ab"]) == "non_confirmé"
+
+
+def test_three_distinct_media_with_hedging_stay_a_rumor():
+    assert label([mk_item(i, "Le joueur serait proche de Y", tier=4) for i in "abc"]) == "rumeur"
+
+
+def test_social_posts_do_not_count_as_media():
+    assert label([mk_item(i, "Un tribunal donne raison", tier=5) for i in "abc"]) == "non_confirmé"
