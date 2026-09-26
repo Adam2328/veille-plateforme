@@ -97,3 +97,10 @@ test('renderNav affiche un compteur par veille et marque la page active', () => 
   assert.match(html, /class="count">1</);
   assert.match(html, /href="#\/d\/ia" aria-current="page"/);
 });
+
+test('la carte n’affiche pas deux fois le titre quand « à retenir » le répète', () => {
+  const e = ev({ title: 'Même texte', summary: { quoi: 'Première phrase utile.', qui: 'w', quand: 'n', pourquoi: 'p', retenir: 'Même texte' } });
+  const html = card(e, 'seen', NOW);
+  assert.equal(html.split('Même texte').length - 1, 1);
+  assert.match(html, /Première phrase utile\./);
+});

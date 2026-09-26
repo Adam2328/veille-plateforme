@@ -51,7 +51,7 @@ export function card(ev, status, now) {
   return `<a class="card" href="${href(ev)}">
     <div>${badges(ev, status)}</div>
     <h3>${esc(ev.title)}</h3>
-    ${ev.summary ? `<p>${esc(ev.summary.retenir)}</p>` : ''}
+    ${ev.summary ? `<p>${esc(ev.summary.retenir === ev.title ? ev.summary.quoi : ev.summary.retenir)}</p>` : ''}
     <div class="meta">${esc(plural(ev.sources.length, 'source'))} · ${esc(timeAgo(ev.updated_at, now))}</div>
   </a>`;
 }
