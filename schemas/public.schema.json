@@ -158,6 +158,44 @@
         "status": {"type": "string"}, "matchday": {"type": ["integer", "null"]}
       }
     },
+    "f1Result": {
+      "type": "object",
+      "required": ["position", "driver", "team", "result", "points"],
+      "properties": {"position": {"type": "integer"}, "driver": {"type": "string"}, "team": {"type": "string"},
+                     "result": {"type": "string"}, "points": {"type": "number"}}
+    },
+    "f1": {
+      "type": "object",
+      "required": ["checked_at", "season", "stale", "last", "next", "drivers", "constructors"],
+      "properties": {
+        "checked_at": {"type": "string"}, "season": {"type": "string"}, "stale": {"type": "boolean"},
+        "last": {
+          "type": ["object", "null"],
+          "required": ["round", "name", "country", "date", "race", "qualifying", "sprint"],
+          "properties": {
+            "round": {"type": "integer"}, "name": {"type": "string"}, "country": {"type": "string"}, "date": {"type": "string"},
+            "race": {"type": "array", "items": {"$ref": "#/$defs/f1Result"}},
+            "qualifying": {"type": "array", "items": {"$ref": "#/$defs/f1Result"}},
+            "sprint": {"type": "array", "items": {"$ref": "#/$defs/f1Result"}}
+          }
+        },
+        "next": {
+          "type": ["object", "null"],
+          "required": ["round", "name", "country", "sessions"],
+          "properties": {
+            "round": {"type": "integer"}, "name": {"type": "string"}, "country": {"type": "string"},
+            "sessions": {"type": "array", "items": {"type": "object", "required": ["name", "start"],
+                                                    "properties": {"name": {"type": "string"}, "start": {"type": "string"}}}}
+          }
+        },
+        "drivers": {"type": "array", "items": {"type": "object", "required": ["position", "driver", "team", "points", "wins"],
+                    "properties": {"position": {"type": "integer"}, "driver": {"type": "string"}, "team": {"type": "string"},
+                                   "points": {"type": "number"}, "wins": {"type": "integer"}}}},
+        "constructors": {"type": "array", "items": {"type": "object", "required": ["position", "team", "points", "wins"],
+                         "properties": {"position": {"type": "integer"}, "team": {"type": "string"},
+                                        "points": {"type": "number"}, "wins": {"type": "integer"}}}}
+      }
+    },
     "football": {
       "type": "object",
       "required": ["checked_at", "competitions", "results", "fixtures"],

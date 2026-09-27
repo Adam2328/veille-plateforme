@@ -1,0 +1,106 @@
+{
+ "MRData": {
+  "xmlns": "",
+  "series": "f1",
+  "url": "https://api.jolpi.ca/ergast/f1/current/last/qualifying.json",
+  "limit": "30",
+  "offset": "0",
+  "total": "22",
+  "RaceTable": {
+   "season": "2026",
+   "round": "15",
+   "Races": [
+    {
+     "season": "2026",
+     "round": "15",
+     "url": "https://en.wikipedia.org/wiki/2026_Azerbaijan_Grand_Prix",
+     "raceName": "Azerbaijan Grand Prix",
+     "Circuit": {
+      "circuitId": "baku",
+      "url": "https://en.wikipedia.org/wiki/Baku_City_Circuit",
+      "circuitName": "Baku City Circuit",
+      "Location": {
+       "lat": "40.3725",
+       "long": "49.8533",
+       "locality": "Baku",
+       "country": "Azerbaijan"
+      }
+     },
+     "date": "2026-09-26",
+     "time": "11:00:00Z",
+     "QualifyingResults": [
+      {
+       "number": "63",
+       "position": "1",
+       "Driver": {
+        "driverId": "russell",
+        "permanentNumber": "63",
+        "code": "RUS",
+        "url": "http://en.wikipedia.org/wiki/George_Russell_(racing_driver)",
+        "givenName": "George",
+        "familyName": "Russell",
+        "dateOfBirth": "1998-02-15",
+        "nationality": "British"
+       },
+       "Constructor": {
+        "constructorId": "mercedes",
+        "url": "https://en.wikipedia.org/wiki/Mercedes-Benz_in_Formula_One",
+        "name": "Mercedes",
+        "nationality": "German"
+       },
+       "Q1": "1:43.615",
+       "Q2": "1:43.462",
+       "Q3": "1:42.526"
+      },
+      {
+       "number": "16",
+       "position": "2",
+       "Driver": {
+        "driverId": "leclerc",
+        "permanentNumber": "16",
+        "code": "LEC",
+        "url": "http://en.wikipedia.org/wiki/Charles_Leclerc",
+        "givenName": "Charles",
+        "familyName": "Leclerc",
+        "dateOfBirth": "1997-10-16",
+        "nationality": "Monegasque"
+       },
+       "Constructor": {
+        "constructorId": "ferrari",
+        "url": "https://en.wikipedia.org/wiki/Scuderia_Ferrari",
+        "name": "Ferrari",
+        "nationality": "Italian"
+       },
+       "Q1": "1:44.360",
+       "Q2": "1:43.780",
+       "Q3": "1:43.363"
+      },
+      {
+       "number": "81",
+       "position": "3",
+       "Driver": {
+        "driverId": "piastri",
+        "permanentNumber": "81",
+        "code": "PIA",
+        "url": "http://en.wikipedia.org/wiki/Oscar_Piastri",
+        "givenName": "Oscar",
+        "familyName": "Piastri",
+        "dateOfBirth": "2001-04-06",
+        "nationality": "Australian"
+       },
+       "Constructor": {
+        "constructorId": "mclaren",
+        "url": "https://en.wikipedia.org/wiki/McLaren",
+        "name": "McLaren",
+        "nationality": "British"
+       },
+       "Q1": "1:45.014",
+       "Q2": "1:43.814",
+       "Q3": "1:43.364"
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -194,7 +194,60 @@ export function renderFootball(file, football, tab, arg, state, now) {
   return `<div style="--dom:${color(file.domain.accent)}"><a class="back" href="#/">← Accueil</a><h1>${esc(file.domain.name)}</h1>${fbTabs(tabName)}${body}</div>`;
 }
 
-export function domainBlock(dom, events, state, now, quotes = null, football = null) {
+// ---- F1 : week-end de Grand Prix (heure de Paris), dernier Grand Prix, championnats ----
+const PARIS = 'Europe/Paris';
+const parisDay = (iso) => new Date(iso).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: PARIS });
+const parisTime = (iso) => new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: PARIS });
+const capital = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+export function f1Weekend(next) {
+  if (!next || !next.sessions?.length) return '';
+  const days = [];
+  for (const s of next.sessions) {
+    const day = parisDay(s.start);
+    if (!days.length || days[days.length - 1].day !== day) days.push({ day, sessions: [] });
+    days[days.length - 1].sessions.push(s);
+  }
+  return `<div class="f1-weekend">${days.map((d) => `<div><h3 class="cmp">${esc(capital(d.day))}</h3><ul class="matches">${d.sessions
+    .map((s) => `<li class="match next"><span class="mh">${esc(s.name)}</span><span class="ms">${esc(parisTime(s.start))}</span><span class="ma"></span></li>`).join('')}</ul></div>`).join('')}</div>`;
+}
+
+const f1Table = (rows, cols) =>
+  `<table class="standings"><thead><tr>${cols.map(([, t]) => `<th>${t}</th>`).join('')}</tr></thead><tbody>${rows
+    .map((r) => `<tr>${cols.map(([k]) => `<td${k === 'driver' || k === 'team' ? ' class="tn"' : ''}>${esc(r[k])}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+
+function f1Last(last) {
+  if (!last) return '';
+  const race = f1Table(last.race.slice(0, 10), [['position', '#'], ['driver', 'Pilote'], ['team', 'Écurie'], ['result', 'Temps'], ['points', 'Pts']]);
+  const pole = last.qualifying[0] ? `<p class="meta">Pole : ${esc(last.qualifying[0].driver)} (${esc(last.qualifying[0].team)}), ${esc(last.qualifying[0].result)}</p>` : '';
+  const sprint = last.sprint.length ? `<h3 class="cmp">Sprint</h3>${f1Table(last.sprint.slice(0, 8), [['position', '#'], ['driver', 'Pilote'], ['team', 'Écurie'], ['points', 'Pts']])}` : '';
+  return `<h2>Dernier Grand Prix : ${esc(last.name)}</h2>${pole}${race}${sprint}`;
+}
+
+export function f1Strip(f1) {
+  if (!f1) return '';
+  const race = f1.next?.sessions?.find((s) => s.name === 'Course');
+  const next = f1.next ? `<div><h3 class="cmp">Prochain Grand Prix</h3><p>${esc(f1.next.name)}${race ? ` · course ${esc(parisDay(race.start))} à ${esc(parisTime(race.start))}` : ''}</p></div>` : '';
+  const winner = f1.last?.race?.[0];
+  const last = winner ? `<div><h3 class="cmp">Dernier vainqueur</h3><p>${esc(winner.driver)} (${esc(winner.team)}) · ${esc(f1.last.name)}</p></div>` : '';
+  return next || last ? `<div class="f1-strip fb-strip">${next}${last}</div>` : '';
+}
+
+function renderF1(file, f1, state, now) {
+  const top5 = [...file.events].sort((a, b) => a.level - b.level || b.importance - a.importance).slice(0, 5);
+  const retain = top5.length ? `<section class="retain retain-f1"><h2>À retenir</h2><ol>${top5.map((e) => `<li><a href="${href(e)}">${esc(e.title)}</a></li>`).join('')}</ol></section>` : '';
+  const data = f1
+    ? `${f1.stale ? '<p class="meta">Certaines données F1 sont non actualisées.</p>' : ''}
+       ${f1.next ? `<h2>Prochain Grand Prix : ${esc(f1.next.name)}</h2>${f1Weekend(f1.next)}` : ''}
+       ${f1Last(f1.last)}
+       ${f1.drivers.length ? `<h2>Championnat pilotes</h2>${f1Table(f1.drivers.slice(0, 10), [['position', '#'], ['driver', 'Pilote'], ['team', 'Écurie'], ['wins', 'V'], ['points', 'Pts']])}` : ''}
+       ${f1.constructors.length ? `<h2>Championnat constructeurs</h2>${f1Table(f1.constructors, [['position', '#'], ['team', 'Écurie'], ['wins', 'V'], ['points', 'Pts']])}` : ''}`
+    : '<p class="meta">Données indisponibles pour le moment.</p>';
+  return `<div style="--dom:${color(file.domain.accent)}"><a class="back" href="#/">← Accueil</a><h1>${esc(file.domain.name)}</h1>
+    ${retain}${data}${eventSections(file.events, state, now)}${linksBlock(file.links)}</div>`;
+}
+
+export function domainBlock(dom, events, state, now, quotes = null, football = null, f1 = null) {
   const pick = (n) => (dom.levels[n] ?? []).map((id) => events[id]).filter(Boolean);
   const [l1, l2, l3] = [pick(1), pick(2), pick(3)];
   const st = (e) => eventStatus(state, e);
@@ -210,11 +263,12 @@ export function domainBlock(dom, events, state, now, quotes = null, football = n
     ${l2.map((e) => row(e, st(e), now)).join('')}
     ${more}
     ${dom.id === 'football' ? footballStrip(football) : ''}
+    ${dom.id === 'f1' ? f1Strip(f1) : ''}
     ${upcomingList(dom.upcoming)}
   </section>`;
 }
 
-export function renderHome(home, state, now, since = null, quotes = null, football = null) {
+export function renderHome(home, state, now, since = null, quotes = null, football = null, f1 = null) {
   const { fresh, updated } = countChanges(state, Object.values(home.events));
   const retain = home.retain.map((id) => home.events[id]).filter(Boolean);
   const sinceTxt = since && fmtDateTime(since) ? ` (dernière visite : ${esc(fmtDateTime(since))})` : '';
@@ -223,7 +277,7 @@ export function renderHome(home, state, now, since = null, quotes = null, footba
     <p class="meta">Dernier changement de contenu : ${esc(timeAgo(home.generated_at, now))}</p>
     <div class="since"><span>Depuis ta dernière visite${sinceTxt} : <b>${fresh}</b> nouveauté${fresh > 1 ? 's' : ''} · <b>${updated}</b> mise${updated > 1 ? 's' : ''} à jour</span>${fresh + updated ? '<button class="link" data-action="mark-all">Tout marquer comme vu</button>' : ''}</div>
     ${retain.length ? `<section class="retain"><h2>À retenir aujourd’hui</h2><ol>${retain.map((e) => `<li>${badges(e, eventStatus(state, e))}<a href="${href(e)}">${esc(e.title)}</a><div class="meta">${esc(e.summary?.retenir ?? '')}</div></li>`).join('')}</ol></section>` : ''}
-    ${home.domains.map((d) => domainBlock(d, home.events, state, now, quotes, football)).join('')}`;
+    ${home.domains.map((d) => domainBlock(d, home.events, state, now, quotes, football, f1)).join('')}`;
 }
 
 // Liens « Approfondir » déclarés dans la config de la veille (ex. pages Flashscore des tournois).
@@ -233,8 +287,9 @@ function linksBlock(links) {
   return `<h2>Approfondir</h2><ul class="links">${safe.map((l) => `<li><a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">${esc(l.title)}</a></li>`).join('')}</ul>`;
 }
 
-export function renderDomain(file, state, now, quotes = null, football = null, tab = 'actu', arg = null) {
+export function renderDomain(file, state, now, quotes = null, football = null, tab = 'actu', arg = null, f1 = null) {
   if (file.domain.id === 'football') return renderFootball(file, football, tab, arg, state, now);
+  if (file.domain.id === 'f1') return renderF1(file, f1, state, now);
   const empty = !file.events.length;
   return `<div style="--dom:${color(file.domain.accent)}"><a class="back" href="#/">← Accueil</a>
     <h1>${esc(file.domain.name)}</h1>

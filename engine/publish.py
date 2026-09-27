@@ -124,3 +124,8 @@ def publish_quotes(root: Path, quotes: dict) -> None:
 def publish_football(root: Path, data: dict) -> None:
     validate("football", data)
     write_if_changed(root / "site" / "data" / "football.json", data)
+
+
+def publish_json(root: Path, kind: str, name: str, data: dict) -> None:
+    validate(kind, data)
+    write_if_changed(root / "site" / "data" / name, data)
