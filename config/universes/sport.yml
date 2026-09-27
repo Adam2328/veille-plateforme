@@ -1,0 +1,13 @@
+id: sport
+name: Sport
+short: Sport
+color: sport
+order: 4
+domains: [football, tennis, f1, nba, volley, sport-essentiel]
+subthemes:
+  - {id: foot, name: Football, domains: [football]}
+  - {id: tennis, name: Tennis, domains: [tennis]}
+  - {id: f1, name: F1, domains: [f1]}
+  - {id: basket, name: Basket, domains: [nba]}
+  - {id: volley, name: Volley, domains: [volley]}
+  - {id: autres, name: Autres sports, domains: [sport-essentiel]}

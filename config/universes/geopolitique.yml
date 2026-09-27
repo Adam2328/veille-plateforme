@@ -1,0 +1,12 @@
+id: geopolitique
+name: Géopolitique
+short: Géo
+color: geo
+order: 3
+domains: [geopolitique]
+subthemes:
+  - {id: conflits, name: Conflits, kinds: [conflict, humanitarian]}
+  - {id: diplomatie, name: Diplomatie & alliances, kinds: [diplomacy, alliance]}
+  - {id: sanctions, name: Économie & sanctions, kinds: [sanctions], entity_types: [commodity]}
+  - {id: politique, name: Élections & institutions, kinds: [election, institutions]}
+  - {id: europe, name: France & Europe, entities: [country:france, org:ue, org:commission-europeenne, org:parlement-europeen, country:allemagne, country:italie, country:espagne, country:pologne]}
