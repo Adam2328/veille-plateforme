@@ -34,4 +34,4 @@ def load_recent(root: Path, now: datetime, days: int = 7) -> list:
             if line.strip():
                 ev = json.loads(line)
                 latest[ev["id"]] = ev
-    return [e for e in latest.values() if parse(e["updated_at"]) >= cutoff]
+    return [e for e in latest.values() if "merged_into" not in e and parse(e["updated_at"]) >= cutoff]

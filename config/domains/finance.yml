@@ -9,7 +9,8 @@ thresholds: {l1: 53, l2: 50, l3: 44}   # calibrés le 26/09/2026 sur les scores 
 relevance: true                         # écarte les articles qui ne citent aucune entité ni aucun mot-clé (finance personnelle, météo, quiz...)
 
 exclude: ["sponsored", "promo code", "black friday", "webinar", "newsletter sign", "subscribe to",
-          "approval of application", "enforcement action", "in common stock", "insider"]      # promotions, communiqués administratifs de la Fed, transactions d'initiés
+          "approval of application", "enforcement action", "in common stock", "insider",
+          "cotation bourse", "cours action"]      # promotions, communiqués administratifs de la Fed, transactions d'initiés, pages de cotation (Boursorama)
 
 entities:                               # entités majeures : un événement qui en cite une reçoit le bonus d'entité
   Fed: [fed, "federal reserve", fomc, powell]

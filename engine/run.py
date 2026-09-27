@@ -7,7 +7,7 @@ from datetime import datetime
 from pathlib import Path
 
 from .agenda import fetch_points
-from .cluster import cluster
+from .cluster import cluster, merge_events
 from .collect import collect_source, fetch_bytes
 from .config import ROOT, load_config
 from .enrich import is_relevant
@@ -107,7 +107,7 @@ def run(root: Path = ROOT, now: datetime | None = None, only: list[str] | None =
     health, by_domain = [], {}
     for dom in sorted(cfg["domains"].values(), key=lambda d: d["order"]):
         mine = [e for e in stored if e["domain"] == dom["id"]]
-        changed = set()
+        changed, merges = set(), []
         if only is None or dom["id"] in only:
             items, h = collect_domain(dom, g, now, fetch)
             health += h
@@ -115,9 +115,12 @@ def run(root: Path = ROOT, now: datetime | None = None, only: list[str] | None =
             report["collected"] += len(items)
             report["new_items"] += len(fresh)
             mine, changed = cluster(fresh, mine, dom, g, now)
+            mine, merges = merge_events(mine, dom, g, now)
+            changed = (changed - {d["id"] for d, _ in merges}) | {sid for _, sid in merges}
         mine = rescore(mine, dom, g, now)
         mine, touched, errors = add_summaries(mine, dom, g, call)
-        append(root, [e for e in mine if e["id"] in changed | touched], now)
+        append(root, [{**d, "merged_into": sid} for d, sid in merges]          # marqueur : l'absorbé ne revient pas
+               + [e for e in mine if e["id"] in changed | touched], now)
         by_domain[dom["id"]] = mine
         _tally(report, mine, errors)
     agendas = _import_agendas(cfg, only, agenda_fetch, health)

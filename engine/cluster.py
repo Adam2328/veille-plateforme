@@ -79,3 +79,51 @@ def cluster(items: list, events: list, dom: dict, g: dict, now: datetime) -> tup
         vecs[target] = vectorizer.transform([_event_text(by_id[target])])
         changed.add(target)
     return list(by_id.values()), changed
+
+
+def _absorb(keep: dict, drop: dict, now: datetime) -> dict:
+    known_ids = {i["id"] for i in keep["items"]}
+    extra = [i for i in drop["items"] if i["id"] not in known_ids]
+    items = [*keep["items"], *extra]
+    keep_best = min(i["tier"] for i in keep["items"])
+    new_origin = bool({i["origin"] for i in extra} - {i["origin"] for i in keep["items"]})
+    better_tier = bool(extra) and min(i["tier"] for i in extra) < keep_best
+    title = min(items, key=lambda i: (i["tier"], i["published_at"]))["title"] if better_tier else keep["title"]
+    grew = new_origin or better_tier
+    return {
+        **keep, "items": items, "title": title,
+        "entities": sorted(set(keep["entities"]) | set(drop["entities"])),
+        "kind": keep["kind"] if keep["kind"] != "other" else drop["kind"],
+        "first_seen": min(keep["first_seen"], drop["first_seen"]),
+        "rev": keep["rev"] + (1 if grew else 0),
+        "updated_at": iso(now) if grew else keep["updated_at"],
+    }
+
+
+def merge_events(events: list, dom: dict, g: dict, now: datetime) -> tuple[list, list]:
+    """Second passage : fusionne les événements ouverts d'une veille qui racontent la même histoire.
+
+    Au plus une fusion par événement et par cycle (limite le chaînage) ; l'événement le plus fourni survit.
+    Désactivé si `cluster.merge_threshold` est absent de la config.
+    """
+    threshold = g["cluster"].get("merge_threshold")
+    window = timedelta(hours=g["cluster"]["window_hours"])
+    open_ = [e for e in events if e["domain"] == dom["id"] and now - parse(e["updated_at"]) <= window]
+    if threshold is None or len(open_) < 2:
+        return list(events), []
+    vectorizer = TfidfVectorizer(strip_accents="unicode", stop_words=_STOP, sublinear_tf=True)
+    sims = cosine_similarity(vectorizer.fit_transform([_event_text(e) for e in open_]))
+    pairs = sorted(((sims[i][j], i, j) for i in range(len(open_)) for j in range(i + 1, len(open_))
+                    if sims[i][j] >= threshold), reverse=True)
+    by_id = {e["id"]: e for e in events}
+    used, merges = set(), []
+    for _, i, j in pairs:
+        if i in used or j in used:
+            continue
+        a, b = open_[i], open_[j]
+        keep, drop = (a, b) if len(a["items"]) >= len(b["items"]) else (b, a)
+        by_id[keep["id"]] = _absorb(keep, drop, now)
+        del by_id[drop["id"]]
+        merges.append((drop, keep["id"]))
+        used |= {i, j}
+    return list(by_id.values()), merges
