@@ -11,11 +11,16 @@ def _pattern(keys: dict, flags: int) -> re.Pattern | None:
     return re.compile(rf"(?<!\w)(?:{alternatives})(?!\w)", flags)
 
 
-def build_matcher(catalog: dict, universe: str | None = None) -> dict[str, _Pattern]:
-    """Deux expressions : alias en minuscules (insensibles à la casse) et alias « = » (casse exacte)."""
+def build_matcher(catalog: dict, universe: str | None = None, domain: str | None = None) -> dict[str, _Pattern]:
+    """Deux expressions : alias en minuscules (insensibles à la casse) et alias « = » (casse exacte).
+
+    `link_in` restreint une entité à des univers, `link_domains` à des rubriques (ex. clubs : Football seulement).
+    """
     loose, strict = {}, {}
     for eid, e in catalog.items():
         if universe and e.get("link_in") and universe not in e["link_in"]:
+            continue
+        if domain and e.get("link_domains") and domain not in e["link_domains"]:
             continue
         for alias in map(str, e["aliases"]):
             if alias.startswith("="):

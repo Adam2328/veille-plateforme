@@ -1,25 +1,25 @@
 # Équipes (type team). Les autres équipes de football sont générées depuis les classements publiés.
-- {id: team:psg, wikidata: Q483020, name: Paris Saint-Germain, aliases: [psg, "paris saint-germain", "paris sg"], universes: [sport], link_in: [sport]}
-- {id: team:om, wikidata: Q132885, name: Olympique de Marseille, aliases: ["=OM", "olympique de marseille", marseille], universes: [sport], link_in: [sport]}
-- {id: team:ol, wikidata: Q704, name: Olympique lyonnais, aliases: ["=OL", "olympique lyonnais", "olympique lyon", lyon], universes: [sport], link_in: [sport]}
-- {id: team:monaco, wikidata: Q180305, name: AS Monaco, aliases: ["as monaco", "=Monaco"], universes: [sport], link_in: [sport]}
-- {id: team:lille, wikidata: Q19516, name: LOSC Lille, aliases: ["=LOSC", lille], universes: [sport], link_in: [sport]}
-- {id: team:lens, wikidata: Q191843, name: RC Lens, aliases: ["rc lens", "=Lens"], universes: [sport], link_in: [sport]}
-- {id: team:real-madrid, wikidata: Q8682, name: Real Madrid, aliases: ["real madrid"], universes: [sport], link_in: [sport]}
-- {id: team:fc-barcelone, wikidata: Q7156, name: FC Barcelone, aliases: [barça, barca, "fc barcelone", barcelone, barcelona], universes: [sport], link_in: [sport]}
-- {id: team:atletico-madrid, wikidata: Q8701, name: Atlético de Madrid, aliases: [atlético, atletico], universes: [sport], link_in: [sport]}
-- {id: team:manchester-city, wikidata: Q50602, name: Manchester City, aliases: ["manchester city", "man city"], universes: [sport], link_in: [sport]}
-- {id: team:manchester-united, wikidata: Q18656, name: Manchester United, aliases: ["manchester united", "man united", "man utd"], universes: [sport], link_in: [sport]}
-- {id: team:liverpool, wikidata: Q1130849, name: Liverpool FC, aliases: [liverpool], universes: [sport], link_in: [sport]}
-- {id: team:arsenal, wikidata: Q9617, name: Arsenal, aliases: [arsenal], universes: [sport], link_in: [sport]}
-- {id: team:chelsea, wikidata: Q9616, name: Chelsea, aliases: [chelsea], universes: [sport], link_in: [sport]}
-- {id: team:tottenham, wikidata: Q18741, name: Tottenham Hotspur, aliases: [tottenham], universes: [sport], link_in: [sport]}
-- {id: team:bayern-munich, wikidata: Q15789, name: Bayern Munich, aliases: [bayern], universes: [sport], link_in: [sport]}
-- {id: team:dortmund, wikidata: Q41420, name: Borussia Dortmund, aliases: [dortmund], universes: [sport], link_in: [sport]}
-- {id: team:juventus, wikidata: Q1422, name: Juventus, aliases: [juventus, juve], universes: [sport], link_in: [sport]}
-- {id: team:inter-milan, wikidata: Q631, name: Inter Milan, aliases: ["inter milan", "=Inter"], universes: [sport], link_in: [sport]}
-- {id: team:ac-milan, wikidata: Q1543, name: AC Milan, aliases: ["milan ac", "ac milan"], universes: [sport], link_in: [sport]}
-- {id: team:napoli, wikidata: Q2641, name: SSC Naples, aliases: [napoli, naples], universes: [sport], link_in: [sport]}
+- {id: team:psg, wikidata: Q483020, name: Paris Saint-Germain, aliases: [psg, "paris saint-germain", "paris sg"], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:om, wikidata: Q132885, name: Olympique de Marseille, aliases: ["=OM", "olympique de marseille", marseille], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:ol, wikidata: Q704, name: Olympique lyonnais, aliases: ["=OL", "olympique lyonnais", "olympique lyon", lyon], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:monaco, wikidata: Q180305, name: AS Monaco, aliases: ["as monaco", "=Monaco"], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:lille, wikidata: Q19516, name: LOSC Lille, aliases: ["=LOSC", lille], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:lens, wikidata: Q191843, name: RC Lens, aliases: ["rc lens", "=Lens"], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:real-madrid, wikidata: Q8682, name: Real Madrid, aliases: ["real madrid"], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:fc-barcelone, wikidata: Q7156, name: FC Barcelone, aliases: [barça, barca, "fc barcelone", barcelone, barcelona], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:atletico-madrid, wikidata: Q8701, name: Atlético de Madrid, aliases: [atlético, atletico], universes: [sport], link_in: [sport], link_domains: [football], football_names: [Atleti]}
+- {id: team:manchester-city, wikidata: Q50602, name: Manchester City, aliases: ["manchester city", "man city"], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:manchester-united, wikidata: Q18656, name: Manchester United, aliases: ["manchester united", "man united", "man utd"], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:liverpool, wikidata: Q1130849, name: Liverpool FC, aliases: [liverpool], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:arsenal, wikidata: Q9617, name: Arsenal, aliases: [arsenal], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:chelsea, wikidata: Q9616, name: Chelsea, aliases: [chelsea], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:tottenham, wikidata: Q18741, name: Tottenham Hotspur, aliases: [tottenham], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:bayern-munich, wikidata: Q15789, name: Bayern Munich, aliases: [bayern], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:dortmund, wikidata: Q41420, name: Borussia Dortmund, aliases: [dortmund], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:juventus, wikidata: Q1422, name: Juventus, aliases: [juventus, juve], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:inter-milan, wikidata: Q631, name: Inter Milan, aliases: ["inter milan", "=Inter"], universes: [sport], link_in: [sport], link_domains: [football]}
+- {id: team:ac-milan, wikidata: Q1543, name: AC Milan, aliases: ["milan ac", "ac milan"], universes: [sport], link_in: [sport], link_domains: [football], football_names: [Milan]}
+- {id: team:napoli, wikidata: Q2641, name: SSC Naples, aliases: [napoli, naples], universes: [sport], link_in: [sport], link_domains: [football]}
 - {id: team:equipe-de-france, wikidata: Q47774, name: Équipe de France, aliases: ["équipe de france", "les bleus", "les bleues", "=Bleus", "=Bleues"], universes: [sport], link_in: [sport]}
 - {id: team:lakers, wikidata: Q121783, name: Los Angeles Lakers, aliases: [lakers], universes: [sport], link_in: [sport]}
 - {id: team:celtics, wikidata: Q131371, name: Boston Celtics, aliases: [celtics], universes: [sport], link_in: [sport]}

@@ -105,16 +105,21 @@ def load_relations(root: Path, catalog: dict) -> list[tuple[str, str, str]]:
 
 
 def football_teams(football: dict | None, catalog: dict, universes: dict) -> dict:
-    """Équipes des classements déjà publiés et absentes du catalogue : entités « team » limitées au Sport."""
+    """Équipes des classements déjà publiés et absentes du catalogue : entités « team » limitées à la rubrique Football.
+
+    Alias en casse exacte : « Nice », « Porto » ou « Milan » sont aussi des villes (constaté sur les données réelles).
+    Les noms courts de football-data déclarés dans le catalogue (`football_names`) ne créent pas de doublon.
+    """
     if not football or "sport" not in universes:
         return {}
-    known = {str(a).lstrip("=").lower() for e in catalog.values() for a in e.get("aliases", [])}
+    known = {str(a).lstrip("=").lower() for e in catalog.values()
+             for a in [*e.get("aliases", []), *e.get("football_names", [])]}
     out = {}
     for comp in football.get("competitions", []):
         for row in comp.get("standings", []):
             name = row["team"]
             eid = f"team:{slug(name)}"
             if name.lower() not in known and eid not in catalog and slug(name):
-                out[eid] = {"id": eid, "name": name, "type": "team", "aliases": [name.lower()],
-                            "universes": ["sport"], "link_in": ["sport"]}
+                out[eid] = {"id": eid, "name": name, "type": "team", "aliases": [f"={name}"],
+                            "universes": ["sport"], "link_in": ["sport"], "link_domains": ["football"]}
     return out

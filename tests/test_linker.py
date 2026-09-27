@@ -46,3 +46,9 @@ def test_final_ids_keeps_confirmed_and_never_offered_candidates_in_order():
     assert final_ids(ev) == ["b", "c"]
     assert final_ids({"candidates": ["a"]}) == ["a"]
     assert final_ids({}) == []
+
+
+def test_link_domains_restricts_an_entity_to_its_domains():
+    catalog = {"team:nice": {"aliases": ["=Nice"], "link_in": ["sport"], "link_domains": ["football"]}}
+    assert link("Nice s'impose à domicile", build_matcher(catalog, "sport", "football")) == ["team:nice"]
+    assert link("Finale à Nice pour les volleyeurs", build_matcher(catalog, "sport", "volley")) == []

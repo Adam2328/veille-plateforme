@@ -99,5 +99,13 @@ def test_football_teams_are_added_for_unknown_names_and_only_in_sport():
     teams = football_teams(football, catalog, {"sport": {}})
     assert list(teams) == ["team:real-sociedad"]
     assert teams["team:real-sociedad"] == {"id": "team:real-sociedad", "name": "Real Sociedad", "type": "team",
-                                          "aliases": ["real sociedad"], "universes": ["sport"], "link_in": ["sport"]}
+                                          "aliases": ["=Real Sociedad"], "universes": ["sport"], "link_in": ["sport"],
+                                          "link_domains": ["football"]}
+
+
+def test_football_data_short_names_declared_in_the_catalog_create_no_duplicate():
+    football = {"competitions": [{"standings": [{"team": "Milan"}, {"team": "Atleti"}]}]}
+    catalog = {"team:ac-milan": {"aliases": ["ac milan"], "football_names": ["Milan"]},
+               "team:atletico-madrid": {"aliases": ["atletico"], "football_names": ["Atleti"]}}
+    assert football_teams(football, catalog, {"sport": {}}) == {}
     assert football_teams(football, catalog, {}) == {} and football_teams(None, catalog, {"sport": {}}) == {}

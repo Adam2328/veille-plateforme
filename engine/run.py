@@ -199,7 +199,7 @@ def run(root: Path = ROOT, now: datetime | None = None, only: list[str] | None =
     g, universes = cfg["global"], cfg["universes"]
     catalog = {**cfg["catalog"], **football_teams(_previous(root, "football.json"), cfg["catalog"], universes)}
     uni_of = {d: u for u, uni in universes.items() for d in uni["domains"]}
-    matchers = {u: build_matcher(catalog, u) for u in universes}
+    matchers = {d: build_matcher(catalog, u, d) for d, u in uni_of.items()}
     stored = load_recent(root, now)
     report = {"collected": 0, "new_items": 0, "events": {"1": 0, "2": 0, "3": 0}, "reliability": {},
               "ai": {"llm": 0, "extractif": 0, "errors": []}, "quotes": {"ok": 0, "failed": 0},
@@ -219,7 +219,7 @@ def run(root: Path = ROOT, now: datetime | None = None, only: list[str] | None =
             mine, merges = merge_events(mine, dom, g, now)
             changed = (changed - {d["id"] for d, _ in merges}) | {sid for _, sid in merges}
         universe = uni_of.get(dom["id"])
-        mine = [annotate(e, universe, matchers.get(universe)) for e in mine]
+        mine = [annotate(e, universe, matchers.get(dom["id"])) for e in mine]
         mine = rescore(mine, dom, g, now)
         mine, touched, errors = add_summaries(mine, dom, g, call)
         mine = [{**e, "entity_ids": final_ids(e)} if "candidates" in e else e for e in mine]
