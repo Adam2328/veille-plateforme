@@ -1,4 +1,5 @@
-import { eventStatus, countChanges } from './state.js';
+import { eventStatus, countChanges, isFollowed } from './state.js';
+import { followedEvents } from './search.js';
 
 export const esc = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -269,7 +270,54 @@ export function domainBlock(dom, events, state, now, quotes = null, football = n
   </section>`;
 }
 
-export function renderHome(home, state, now, since = null, quotes = null, football = null, f1 = null) {
+// ---- Recherche, archives, suivis ----
+const domainName = (index, id) => index?.domains?.find((d) => d.id === id)?.name ?? id;
+
+export function renderResults(list, index, now) {
+  if (!list.length) return '<p class="meta">Aucun résultat.</p>';
+  const days = [];
+  for (const e of list.slice(0, 200)) {
+    const day = fmtDate(e.date);
+    if (!days.length || days[days.length - 1].day !== day) days.push({ day, items: [] });
+    days[days.length - 1].items.push(e);
+  }
+  return days.map((d) => `<h3 class="cmp">${esc(d.day)}</h3>${d.items.map((e) =>
+    `<a class="row" href="#/e/${enc(e.id)}"><span class="badge">${esc(domainName(index, e.domain))}</span><span class="t">${esc(e.title)}</span><span class="meta">${esc(timeAgo(e.date, now))}</span></a>`).join('')}`).join('')
+    + (list.length > 200 ? `<p class="meta">${list.length - 200} résultats plus anciens non affichés : précisez la recherche.</p>` : '');
+}
+
+export function renderSearch(index, query, filters = {}, now = Date.now()) {
+  const opts = (index?.domains ?? []).map((d) => `<option value="${esc(d.id)}"${filters.domain === d.id ? ' selected' : ''}>${esc(d.name)}</option>`).join('');
+  const period = [[0, '30 derniers jours'], [7, '7 derniers jours'], [1, '24 heures']]
+    .map(([v, t]) => `<option value="${v}"${Number(filters.days || 0) === v ? ' selected' : ''}>${t}</option>`).join('');
+  return `<a class="back" href="#/">← Accueil</a><h1>Recherche et archives</h1>
+    <form class="search" role="search" onsubmit="return false">
+      <input id="q" type="search" autocomplete="off" placeholder="Équipe, joueur, entreprise, pays, sujet…" value="${esc(query)}" aria-label="Rechercher">
+      <select id="qd" aria-label="Veille"><option value="">Toutes les veilles</option>${opts}</select>
+      <select id="qp" aria-label="Période">${period}</select>
+    </form>
+    <p class="meta">Sans mot-clé : toutes les informations, jour par jour. Raccourci : Ctrl+K ou /.</p>
+    <div id="results">${index ? '' : '<p class="meta">Index de recherche indisponible pour le moment.</p>'}</div>`;
+}
+
+export function renderArchived(e, index) {
+  const url = safeUrl(e.url);
+  return `<article class="detail"><a class="back" href="#/s/">← Recherche</a>
+    <div><span class="badge">${esc(domainName(index, e.domain))}</span><span class="badge">Archive</span></div>
+    <h1>${esc(e.title)}</h1><p class="meta">${esc(fmtDateTime(e.date))} · ${esc(e.reliability)}</p>
+    ${e.retenir ? `<p>${esc(e.retenir)}</p>` : ''}
+    <p>${url ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">Lire la source : ${esc(e.source)}</a>` : esc(e.source)}</p>
+  </article>`;
+}
+
+function followsBlock(index, state) {
+  if (!state.follows.length) return '';
+  const list = followedEvents(index, state);
+  return `<section class="retain"><h2>Vos suivis</h2><p class="meta">${state.follows.map(esc).join(' · ')}</p>
+    ${list.length ? `<ol>${list.map((e) => `<li><a href="#/e/${enc(e.id)}">${esc(e.title)}</a><div class="meta">${esc(timeAgo(e.date, Date.now()))}</div></li>`).join('')}</ol>` : '<p class="meta">Rien de nouveau sur vos suivis ces 30 derniers jours.</p>'}</section>`;
+}
+
+export function renderHome(home, state, now, since = null, quotes = null, football = null, f1 = null, index = null) {
   const { fresh, updated } = countChanges(state, Object.values(home.events));
   const retain = home.retain.map((id) => home.events[id]).filter(Boolean);
   const sinceTxt = since && fmtDateTime(since) ? ` (dernière visite : ${esc(fmtDateTime(since))})` : '';
@@ -277,6 +325,7 @@ export function renderHome(home, state, now, since = null, quotes = null, footba
     <h1>Aujourd’hui</h1>
     <p class="meta">Dernier changement de contenu : ${esc(timeAgo(home.generated_at, now))}</p>
     <div class="since"><span>Depuis ta dernière visite${sinceTxt} : <b>${fresh}</b> nouveauté${fresh > 1 ? 's' : ''} · <b>${updated}</b> mise${updated > 1 ? 's' : ''} à jour</span>${fresh + updated ? '<button class="link" data-action="mark-all">Tout marquer comme vu</button>' : ''}</div>
+    ${followsBlock(index, state)}
     ${retain.length ? `<section class="retain"><h2>À retenir aujourd’hui</h2><ol>${retain.map((e) => `<li>${badges(e, eventStatus(state, e))}<a href="${href(e)}">${esc(e.title)}</a><div class="meta">${esc(e.summary?.retenir ?? '')}</div></li>`).join('')}</ol></section>` : ''}
     ${home.domains.map((d) => domainBlock(d, home.events, state, now, quotes, football, f1)).join('')}`;
 }
@@ -325,6 +374,10 @@ export function renderEvent(ev, state, now) {
     <p class="meta">Fiabilité : ${esc(ev.reliability_reason)} · première détection ${esc(timeAgo(ev.first_seen, now))} · mis à jour ${esc(timeAgo(ev.updated_at, now))}</p>
     ${fields.length ? `<dl>${fields.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>` : '<p class="meta">Événement secondaire : pas de synthèse, voir les sources.</p>'}
     ${layersBlock(ev.layers, ev.domain)}
+    ${ev.entities?.length ? `<p class="follow">${ev.entities.map((x) => {
+      const on = isFollowed(state, x);
+      return `<button class="chip" data-action="follow" data-entity="${esc(x)}" aria-pressed="${on}">${on ? '✓ Suivi' : '+ Suivre'} : ${esc(x)}</button>`;
+    }).join('')}</p>` : ''}
     <h2>Sources (${sorted.length})</h2>
     <ul class="sources">${main.map(li).join('')}</ul>
     ${social.length ? `<details class="more"><summary>Réseaux sociaux (${social.length})</summary><ul class="sources">${social.map(li).join('')}</ul></details>` : ''}
@@ -337,7 +390,7 @@ export function renderNav(home, state, activeHash) {
   const isActive = (h) => (h === '#/' ? activeHash === h : activeHash === h || activeHash.startsWith(`${h}/`));
   const link = (h, label, n) =>
     `<a href="${h}"${isActive(h) ? ' aria-current="page"' : ''}><span>${esc(label)}</span>${n ? `<span class="count">${n}</span>` : ''}</a>`;
-  return `<div class="brand">Veille</div>${link('#/', 'Accueil', 0)}${home.domains.map((d) => link(`#/d/${enc(d.id)}`, d.name, changed(d))).join('')}`;
+  return `<div class="brand">Veille</div>${link('#/', 'Accueil', 0)}${link('#/s/', 'Rechercher', 0)}${home.domains.map((d) => link(`#/d/${enc(d.id)}`, d.name, changed(d))).join('')}`;
 }
 
 export function renderError(message, canRetry = false) {

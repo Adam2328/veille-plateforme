@@ -9,3 +9,4 @@ export const loadDomain = (id) => get(`data/domains/${encodeURIComponent(id)}.js
 export const loadQuotes = () => get('data/quotes.json');
 export const loadFootball = () => get('data/football.json');
 export const loadF1 = () => get('data/f1.json');
+export const loadSearch = () => get('data/search.json');
