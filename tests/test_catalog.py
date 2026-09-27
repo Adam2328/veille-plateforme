@@ -63,6 +63,36 @@ def test_missing_folders_give_an_empty_configuration(tmp_path):
     assert load_universes(tmp_path) == {} and load_catalog(tmp_path, {}) == {} and load_relations(tmp_path, {}) == []
 
 
+def test_repo_catalog_is_large_consistent_and_aliases_are_unique():
+    cfg = load_config()
+    catalog = cfg["catalog"]
+    assert len(catalog) >= 350
+    assert {e["type"] for e in catalog.values()} == {"company", "country", "org", "person", "etf", "crypto", "index", "rate",
+                                                     "commodity", "sector", "tech", "ai_model", "central_bank", "team",
+                                                     "player", "driver", "competition", "topic"}
+    seen = {}
+    for eid, e in catalog.items():
+        for a in e["aliases"]:
+            key = a if a.startswith("=") else a.lower()
+            assert key not in seen, f"alias {a} partagé par {seen.get(key)} et {eid}"
+            seen[key] = eid
+    assert len(cfg["relations"]) >= 100
+
+
+def test_every_name_of_the_domain_dictionaries_is_covered_by_the_catalog():
+    cfg = load_config()
+    known = {a.lstrip("=").lower() for e in cfg["catalog"].values() for a in e["aliases"]}
+    missing = [f"{d}:{name}" for d, dom in cfg["domains"].items() for name, aliases in dom.get("entities", {}).items()
+               if not ({name.lower(), *(a.lower() for a in aliases)} & known)]
+    assert missing == []
+
+
+def test_subtheme_entities_exist():
+    cfg = load_config()
+    wanted = {i for u in cfg["universes"].values() for s in u["subthemes"] for i in s.get("entities", [])}
+    assert wanted <= set(cfg["catalog"])
+
+
 def test_football_teams_are_added_for_unknown_names_and_only_in_sport():
     football = {"competitions": [{"standings": [{"team": "Lille"}, {"team": "Real Sociedad"}]}]}
     catalog = {"team:lille": {"aliases": ["lille"]}}

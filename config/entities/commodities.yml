@@ -1,0 +1,10 @@
+- {id: commodity:petrole, name: Pétrole, aliases: [pétrole, petrole, brent, "=WTI", oil, "crude oil", baril], universes: [finance, geopolitique]}
+- {id: commodity:gaz, name: Gaz naturel, aliases: ["gaz naturel", "natural gas", "=GNL", "=LNG"], universes: [finance, geopolitique]}
+- {id: commodity:or, name: Or, aliases: ["cours de l'or", "prix de l'or", "l'or", "l’or", gold], universes: [finance], link_in: [finance, geopolitique, ia]}
+- {id: commodity:cuivre, name: Cuivre, aliases: [cuivre, copper], universes: [finance]}
+- {id: commodity:lithium, name: Lithium, aliases: [lithium], universes: [finance]}
+- {id: commodity:uranium, name: Uranium, aliases: [uranium], universes: [finance, geopolitique]}
+- {id: commodity:terres-rares, name: Terres rares, aliases: ["terres rares", "rare earths", "rare earth"], universes: [finance, geopolitique]}
+- {id: commodity:ble, name: Blé, aliases: [blé, wheat], universes: [finance, geopolitique]}
+- {id: commodity:cacao, name: Cacao, aliases: [cacao, cocoa], universes: [finance]}
+- {id: commodity:electricite, name: Électricité, aliases: [électricité, electricite, electricity], universes: [finance, ia]}

@@ -1,0 +1,10 @@
+- {id: tech:gpu, name: GPU, aliases: ["=GPU", "=GPUs", "processeurs graphiques"], universes: [ia, finance]}
+- {id: tech:puces-ia, name: Puces d'IA, aliases: ["puces ia", "puces d'ia", "ai chips", "ai chip"], universes: [ia, finance]}
+- {id: tech:data-centers, name: Data centers, aliases: ["data center", "data centers", "data centres", "centres de données", "centre de données", datacenter, datacenters], universes: [ia, finance]}
+- {id: tech:agents-ia, name: Agents IA, aliases: ["agents ia", "agent ia", "ai agents", "ai agent", agentic], universes: [ia]}
+- {id: tech:llm, name: Grands modèles de langage, aliases: ["=LLM", "=LLMs", "large language model", "large language models", "grands modèles de langage"], universes: [ia]}
+- {id: tech:robotique-humanoide, name: Robots humanoïdes, aliases: ["robot humanoïde", "robots humanoïdes", "humanoid robot", "humanoid robots"], universes: [ia]}
+- {id: tech:informatique-quantique, name: Informatique quantique, aliases: ["informatique quantique", "quantum computing", "ordinateur quantique", "quantum computer"], universes: [ia, finance]}
+- {id: tech:nucleaire, name: Nucléaire, aliases: [nucléaire, "nuclear power", "nuclear energy", "=SMR", "=SMRs"], universes: [finance, geopolitique]}
+- {id: tech:vehicule-electrique, name: Véhicule électrique, aliases: ["véhicule électrique", "véhicules électriques", "electric vehicle", "electric vehicles", "=EV", "=EVs"], universes: [finance]}
+- {id: tech:cybersecurite, name: Cybersécurité, aliases: [cybersécurité, cybersecurity, cyberattaque, cyberattack], universes: [ia, geopolitique]}

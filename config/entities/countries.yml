@@ -1,0 +1,47 @@
+# Pays (type country). Les capitales servent d'alias quand elles désignent couramment le gouvernement.
+- {id: country:france, name: France, aliases: [france], universes: [geopolitique]}
+- {id: country:etats-unis, name: États-Unis, aliases: ["états-unis", "etats-unis", "=USA", "united states", "u.s.", "maison-blanche", "maison blanche", "white house", washington], universes: [geopolitique]}
+- {id: country:chine, name: Chine, aliases: [chine, china, pékin, beijing], universes: [geopolitique]}
+- {id: country:russie, name: Russie, aliases: [russie, russia, moscou, moscow, kremlin], universes: [geopolitique]}
+- {id: country:ukraine, name: Ukraine, aliases: [ukraine, kiev, kyiv], universes: [geopolitique]}
+- {id: country:allemagne, name: Allemagne, aliases: [allemagne, germany, berlin], universes: [geopolitique]}
+- {id: country:royaume-uni, name: Royaume-Uni, aliases: ["royaume-uni", "united kingdom", "=UK", britain, "grande-bretagne", "downing street"], universes: [geopolitique]}
+- {id: country:italie, name: Italie, aliases: [italie, italy], universes: [geopolitique]}
+- {id: country:espagne, name: Espagne, aliases: [espagne, spain], universes: [geopolitique]}
+- {id: country:pologne, name: Pologne, aliases: [pologne, poland], universes: [geopolitique]}
+- {id: country:japon, name: Japon, aliases: [japon, japan], universes: [geopolitique]}
+- {id: country:coree-du-sud, name: Corée du Sud, aliases: ["corée du sud", "south korea", séoul, seoul], universes: [geopolitique]}
+- {id: country:coree-du-nord, name: Corée du Nord, aliases: ["corée du nord", "north korea", pyongyang], universes: [geopolitique]}
+- {id: country:inde, name: Inde, aliases: [inde, india, "new delhi"], universes: [geopolitique]}
+- {id: country:pakistan, name: Pakistan, aliases: [pakistan], universes: [geopolitique]}
+- {id: country:iran, name: Iran, aliases: [iran, téhéran, tehran], universes: [geopolitique]}
+- {id: country:israel, name: Israël, aliases: [israël, israel], universes: [geopolitique]}
+- {id: country:palestine, name: Palestine, aliases: [palestine, gaza, cisjordanie, "west bank", palestinien, palestiniens, palestinian, palestinians], universes: [geopolitique]}
+- {id: country:liban, name: Liban, aliases: [liban, lebanon, beyrouth, beirut], universes: [geopolitique]}
+- {id: country:syrie, name: Syrie, aliases: [syrie, syria, damas, damascus], universes: [geopolitique]}
+- {id: country:arabie-saoudite, name: Arabie saoudite, aliases: ["arabie saoudite", "saudi arabia", riyad, riyadh], universes: [geopolitique]}
+- {id: country:emirats-arabes-unis, name: Émirats arabes unis, aliases: ["émirats arabes unis", "emirats arabes unis", "united arab emirates", "=UAE", "=EAU", dubaï, dubai, "abou dhabi", "abu dhabi"], universes: [geopolitique]}
+- {id: country:qatar, name: Qatar, aliases: [qatar, doha], universes: [geopolitique]}
+- {id: country:turquie, name: Turquie, aliases: [turquie, turkey, türkiye, ankara], universes: [geopolitique]}
+- {id: country:egypte, name: Égypte, aliases: [égypte, egypte, egypt, "le caire", cairo], universes: [geopolitique]}
+- {id: country:taiwan, name: Taïwan, aliases: [taïwan, taiwan, taipei], universes: [geopolitique]}
+- {id: country:bresil, name: Brésil, aliases: [brésil, bresil, brazil, brasilia], universes: [geopolitique]}
+- {id: country:argentine, name: Argentine, aliases: [argentine, argentina], universes: [geopolitique]}
+- {id: country:mexique, name: Mexique, aliases: [mexique, mexico], universes: [geopolitique]}
+- {id: country:canada, name: Canada, aliases: [canada, ottawa], universes: [geopolitique]}
+- {id: country:venezuela, name: Venezuela, aliases: [venezuela, caracas], universes: [geopolitique]}
+- {id: country:afrique-du-sud, name: Afrique du Sud, aliases: ["afrique du sud", "south africa"], universes: [geopolitique]}
+- {id: country:nigeria, name: Nigeria, aliases: [nigeria], universes: [geopolitique]}
+- {id: country:ethiopie, name: Éthiopie, aliases: [éthiopie, ethiopie, ethiopia], universes: [geopolitique]}
+- {id: country:soudan, name: Soudan, aliases: [soudan, sudan, khartoum], universes: [geopolitique]}
+- {id: country:mali, name: Mali, aliases: ["=Mali", bamako], universes: [geopolitique]}
+- {id: country:algerie, name: Algérie, aliases: [algérie, algerie, algeria], universes: [geopolitique]}
+- {id: country:maroc, name: Maroc, aliases: [maroc, morocco], universes: [geopolitique]}
+- {id: country:australie, name: Australie, aliases: [australie, australia], universes: [geopolitique]}
+- {id: country:belgique, name: Belgique, aliases: [belgique, belgium], universes: [geopolitique]}
+- {id: country:suisse, name: Suisse, aliases: [suisse, switzerland], universes: [geopolitique]}
+- {id: country:pays-bas, name: Pays-Bas, aliases: ["pays-bas", netherlands], universes: [geopolitique]}
+- {id: country:hongrie, name: Hongrie, aliases: [hongrie, hungary, budapest], universes: [geopolitique]}
+- {id: country:yemen, name: Yémen, aliases: [yémen, yemen], universes: [geopolitique]}
+- {id: country:danemark, name: Danemark, aliases: [danemark, denmark], universes: [geopolitique]}
+- {id: country:groenland, name: Groenland, aliases: [groenland, greenland], universes: [geopolitique]}

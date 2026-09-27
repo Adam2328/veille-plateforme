@@ -1,0 +1,44 @@
+# Joueuses et joueurs (type player), rattachés uniquement dans l'univers Sport.
+- {id: player:kylian-mbappe, name: Kylian Mbappé, aliases: [mbappé, mbappe], universes: [sport], link_in: [sport]}
+- {id: player:erling-haaland, name: Erling Haaland, aliases: [haaland], universes: [sport], link_in: [sport]}
+- {id: player:vinicius-junior, name: Vinícius Júnior, aliases: [vinícius, vinicius], universes: [sport], link_in: [sport]}
+- {id: player:jude-bellingham, name: Jude Bellingham, aliases: [bellingham], universes: [sport], link_in: [sport]}
+- {id: player:lamine-yamal, name: Lamine Yamal, aliases: [yamal], universes: [sport], link_in: [sport]}
+- {id: player:ousmane-dembele, name: Ousmane Dembélé, aliases: [dembélé, dembele], universes: [sport], link_in: [sport]}
+- {id: player:mohamed-salah, name: Mohamed Salah, aliases: [salah], universes: [sport], link_in: [sport]}
+- {id: player:harry-kane, name: Harry Kane, aliases: ["harry kane"], universes: [sport], link_in: [sport]}
+- {id: player:lionel-messi, name: Lionel Messi, aliases: [messi], universes: [sport], link_in: [sport]}
+- {id: player:cristiano-ronaldo, name: Cristiano Ronaldo, aliases: [ronaldo, "cristiano ronaldo"], universes: [sport], link_in: [sport]}
+- {id: player:jannik-sinner, name: Jannik Sinner, aliases: [sinner], universes: [sport], link_in: [sport]}
+- {id: player:carlos-alcaraz, name: Carlos Alcaraz, aliases: [alcaraz], universes: [sport], link_in: [sport]}
+- {id: player:novak-djokovic, name: Novak Djokovic, aliases: [djokovic], universes: [sport], link_in: [sport]}
+- {id: player:alexander-zverev, name: Alexander Zverev, aliases: [zverev], universes: [sport], link_in: [sport]}
+- {id: player:daniil-medvedev, name: Daniil Medvedev, aliases: [medvedev], universes: [sport], link_in: [sport]}
+- {id: player:taylor-fritz, name: Taylor Fritz, aliases: [fritz], universes: [sport], link_in: [sport]}
+- {id: player:jack-draper, name: Jack Draper, aliases: [draper], universes: [sport], link_in: [sport]}
+- {id: player:holger-rune, name: Holger Rune, aliases: ["=Rune"], universes: [sport], link_in: [sport]}
+- {id: player:arthur-fils, name: Arthur Fils, aliases: ["arthur fils", "=Fils"], universes: [sport], link_in: [sport]}
+- {id: player:giovanni-mpetshi-perricard, name: Giovanni Mpetshi Perricard, aliases: ["mpetshi perricard", mpetshi], universes: [sport], link_in: [sport]}
+- {id: player:aryna-sabalenka, name: Aryna Sabalenka, aliases: [sabalenka], universes: [sport], link_in: [sport]}
+- {id: player:iga-swiatek, name: Iga Świątek, aliases: [swiatek, świątek], universes: [sport], link_in: [sport]}
+- {id: player:coco-gauff, name: Coco Gauff, aliases: [gauff], universes: [sport], link_in: [sport]}
+- {id: player:elena-rybakina, name: Elena Rybakina, aliases: [rybakina], universes: [sport], link_in: [sport]}
+- {id: player:jessica-pegula, name: Jessica Pegula, aliases: [pegula], universes: [sport], link_in: [sport]}
+- {id: player:mirra-andreeva, name: Mirra Andreeva, aliases: [andreeva], universes: [sport], link_in: [sport]}
+- {id: player:victor-wembanyama, name: Victor Wembanyama, aliases: [wembanyama, wemby], universes: [sport], link_in: [sport]}
+- {id: player:lebron-james, name: LeBron James, aliases: [lebron], universes: [sport], link_in: [sport]}
+- {id: player:stephen-curry, name: Stephen Curry, aliases: ["stephen curry", "steph curry"], universes: [sport], link_in: [sport]}
+- {id: player:kevin-durant, name: Kevin Durant, aliases: [durant], universes: [sport], link_in: [sport]}
+- {id: player:nikola-jokic, name: Nikola Jokić, aliases: [jokic, jokić], universes: [sport], link_in: [sport]}
+- {id: player:giannis-antetokounmpo, name: Giannis Antetokounmpo, aliases: [antetokounmpo, giannis], universes: [sport], link_in: [sport]}
+- {id: player:shai-gilgeous-alexander, name: Shai Gilgeous-Alexander, aliases: ["gilgeous-alexander", "=SGA"], universes: [sport], link_in: [sport]}
+- {id: player:luka-doncic, name: Luka Dončić, aliases: [doncic, dončić], universes: [sport], link_in: [sport]}
+- {id: player:jayson-tatum, name: Jayson Tatum, aliases: [tatum], universes: [sport], link_in: [sport]}
+- {id: player:anthony-edwards, name: Anthony Edwards, aliases: ["anthony edwards"], universes: [sport], link_in: [sport]}
+- {id: player:rudy-gobert, name: Rudy Gobert, aliases: [gobert], universes: [sport], link_in: [sport]}
+- {id: player:earvin-ngapeth, name: Earvin Ngapeth, aliases: [ngapeth], universes: [sport], link_in: [sport]}
+- {id: player:jean-patry, name: Jean Patry, aliases: [patry], universes: [sport], link_in: [sport]}
+- {id: player:antoine-brizard, name: Antoine Brizard, aliases: [brizard], universes: [sport], link_in: [sport]}
+- {id: player:kevin-tillie, name: Kévin Tillie, aliases: [tillie], universes: [sport], link_in: [sport]}
+- {id: player:trevor-clevenot, name: Trévor Clévenot, aliases: [clevenot, clévenot], universes: [sport], link_in: [sport]}
+- {id: player:stephen-boyer, name: Stephen Boyer, aliases: ["stephen boyer", "=Boyer"], universes: [sport], link_in: [sport]}

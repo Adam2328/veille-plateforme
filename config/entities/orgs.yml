@@ -1,0 +1,26 @@
+- {id: org:onu, name: ONU, aliases: [onu, "nations unies", "united nations"], universes: [geopolitique]}
+- {id: org:conseil-de-securite, name: Conseil de sécurité de l'ONU, aliases: ["conseil de sécurité", "security council"], universes: [geopolitique]}
+- {id: org:otan, name: OTAN, aliases: [otan, nato], universes: [geopolitique]}
+- {id: org:ue, name: Union européenne, aliases: ["union européenne", "european union", "=UE", "=EU"], universes: [geopolitique, finance]}
+- {id: org:commission-europeenne, name: Commission européenne, aliases: ["commission européenne", "european commission"], universes: [geopolitique, finance]}
+- {id: org:parlement-europeen, name: Parlement européen, aliases: ["parlement européen", "european parliament"], universes: [geopolitique]}
+- {id: org:fmi, name: FMI, aliases: [fmi, "=IMF", "fonds monétaire international", "international monetary fund"], universes: [finance, geopolitique]}
+- {id: org:banque-mondiale, name: Banque mondiale, aliases: ["banque mondiale", "world bank"], universes: [finance, geopolitique]}
+- {id: org:omc, name: OMC, aliases: ["=OMC", "=WTO", "organisation mondiale du commerce", "world trade organization"], universes: [geopolitique, finance]}
+- {id: org:opep, name: OPEP, aliases: [opep, opec, "opep+", "opec+"], universes: [finance, geopolitique]}
+- {id: org:g7, name: G7, aliases: [g7], universes: [geopolitique]}
+- {id: org:g20, name: G20, aliases: [g20], universes: [geopolitique]}
+- {id: org:brics, name: BRICS, aliases: [brics], universes: [geopolitique]}
+- {id: org:oms, name: OMS, aliases: ["=OMS", "organisation mondiale de la santé", "world health organization"], universes: [geopolitique]}
+- {id: org:aiea, name: AIEA, aliases: [aiea, iaea], universes: [geopolitique]}
+- {id: org:cpi, name: Cour pénale internationale, aliases: ["cour pénale internationale", "international criminal court"], universes: [geopolitique]}
+- {id: org:hamas, name: Hamas, aliases: [hamas], universes: [geopolitique]}
+- {id: org:hezbollah, name: Hezbollah, aliases: [hezbollah], universes: [geopolitique]}
+- {id: org:houthis, name: Houthis, aliases: [houthis, houthi], universes: [geopolitique]}
+- {id: org:sec, name: SEC (gendarme boursier américain), aliases: ["=SEC", "securities and exchange commission"], universes: [finance]}
+- {id: org:uefa, name: UEFA, aliases: [uefa], universes: [sport], link_in: [sport]}
+- {id: org:fifa, name: FIFA, aliases: [fifa], universes: [sport]}
+- {id: org:cio, name: Comité international olympique, aliases: ["comité international olympique", "=CIO", "=IOC"], universes: [sport]}
+- {id: org:fia, name: FIA, aliases: ["=FIA"], universes: [sport], link_in: [sport]}
+- {id: org:atp, name: ATP, aliases: ["=ATP"], universes: [sport], link_in: [sport]}
+- {id: org:wta, name: WTA, aliases: ["=WTA"], universes: [sport], link_in: [sport]}

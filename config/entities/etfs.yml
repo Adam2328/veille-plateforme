@@ -1,0 +1,20 @@
+# ETF (type etf) : peu cités par leur nom dans l'actualité, surtout atteints par les chaînes « Concernés ».
+- {id: etf:spy, name: SPDR S&P 500 (SPY), aliases: ["=SPY"], ticker: SPY, universes: [finance]}
+- {id: etf:cspx, name: iShares Core S&P 500 UCITS (CSPX), aliases: ["=CSPX", "ishares core s&p 500"], ticker: CSPX, universes: [finance]}
+- {id: etf:iwda, name: iShares Core MSCI World (IWDA), aliases: ["=IWDA", "ishares core msci world"], ticker: IWDA, universes: [finance]}
+- {id: etf:vwce, name: Vanguard FTSE All-World (VWCE), aliases: ["=VWCE", "vanguard ftse all-world"], ticker: VWCE, universes: [finance]}
+- {id: etf:qqq, name: Invesco QQQ, aliases: ["=QQQ"], ticker: QQQ, universes: [finance]}
+- {id: etf:eem, name: iShares MSCI Emerging Markets (EEM), aliases: ["=EEM"], ticker: EEM, universes: [finance]}
+- {id: etf:tlt, name: iShares 20+ Year Treasury Bond (TLT), aliases: ["=TLT"], ticker: TLT, universes: [finance]}
+- {id: etf:lqd, name: iShares Investment Grade Corporate Bond (LQD), aliases: ["=LQD"], ticker: LQD, universes: [finance]}
+- {id: etf:hyg, name: iShares High Yield Corporate Bond (HYG), aliases: ["=HYG"], ticker: HYG, universes: [finance]}
+- {id: etf:gld, name: SPDR Gold Shares (GLD), aliases: ["=GLD", "spdr gold"], ticker: GLD, universes: [finance]}
+- {id: etf:xle, name: Energy Select Sector SPDR (XLE), aliases: ["=XLE"], ticker: XLE, universes: [finance]}
+- {id: etf:smh, name: VanEck Semiconductor (SMH), aliases: ["=SMH"], ticker: SMH, universes: [finance, ia]}
+- {id: etf:soxx, name: iShares Semiconductor (SOXX), aliases: ["=SOXX"], ticker: SOXX, universes: [finance, ia]}
+- {id: etf:arkk, name: ARK Innovation (ARKK), aliases: ["=ARKK"], ticker: ARKK, universes: [finance]}
+- {id: etf:ibit, name: iShares Bitcoin Trust (IBIT), aliases: ["=IBIT", "ishares bitcoin trust"], ticker: IBIT, universes: [finance]}
+- {id: etf:fbtc, name: Fidelity Wise Origin Bitcoin (FBTC), aliases: ["=FBTC"], ticker: FBTC, universes: [finance]}
+- {id: etf:etha, name: iShares Ethereum Trust (ETHA), aliases: ["=ETHA"], ticker: ETHA, universes: [finance]}
+- {id: etf:ura, name: Global X Uranium (URA), aliases: ["=URA"], ticker: URA, universes: [finance]}
+- {id: etf:ita, name: iShares U.S. Aerospace & Defense (ITA), aliases: ["=ITA"], ticker: ITA, universes: [finance, geopolitique]}

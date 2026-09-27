@@ -1,0 +1,9 @@
+- {id: crypto:bitcoin, name: Bitcoin, aliases: [bitcoin, "=BTC"], universes: [finance]}
+- {id: crypto:ethereum, name: Ethereum, aliases: [ethereum, ether, "=ETH"], universes: [finance]}
+- {id: crypto:solana, name: Solana, aliases: [solana], universes: [finance]}
+- {id: crypto:xrp, name: XRP, aliases: ["=XRP", ripple], universes: [finance]}
+- {id: crypto:bnb, name: BNB, aliases: ["=BNB"], universes: [finance]}
+- {id: crypto:tether, name: Tether (USDT), aliases: [tether, "=USDT"], universes: [finance]}
+- {id: crypto:usdc, name: USD Coin (USDC), aliases: ["=USDC"], universes: [finance]}
+- {id: crypto:dogecoin, name: Dogecoin, aliases: [dogecoin], universes: [finance]}
+- {id: crypto:cardano, name: Cardano, aliases: [cardano], universes: [finance]}

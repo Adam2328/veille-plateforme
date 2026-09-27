@@ -1,0 +1,21 @@
+- {id: competition:ligue-des-champions, name: Ligue des champions, aliases: ["ligue des champions", "champions league", "=UCL"], universes: [sport], link_in: [sport]}
+- {id: competition:ligue-europa, name: Ligue Europa, aliases: ["ligue europa", "europa league"], universes: [sport], link_in: [sport]}
+- {id: competition:ligue-1, name: Ligue 1, aliases: ["ligue 1"], universes: [sport], link_in: [sport]}
+- {id: competition:premier-league, name: Premier League, aliases: ["premier league"], universes: [sport], link_in: [sport]}
+- {id: competition:liga, name: Liga, aliases: [laliga, "la liga", "=Liga"], universes: [sport], link_in: [sport]}
+- {id: competition:serie-a, name: Serie A, aliases: ["serie a"], universes: [sport], link_in: [sport]}
+- {id: competition:bundesliga, name: Bundesliga, aliases: [bundesliga], universes: [sport], link_in: [sport]}
+- {id: competition:coupe-du-monde, name: Coupe du monde, aliases: ["coupe du monde", "world cup"], universes: [sport], link_in: [sport]}
+- {id: competition:formule-1, name: Formule 1, aliases: ["formule 1", "formula 1", "=F1"], universes: [sport], link_in: [sport]}
+- {id: competition:grands-chelems, name: Grands Chelems, aliases: ["grand chelem", "grands chelems", "grand slam"], universes: [sport], link_in: [sport]}
+- {id: competition:roland-garros, name: Roland-Garros, aliases: ["roland-garros", "roland garros", "french open"], universes: [sport], link_in: [sport]}
+- {id: competition:wimbledon, name: Wimbledon, aliases: [wimbledon], universes: [sport], link_in: [sport]}
+- {id: competition:us-open, name: US Open, aliases: ["us open"], universes: [sport], link_in: [sport]}
+- {id: competition:open-australie, name: Open d'Australie, aliases: ["open d'australie", "australian open"], universes: [sport], link_in: [sport]}
+- {id: competition:masters-1000, name: Masters 1000, aliases: ["masters 1000"], universes: [sport], link_in: [sport]}
+- {id: competition:finales-atp-wta, name: Finales ATP et WTA, aliases: ["atp finals", "wta finals", "finales atp"], universes: [sport], link_in: [sport]}
+- {id: competition:nba, name: NBA, aliases: ["=NBA"], universes: [sport], link_in: [sport]}
+- {id: competition:jeux-olympiques, name: Jeux olympiques, aliases: ["jeux olympiques", "=JO", olympics], universes: [sport], link_in: [sport]}
+- {id: competition:tour-de-france, name: Tour de France, aliases: ["tour de france"], universes: [sport], link_in: [sport]}
+- {id: competition:six-nations, name: Tournoi des Six Nations, aliases: ["six nations"], universes: [sport], link_in: [sport]}
+- {id: competition:top-14, name: Top 14, aliases: ["top 14"], universes: [sport], link_in: [sport]}

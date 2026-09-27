@@ -1,0 +1,74 @@
+# Entreprises (type company). Alias en minuscules = insensible à la casse ; « = » = casse exacte.
+- {id: company:nvidia, name: Nvidia, aliases: [nvidia, "=NVDA"], ticker: NVDA, universes: [finance, ia]}
+- {id: company:microsoft, name: Microsoft, aliases: [microsoft, "=MSFT"], ticker: MSFT, universes: [finance, ia]}
+- {id: company:apple, name: Apple, aliases: ["=Apple", "=AAPL", iphone], ticker: AAPL, universes: [finance]}
+- {id: company:alphabet, name: Alphabet (Google), aliases: ["=Alphabet", google, "=GOOGL"], ticker: GOOGL, universes: [finance, ia]}
+- {id: company:amazon, name: Amazon, aliases: ["=Amazon", aws, "amazon web services", "=AMZN"], ticker: AMZN, universes: [finance, ia]}
+- {id: company:meta, name: Meta, aliases: ["=Meta", "meta platforms", "meta ai", facebook, instagram, whatsapp], ticker: META, universes: [finance, ia]}
+- {id: company:tesla, name: Tesla, aliases: [tesla, "=TSLA"], ticker: TSLA, universes: [finance]}
+- {id: company:broadcom, name: Broadcom, aliases: [broadcom], ticker: AVGO, universes: [finance, ia]}
+- {id: company:amd, name: AMD, aliases: ["=AMD", "advanced micro devices"], ticker: AMD, universes: [finance, ia]}
+- {id: company:intel, name: Intel, aliases: ["=Intel"], ticker: INTC, universes: [finance, ia]}
+- {id: company:tsmc, name: TSMC, aliases: [tsmc, "taiwan semiconductor"], ticker: TSM, universes: [finance, ia, geopolitique]}
+- {id: company:asml, name: ASML, aliases: [asml], ticker: ASML, universes: [finance, ia]}
+- {id: company:samsung, name: Samsung Electronics, aliases: [samsung], universes: [finance, ia]}
+- {id: company:sk-hynix, name: SK Hynix, aliases: ["sk hynix", hynix], universes: [finance, ia]}
+- {id: company:arm, name: Arm, aliases: ["arm holdings", "=ARM"], ticker: ARM, universes: [finance, ia]}
+- {id: company:qualcomm, name: Qualcomm, aliases: [qualcomm], ticker: QCOM, universes: [finance]}
+- {id: company:oracle, name: Oracle, aliases: ["=Oracle"], ticker: ORCL, universes: [finance, ia]}
+- {id: company:salesforce, name: Salesforce, aliases: [salesforce], ticker: CRM, universes: [finance, ia]}
+- {id: company:ibm, name: IBM, aliases: ["=IBM"], ticker: IBM, universes: [finance, ia]}
+- {id: company:palantir, name: Palantir, aliases: [palantir], ticker: PLTR, universes: [finance, ia]}
+- {id: company:netflix, name: Netflix, aliases: [netflix], ticker: NFLX, universes: [finance]}
+- {id: company:berkshire-hathaway, name: Berkshire Hathaway, aliases: ["berkshire hathaway", berkshire], universes: [finance]}
+- {id: company:jpmorgan, name: JPMorgan Chase, aliases: [jpmorgan, "jp morgan", "jpmorgan chase"], ticker: JPM, universes: [finance]}
+- {id: company:goldman-sachs, name: Goldman Sachs, aliases: ["goldman sachs"], ticker: GS, universes: [finance]}
+- {id: company:blackrock, name: BlackRock, aliases: [blackrock], ticker: BLK, universes: [finance]}
+- {id: company:visa, name: Visa, aliases: ["=Visa Inc"], ticker: V, universes: [finance]}
+- {id: company:exxonmobil, name: ExxonMobil, aliases: [exxonmobil, "exxon mobil", exxon], ticker: XOM, universes: [finance, geopolitique]}
+- {id: company:chevron, name: Chevron, aliases: [chevron], ticker: CVX, universes: [finance]}
+- {id: company:shell, name: Shell, aliases: ["=Shell"], ticker: SHEL, universes: [finance]}
+- {id: company:totalenergies, name: TotalEnergies, aliases: [totalenergies, "total energies"], ticker: TTE, universes: [finance, geopolitique]}
+- {id: company:bp, name: BP, aliases: ["=BP"], ticker: BP, universes: [finance]}
+- {id: company:saudi-aramco, name: Saudi Aramco, aliases: [aramco, "saudi aramco"], universes: [finance, geopolitique]}
+- {id: company:lvmh, name: LVMH, aliases: [lvmh], ticker: MC.PA, universes: [finance]}
+- {id: company:hermes, name: Hermès, aliases: ["=Hermès"], ticker: RMS.PA, universes: [finance]}
+- {id: company:loreal, name: L'Oréal, aliases: ["l'oréal", "l’oréal", loreal], ticker: OR.PA, universes: [finance]}
+- {id: company:airbus, name: Airbus, aliases: [airbus], ticker: AIR.PA, universes: [finance]}
+- {id: company:boeing, name: Boeing, aliases: [boeing], ticker: BA, universes: [finance]}
+- {id: company:safran, name: Safran, aliases: [safran], ticker: SAF.PA, universes: [finance]}
+- {id: company:thales, name: Thales, aliases: ["=Thales"], ticker: HO.PA, universes: [finance, geopolitique]}
+- {id: company:dassault-aviation, name: Dassault Aviation, aliases: ["dassault aviation", rafale], universes: [finance, geopolitique]}
+- {id: company:schneider-electric, name: Schneider Electric, aliases: ["schneider electric"], ticker: SU.PA, universes: [finance]}
+- {id: company:sanofi, name: Sanofi, aliases: [sanofi], ticker: SAN.PA, universes: [finance]}
+- {id: company:novo-nordisk, name: Novo Nordisk, aliases: ["novo nordisk", ozempic, wegovy], ticker: NVO, universes: [finance]}
+- {id: company:eli-lilly, name: Eli Lilly, aliases: ["eli lilly"], ticker: LLY, universes: [finance]}
+- {id: company:bnp-paribas, name: BNP Paribas, aliases: ["bnp paribas", "=BNP"], ticker: BNP.PA, universes: [finance]}
+- {id: company:axa, name: AXA, aliases: ["=AXA"], ticker: CS.PA, universes: [finance]}
+- {id: company:stellantis, name: Stellantis, aliases: [stellantis], ticker: STLA, universes: [finance]}
+- {id: company:renault, name: Renault, aliases: [renault], ticker: RNO.PA, universes: [finance]}
+- {id: company:volkswagen, name: Volkswagen, aliases: [volkswagen], universes: [finance]}
+- {id: company:byd, name: BYD, aliases: ["=BYD"], universes: [finance]}
+- {id: company:toyota, name: Toyota, aliases: [toyota], universes: [finance]}
+- {id: company:alibaba, name: Alibaba, aliases: [alibaba], ticker: BABA, universes: [finance, ia]}
+- {id: company:tencent, name: Tencent, aliases: [tencent], universes: [finance, ia]}
+- {id: company:huawei, name: Huawei, aliases: [huawei], universes: [finance, ia, geopolitique]}
+- {id: company:xiaomi, name: Xiaomi, aliases: [xiaomi], universes: [finance]}
+- {id: company:softbank, name: SoftBank, aliases: [softbank], universes: [finance, ia]}
+- {id: company:coreweave, name: CoreWeave, aliases: [coreweave], ticker: CRWV, universes: [finance, ia]}
+- {id: company:lockheed-martin, name: Lockheed Martin, aliases: ["lockheed martin", lockheed], ticker: LMT, universes: [finance, geopolitique]}
+- {id: company:rheinmetall, name: Rheinmetall, aliases: [rheinmetall], universes: [finance, geopolitique]}
+- {id: company:siemens, name: Siemens, aliases: [siemens], universes: [finance]}
+- {id: company:sap, name: SAP, aliases: ["=SAP"], universes: [finance]}
+- {id: company:coinbase, name: Coinbase, aliases: [coinbase], ticker: COIN, universes: [finance]}
+- {id: company:binance, name: Binance, aliases: [binance], universes: [finance]}
+- {id: company:strategy, name: Strategy (MicroStrategy), aliases: [microstrategy, "=MSTR"], ticker: MSTR, universes: [finance]}
+- {id: company:openai, name: OpenAI, aliases: [openai], universes: [ia, finance]}
+- {id: company:anthropic, name: Anthropic, aliases: [anthropic], universes: [ia, finance]}
+- {id: company:google-deepmind, name: Google DeepMind, aliases: [deepmind, "google deepmind"], universes: [ia]}
+- {id: company:xai, name: xAI, aliases: [xai], universes: [ia, finance]}
+- {id: company:mistral-ai, name: Mistral AI, aliases: ["mistral ai", "=Mistral"], universes: [ia, finance]}
+- {id: company:deepseek, name: DeepSeek, aliases: [deepseek], universes: [ia]}
+- {id: company:perplexity, name: Perplexity, aliases: ["=Perplexity"], universes: [ia]}
+- {id: company:hugging-face, name: Hugging Face, aliases: ["hugging face", huggingface], universes: [ia]}
+- {id: company:cohere, name: Cohere, aliases: ["=Cohere"], universes: [ia]}
