@@ -54,6 +54,28 @@ with sync_playwright() as p:
         page.wait_for_selector("#q")
         check(f"{label} : Ctrl+K ouvre la recherche", "#/s/" in page.url)
         page.close()
+    # Application installable et lecture hors ligne (service worker, réseau d'abord, cache en secours)
+    context = browser.new_context()
+    page = context.new_page()
+    page.on("pageerror", lambda e: errors.append(str(e)))
+    page.goto(BASE + "#/")
+    page.wait_for_selector(".block")
+    manifest = page.evaluate("document.querySelector('link[rel=manifest]')?.href || ''")
+    check("manifeste déclaré", manifest.endswith("manifest.webmanifest"))
+    check("service worker actif", page.evaluate(
+        "Promise.race([navigator.serviceWorker.ready.then(() => true), new Promise((r) => setTimeout(() => r(false), 5000))])"))
+    page.reload()
+    page.wait_for_selector(".block")
+    context.set_offline(True)
+    try:
+        page.reload(timeout=10000)
+        page.wait_for_selector(".block", timeout=10000)
+        offline_ok = page.locator(".block").count() >= 9
+    except Exception:
+        offline_ok = False
+    check("hors ligne : l'Accueil s'affiche depuis le cache", offline_ok)
+    context.set_offline(False)
+    context.close()
     browser.close()
 
 print("\nErreurs console :", errors or "aucune")
