@@ -1,0 +1,78 @@
+id: geopolitique
+name: Géopolitique
+accent: "#7A1F1F"
+order: 4
+quota: 12
+max_l1: 4
+summary_profile: geopolitique
+thresholds: {l1: 75, l2: 65, l3: 58}   # calibrés le 27/09/2026 sur les scores observés (55 à 86)
+relevance: true
+
+exclude: ["sponsored", "promo code", "horoscope", "recette", "quiz", "live blog", "podcast", "newsletter",
+          "météo", "weather forecast", "tempête", "storm", "inondation", "flooding", "canicule", "heatwave",
+          "la semaine en images", "expo ", "exposition"]      # météo et culture : hors géopolitique
+
+entities:
+  États-Unis: ["états-unis", "etats-unis", "washington", "maison-blanche", "white house", "united states", "u.s."]
+  Chine: [chine, china, pékin, beijing, "xi jinping"]
+  Russie: [russie, russia, moscou, moscow, kremlin, poutine, putin]
+  Ukraine: [ukraine, kiev, kyiv, zelensky, zelenski]
+  Israël: [israël, israel, netanyahou, netanyahu]
+  Palestine: [gaza, palestine, palestinien, palestinian, hamas, cisjordanie, "west bank"]
+  Iran: [iran, téhéran, tehran]
+  Taïwan: [taïwan, taiwan]
+  Corée du Nord: ["corée du nord", "north korea", pyongyang]
+  Inde: [inde, india, modi]
+  Union européenne: ["union européenne", "european union", "commission européenne", "european commission", bruxelles, brussels]
+  OTAN: [otan, nato]
+  ONU: [onu, "nations unies", "united nations", "conseil de sécurité", "security council"]
+  France: [macron, "élysée", "quai d'orsay"]
+  Royaume-Uni: ["royaume-uni", "united kingdom", starmer, downing]
+  Allemagne: [allemagne, germany, berlin]
+  Turquie: [turquie, turkey, erdogan, erdoğan]
+  Arabie saoudite: ["arabie saoudite", "saudi arabia", riyad, riyadh]
+  Syrie: [syrie, syria]
+  Liban: [liban, lebanon, hezbollah]
+  Soudan: [soudan, sudan]
+  Sahel: [sahel, mali, niger, "burkina faso"]
+  Venezuela: [venezuela]
+
+kinds:
+  conflict:
+    weight: 25
+    keywords: [guerre, war, frappe, frappes, airstrike, airstrikes, "drone strike", "attaque de drones", "drone attack", offensive, bombardement, bombardements, bombing, attentat, "suicide bombing", cessez-le-feu, ceasefire, invasion, missile, missiles, troupes, troops, armée, army, militaires]   # « attack », « strike », « drones » seuls retirés (« Massive Attack », grèves, drones médicaux)
+  diplomacy:
+    weight: 20
+    keywords: [sommet, summit, négociations, negotiations, "accord de paix", "peace deal", "peace talks", pourparlers, diplomatie, diplomacy, ambassadeur, ambassador, traité, treaty, visite officielle]
+  sanctions:
+    weight: 20
+    keywords: [sanction, sanctions, embargo, "droits de douane", tariffs, "gel des avoirs", "asset freeze"]
+  election:
+    weight: 18
+    keywords: [élection, élections, election, elections, scrutin, vote, referendum, référendum, "coup d'état", coup, présidentielle, législatives]
+  institutions:
+    weight: 15
+    keywords: ["conseil de sécurité", "security council", "assemblée générale", "general assembly", résolution, resolution, "sommet de l'otan", "nato summit", "conseil européen", "european council", g7, g20, brics]
+  humanitarian:
+    weight: 15
+    keywords: [réfugiés, refugees, famine, humanitaire, humanitarian, civils, civilians, "crise humanitaire", déplacés, displaced]
+  alliance:
+    weight: 12
+    keywords: [alliance, défense, defense, "partenariat stratégique", "strategic partnership", "aide militaire", "military aid", armement, arms]
+
+sources:                                # flux testés le 27/09/2026 ; OTAN (404), Quai d'Orsay et Département d'État (403) écartés
+  - {id: onu-news, name: "ONU Info", tier: 1, origin: onu, type: rss, url: "https://news.un.org/feed/subscribe/fr/news/all/rss.xml"}
+  - {id: conseil-ue, name: "Conseil de l'UE (communiqués)", tier: 1, origin: conseil de l'ue, type: rss, url: "https://www.consilium.europa.eu/fr/rss/pressreleases.ashx"}
+  - {id: lemonde-intl, name: "Le Monde (international)", tier: 2, origin: le monde, type: rss, url: "https://www.lemonde.fr/international/rss_full.xml"}
+  - {id: france24, name: "France 24", tier: 2, origin: france 24, type: rss, url: "https://www.france24.com/fr/rss"}
+  - {id: rfi-monde, name: "RFI (monde)", tier: 2, origin: rfi, type: rss, url: "https://www.rfi.fr/fr/monde/rss"}
+  - {id: figaro-intl, name: "Le Figaro (international)", tier: 2, origin: le figaro, type: rss, url: "https://www.lefigaro.fr/rss/figaro_international.xml"}
+  - {id: courrier-intl, name: "Courrier international", tier: 2, origin: courrier international, type: rss, url: "https://www.courrierinternational.com/feed/all/rss.xml"}
+  - {id: bbc-world, name: "BBC News (world)", tier: 2, origin: bbc news, type: rss, url: "https://feeds.bbci.co.uk/news/world/rss.xml"}
+  - {id: guardian-world, name: "The Guardian (world)", tier: 2, origin: the guardian, type: rss, url: "https://www.theguardian.com/world/rss"}
+  - {id: aljazeera, name: "Al Jazeera", tier: 2, origin: al jazeera, type: rss, url: "https://www.aljazeera.com/xml/rss/all.xml"}
+  - {id: dw-world, name: "DW (world)", tier: 2, origin: dw, type: rss, url: "https://rss.dw.com/rdf/rss-en-world"}
+  - {id: npr-world, name: "NPR (world)", tier: 2, origin: npr, type: rss, url: "https://feeds.npr.org/1004/rss.xml"}
+  - {id: foreign-affairs, name: "Foreign Affairs", tier: 3, origin: foreign affairs, type: rss, url: "https://www.foreignaffairs.com/rss.xml"}
+  - {id: crisis-group, name: "International Crisis Group", tier: 3, origin: crisis group, type: rss, url: "https://www.crisisgroup.org/rss.xml"}
+  - {id: gn-geo, name: "Google Actualités : diplomatie et géopolitique", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=g%C3%A9opolitique+OR+diplomatie+when:1d&hl=fr&gl=FR&ceid=FR:fr"}

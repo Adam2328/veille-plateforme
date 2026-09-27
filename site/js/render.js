@@ -83,14 +83,24 @@ export function renderQuotes(quotes, now = Date.now()) {
 
 const LAYER_SECTIONS = [['faits', 'Faits'], ['analyse', 'Analyse'], ['interpretation', 'Interprétation'], ['incertitude', 'Incertitude'],
   ['actifs', 'Actifs concernés'], ['favorables', 'Éléments favorables'], ['risques', 'Risques'], ['a_surveiller', 'À surveiller']];
+// Mêmes couches, rôles propres à la Géopolitique (voir le profil « geopolitique » du moteur).
+const LAYER_TITLES = {
+  geopolitique: { analyse: 'Déclarations des acteurs', interpretation: 'Conséquences possibles', incertitude: 'Incertitudes', actifs: 'Pays et acteurs concernés' },
+};
+const LAYER_NOTES = {
+  finance: 'Synthèse générée automatiquement à partir des sources. Elle ne constitue pas un conseil en investissement.',
+  geopolitique: 'Synthèse générée automatiquement à partir des sources ; les déclarations sont attribuées à leurs auteurs et ne sont pas des faits établis.',
+};
 
-function layersBlock(layers) {
+function layersBlock(layers, domain) {
   if (!layers) return '';
+  const titles = LAYER_TITLES[domain] ?? {};
   const sections = LAYER_SECTIONS
     .filter(([key]) => Array.isArray(layers[key]) && layers[key].length)
-    .map(([key, title]) => `<section class="layer layer-${key}"><h3>${title}</h3><ul>${layers[key].map((b) => `<li>${esc(b)}</li>`).join('')}</ul></section>`);
+    .map(([key, title]) => `<section class="layer layer-${key}"><h3>${titles[key] ?? title}</h3><ul>${layers[key].map((b) => `<li>${esc(b)}</li>`).join('')}</ul></section>`);
   if (!sections.length) return '';
-  return `<div class="layers">${sections.join('')}<p class="meta">Synthèse générée automatiquement à partir des sources. Elle ne constitue pas un conseil en investissement.</p></div>`;
+  const note = LAYER_NOTES[domain] ?? 'Synthèse générée automatiquement à partir des sources.';
+  return `<div class="layers">${sections.join('')}<p class="meta">${note}</p></div>`;
 }
 
 const FB_TABS = [['actu', 'Actu'], ['resultats', 'Résultats'], ['classements', 'Classements'], ['calendrier', 'Calendrier'], ['mercato', 'Mercato']];
@@ -243,7 +253,7 @@ export function renderEvent(ev, state, now) {
     <h1>${esc(ev.title)}</h1>
     <p class="meta">Fiabilité : ${esc(ev.reliability_reason)} · première détection ${esc(timeAgo(ev.first_seen, now))} · mis à jour ${esc(timeAgo(ev.updated_at, now))}</p>
     ${fields.length ? `<dl>${fields.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>` : '<p class="meta">Événement secondaire : pas de synthèse, voir les sources.</p>'}
-    ${layersBlock(ev.layers)}
+    ${layersBlock(ev.layers, ev.domain)}
     <h2>Sources (${sorted.length})</h2>
     <ul class="sources">${main.map(li).join('')}</ul>
     ${social.length ? `<details class="more"><summary>Réseaux sociaux (${social.length})</summary><ul class="sources">${social.map(li).join('')}</ul></details>` : ''}
