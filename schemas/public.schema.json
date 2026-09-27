@@ -101,6 +101,25 @@
         "events": {"type": "object", "additionalProperties": {"$ref": "#/$defs/event"}}
       }
     },
+    "search": {
+      "type": "object",
+      "required": ["generated_at", "domains", "events"],
+      "properties": {
+        "generated_at": {"type": "string"},
+        "domains": {"type": "array", "items": {"type": "object", "required": ["id", "name"],
+                    "properties": {"id": {"type": "string"}, "name": {"type": "string"}}}},
+        "events": {"type": "array", "items": {
+          "type": "object",
+          "required": ["id", "domain", "title", "retenir", "entities", "date", "level", "reliability", "source", "url"],
+          "properties": {
+            "id": {"type": "string"}, "domain": {"type": "string"}, "title": {"type": "string"}, "retenir": {"type": "string"},
+            "entities": {"type": "array", "items": {"type": "string"}}, "date": {"type": "string"},
+            "level": {"type": "integer", "enum": [1, 2, 3]}, "reliability": {"type": "string"},
+            "source": {"type": "string"}, "url": {"type": "string"}
+          }
+        }}
+      }
+    },
     "learn": {
       "type": "object",
       "required": ["category", "title", "text"],

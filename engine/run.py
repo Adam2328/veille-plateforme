@@ -19,6 +19,7 @@ from .publish import build_domain, build_home, publish, publish_football, publis
 from .quotes import collect_quotes, fetch_relay
 from .reliability import classify
 from .score import assign_levels, importance
+from .search import FULL_DAYS, build_index
 from .store import append, load_recent
 from .summarize import fingerprint, gemini_call, summarize
 from .timeutil import iso, now_utc
@@ -135,6 +136,9 @@ def run(root: Path = ROOT, now: datetime | None = None, only: list[str] | None =
         health += qhealth
         symbols = [h for h in qhealth if h["source"] != "quote-relay"]
         report["quotes"] = {"ok": sum(h["ok"] for h in symbols), "failed": sum(not h["ok"] for h in qhealth)}
+    history = {e["id"]: e for e in load_recent(root, now, days=FULL_DAYS)}
+    history.update({e["id"]: e for evs in by_domain.values() for e in evs})       # niveaux du cycle en cours
+    publish_json(root, "search", "search.json", build_index(list(history.values()), cfg["domains"], now))
     if "f1" in cfg["domains"] and (only is None or "f1-data" in only or "f1" in only):
         f1, f1health = collect_f1(_previous(root, "f1.json"), now, f1_fetch)
         if f1 is not None:

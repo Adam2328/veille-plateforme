@@ -52,3 +52,10 @@ export function pruneSeen(state, max = 3000) {
   if (keys.length <= max) return state;
   return { ...state, seen: Object.fromEntries(keys.slice(keys.length - max).map((k) => [k, state.seen[k]])) };
 }
+
+export const isFollowed = (state, entity) => state.follows.includes(entity);
+
+export function toggleFollow(state, entity) {
+  const follows = isFollowed(state, entity) ? state.follows.filter((x) => x !== entity) : [...state.follows, entity];
+  return { ...state, follows };
+}
