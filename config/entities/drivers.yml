@@ -1,0 +1,23 @@
+# Pilotes de F1, grille 2026 (à mettre à jour en début de saison).
+- {id: driver:max-verstappen, wikidata: Q2239218, name: Max Verstappen, aliases: [verstappen], universes: [sport], link_in: [sport]}
+- {id: driver:isack-hadjar, wikidata: Q105071364, name: Isack Hadjar, aliases: [hadjar], universes: [sport], link_in: [sport]}
+- {id: driver:george-russell, wikidata: Q17319645, name: George Russell, aliases: [russell], universes: [sport], link_in: [sport]}
+- {id: driver:kimi-antonelli, wikidata: Q112073790, name: Kimi Antonelli, aliases: [antonelli], universes: [sport], link_in: [sport]}
+- {id: driver:charles-leclerc, wikidata: Q17541912, name: Charles Leclerc, aliases: [leclerc], universes: [sport], link_in: [sport]}
+- {id: driver:lewis-hamilton, wikidata: Q9673, name: Lewis Hamilton, aliases: [hamilton], universes: [sport], link_in: [sport]}
+- {id: driver:lando-norris, wikidata: Q22007193, name: Lando Norris, aliases: [norris], universes: [sport], link_in: [sport]}
+- {id: driver:oscar-piastri, wikidata: Q28741262, name: Oscar Piastri, aliases: [piastri], universes: [sport], link_in: [sport]}
+- {id: driver:fernando-alonso, wikidata: Q10514, name: Fernando Alonso, aliases: [alonso], universes: [sport], link_in: [sport]}
+- {id: driver:lance-stroll, wikidata: Q16238921, name: Lance Stroll, aliases: [stroll], universes: [sport], link_in: [sport]}
+- {id: driver:pierre-gasly, wikidata: Q11816647, name: Pierre Gasly, aliases: [gasly], universes: [sport], link_in: [sport]}
+- {id: driver:franco-colapinto, wikidata: Q88463514, name: Franco Colapinto, aliases: [colapinto], universes: [sport], link_in: [sport]}
+- {id: driver:alexander-albon, wikidata: Q16149172, name: Alexander Albon, aliases: [albon], universes: [sport], link_in: [sport]}
+- {id: driver:carlos-sainz, wikidata: Q544856, name: Carlos Sainz, aliases: [sainz], universes: [sport], link_in: [sport]}
+- {id: driver:esteban-ocon, wikidata: Q15074165, name: Esteban Ocon, aliases: [ocon], universes: [sport], link_in: [sport]}
+- {id: driver:oliver-bearman, wikidata: Q107023292, name: Oliver Bearman, aliases: [bearman], universes: [sport], link_in: [sport]}
+- {id: driver:liam-lawson, wikidata: Q59180330, name: Liam Lawson, aliases: [lawson], universes: [sport], link_in: [sport]}
+- {id: driver:arvid-lindblad, wikidata: Q117035650, name: Arvid Lindblad, aliases: [lindblad], universes: [sport], link_in: [sport]}
+- {id: driver:nico-hulkenberg, wikidata: Q76547, name: Nico Hülkenberg, aliases: [hülkenberg, hulkenberg], universes: [sport], link_in: [sport]}
+- {id: driver:gabriel-bortoleto, wikidata: Q106641273, name: Gabriel Bortoleto, aliases: [bortoleto], universes: [sport], link_in: [sport]}
+- {id: driver:sergio-perez, wikidata: Q82805, name: Sergio Pérez, aliases: ["sergio pérez", "sergio perez", checo], universes: [sport], link_in: [sport]}
+- {id: driver:valtteri-bottas, wikidata: Q138745, name: Valtteri Bottas, aliases: [bottas], universes: [sport], link_in: [sport]}

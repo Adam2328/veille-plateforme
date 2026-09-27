@@ -1,0 +1,15 @@
+id: finance
+name: Finance & Marchés
+short: Finance
+color: finance           # jeton de couleur de l'interface (partie B)
+order: 1                 # ordre par défaut des bandes de l'accueil (modifiable par l'utilisateur dans le site)
+domains: [finance]
+# Un sous-thème filtre les événements de l'univers : type d'événement (kinds), type d'entité (entity_types),
+# entité précise (entities) ou rubrique (domains). Un seul critère rempli suffit.
+subthemes:
+  - {id: actions, name: Actions, kinds: [earnings, m_and_a], entity_types: [company]}
+  - {id: taux, name: Taux & obligations, entity_types: [rate, central_bank]}
+  - {id: etf, name: ETF & indices, entity_types: [etf, index]}
+  - {id: crypto, name: Crypto, kinds: [crypto], entity_types: [crypto]}
+  - {id: macro, name: Macro & banques centrales, kinds: [macro_data, central_bank]}
+  - {id: matieres, name: Matières premières, kinds: [commodities], entity_types: [commodity]}

@@ -29,3 +29,14 @@ def test_is_relevant_when_an_entity_or_a_kind_keyword_matches():
     assert is_relevant("Une étude sur les modèles", dom)            # mot-clé de type d'événement
     assert not is_relevant("Recette de cuisine du dimanche", dom)
     assert not is_relevant("", dom)
+
+
+def test_event_image_prefers_the_best_tier_then_the_most_recent():
+    from engine.enrich import event_image
+    from tests.helpers import mk_event, mk_item
+    items = [{**mk_item("a", "A", tier=3, minutes_ago=5), "image": "https://i/a.jpg"},
+             {**mk_item("b", "B", tier=2, minutes_ago=60), "image": "https://i/b.jpg"},
+             {**mk_item("c", "C", tier=2, minutes_ago=10), "image": "https://i/c.jpg"},
+             mk_item("d", "D", tier=1)]
+    assert event_image(mk_event(items)) == "https://i/c.jpg"
+    assert event_image(mk_event([mk_item("x", "X")])) is None

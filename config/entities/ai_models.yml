@@ -1,0 +1,11 @@
+- {id: ai_model:gpt, wikidata: Q115564437, name: GPT / ChatGPT, aliases: [chatgpt, "=GPT", "gpt-4o", "gpt-5", "gpt-6"], universes: [ia]}
+- {id: ai_model:sora, wikidata: Q124544998, name: Sora, aliases: [sora], universes: [ia]}
+- {id: ai_model:claude, wikidata: Q118876059, name: Claude, aliases: ["=Claude"], universes: [ia]}
+- {id: ai_model:gemini, wikidata: Q123688361, name: Gemini, aliases: [gemini], universes: [ia]}
+- {id: ai_model:veo, name: Veo, aliases: ["=Veo"], universes: [ia]}
+- {id: ai_model:llama, wikidata: Q116894231, name: Llama, aliases: ["=Llama"], universes: [ia]}
+- {id: ai_model:grok, wikidata: Q123361035, name: Grok, aliases: [grok], universes: [ia]}
+- {id: ai_model:le-chat, wikidata: Q132323422, name: Le Chat (Mistral), aliases: ["=Le Chat", "mistral large", "mistral medium", magistral], universes: [ia]}
+- {id: ai_model:deepseek, wikidata: Q131914874, name: Modèles DeepSeek, aliases: ["deepseek-r1", "deepseek-r2", "deepseek-v3", "deepseek-v4"], universes: [ia]}
+- {id: ai_model:qwen, wikidata: Q130234299, name: Qwen, aliases: [qwen], universes: [ia]}
+- {id: ai_model:copilot, wikidata: Q116793893, name: Copilot, aliases: [copilot], universes: [ia]}

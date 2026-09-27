@@ -95,3 +95,21 @@ alerts:                  # rares et justifiées : niveau 1, officiel ou confirm�
   max_per_day: 3
   recent_hours: 6        # jamais d'alerte sur un événement détecté il y a plus de 6 h
   site_url: "https://veille-plateforme.vercel.app/"
+today:                   # « Ce qu'il faut savoir aujourd'hui » (spec §6)
+  window_hours: 36       # événements mis à jour dans les 36 dernières heures
+  floor: 3               # au moins 3 événements par univers quand il y en a
+  total: 18              # total visé ; les places au-delà du plancher vont aux meilleurs scores du jour
+  max_per_entity: 2      # diversité : 2 événements au plus par entité principale
+  novelty_bonus: 8       # événement apparu il y a moins de 24 h
+  evolution_bonus: 5     # nouvelle révision (nouvelles sources) dans les 12 dernières heures
+links:
+  cooccurrence_min: 3    # deux entités citées ensemble dans au moins 3 événements (30 jours) sont reliées
+  # types d'événement pour lesquels un pays ouvre une chaîne « Concernés » (sinon bruit sur les actualités non économiques)
+  country_start_kinds: [conflict, sanctions, commodities, markets, macro_data, central_bank, earnings, m_and_a, regulation]
+band:                    # bandeau Vigie (spec §9)
+  quotes: ["^FCHI", "^GSPC", "^IXIC", "^STOXX50E", "EURUSD=X", "^TNX", "BZ=F", "GC=F", "BTC-USD"]
+  new_hours: 6
+  max_new: 4
+  agenda_days: 3
+  max_agenda: 4
+  max_matches: 6

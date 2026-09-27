@@ -1,0 +1,12 @@
+id: ia
+name: Intelligence artificielle
+short: IA
+color: ia
+order: 2
+domains: [ia]
+subthemes:
+  - {id: modeles, name: Modèles & produits, kinds: [model_release, product_launch], entity_types: [ai_model]}
+  - {id: argent, name: Business & argent, kinds: [funding_acquisition]}
+  - {id: infra, name: Infrastructure, entities: [tech:gpu, tech:data-centers, tech:puces-ia, sector:semi-conducteurs, company:nvidia, company:tsmc, company:asml, commodity:electricite]}
+  - {id: regulation, name: Société & régulation, kinds: [regulation]}
+  - {id: recherche, name: Recherche, kinds: [research]}

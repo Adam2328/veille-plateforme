@@ -1,0 +1,8 @@
+- {id: sector:semi-conducteurs, name: Semi-conducteurs, aliases: [semi-conducteurs, semiconducteurs, semiconductors, semiconductor, "puces électroniques"], universes: [finance, ia]}
+- {id: sector:energie, name: Énergie, aliases: ["secteur énergétique", "energy sector", "majors pétrolières", "oil majors"], universes: [finance]}
+- {id: sector:defense, name: Défense, aliases: ["industrie de défense", "valeurs de défense", "defense stocks", "dépenses militaires", "defense spending", "defence spending"], universes: [finance, geopolitique]}
+- {id: sector:banques, name: Banques, aliases: ["secteur bancaire", "banking sector", "valeurs bancaires"], universes: [finance]}
+- {id: sector:automobile, name: Automobile, aliases: ["secteur automobile", "constructeurs automobiles", automakers], universes: [finance]}
+- {id: sector:luxe, name: Luxe, aliases: ["secteur du luxe", "luxury sector", "valeurs du luxe"], universes: [finance]}
+- {id: sector:pharmacie, name: Pharmacie, aliases: ["secteur pharmaceutique", "laboratoires pharmaceutiques", "pharmaceutical industry"], universes: [finance]}
+- {id: sector:immobilier, name: Immobilier, aliases: [immobilier, "real estate"], universes: [finance]}

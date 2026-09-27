@@ -48,3 +48,26 @@ def test_limit_caps_the_number_of_entries():
 def test_unknown_source_type_is_reported():
     raws, health = collect_source({**SRC, "type": "carrier-pigeon"})
     assert raws == [] and health["ok"] is False and "carrier-pigeon" in health["error"]
+
+
+MEDIA = b"""<?xml version="1.0"?><rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>t</title>
+<item><title>A</title><link>https://ex.com/a</link><media:content url="https://img.ex.com/a.jpg" medium="image"/></item>
+<item><title>B</title><link>https://ex.com/b</link><enclosure url="https://img.ex.com/b.png" type="image/png" length="1"/></item>
+<item><title>C</title><link>https://ex.com/c</link><description>&lt;img src="https://img.ex.com/c.webp"&gt; texte</description></item>
+<item><title>D</title><link>https://ex.com/d</link><description>sans image</description></item>
+</channel></rss>"""
+
+
+def test_rss_images_come_from_media_enclosure_or_the_first_img_tag():
+    raws, health = collect_rss({"id": "s", "url": "mem://"}, lambda url: MEDIA)
+    assert health["ok"]
+    assert [r.get("image") for r in raws] == ["https://img.ex.com/a.jpg", "https://img.ex.com/b.png",
+                                              "https://img.ex.com/c.webp", None]
+
+
+def test_escaped_ampersands_in_img_urls_are_decoded():
+    feed = b"""<?xml version="1.0"?><rss version="2.0"><channel><title>t</title>
+<item><title>E</title><link>https://ex.com/e</link><description>&lt;img src="https://img.ex.com/e.jpg?w=600&amp;amp;h=400"&gt;</description></item>
+</channel></rss>"""
+    raws, _ = collect_rss({"id": "s", "url": "mem://"}, lambda url: feed)
+    assert raws[0]["image"] == "https://img.ex.com/e.jpg?w=600&h=400"

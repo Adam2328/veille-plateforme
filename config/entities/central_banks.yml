@@ -1,0 +1,6 @@
+- {id: central_bank:fed, wikidata: Q53536, name: Réserve fédérale (Fed), aliases: ["=Fed", "réserve fédérale", "federal reserve", "=FOMC"], universes: [finance]}
+- {id: central_bank:bce, wikidata: Q8901, name: Banque centrale européenne (BCE), aliases: ["=BCE", "=ECB", "banque centrale européenne", "european central bank"], universes: [finance]}
+- {id: central_bank:boe, wikidata: Q183231, name: Banque d'Angleterre, aliases: ["=BoE", "banque d'angleterre", "bank of england"], universes: [finance]}
+- {id: central_bank:boj, wikidata: Q333101, name: Banque du Japon, aliases: ["=BoJ", "banque du japon", "bank of japan"], universes: [finance]}
+- {id: central_bank:pboc, wikidata: Q249203, name: Banque populaire de Chine, aliases: ["=PBOC", "banque populaire de chine", "people's bank of china"], universes: [finance]}
+- {id: central_bank:bns, wikidata: Q597394, name: Banque nationale suisse, aliases: ["=BNS", "=SNB", "banque nationale suisse", "swiss national bank"], universes: [finance]}

@@ -1,0 +1,74 @@
+# Entreprises (type company). Alias en minuscules = insensible à la casse ; « = » = casse exacte.
+- {id: company:nvidia, wikidata: Q182477, name: Nvidia, aliases: [nvidia, "=NVDA"], ticker: NVDA, universes: [finance, ia]}
+- {id: company:microsoft, wikidata: Q2283, name: Microsoft, aliases: [microsoft, "=MSFT"], ticker: MSFT, universes: [finance, ia]}
+- {id: company:apple, wikidata: Q312, name: Apple, aliases: ["=Apple", "=AAPL", iphone], ticker: AAPL, universes: [finance]}
+- {id: company:alphabet, wikidata: Q20800404, name: Alphabet (Google), aliases: ["=Alphabet", google, "=GOOGL"], ticker: GOOGL, universes: [finance, ia]}
+- {id: company:amazon, wikidata: Q3884, name: Amazon, aliases: ["=Amazon", aws, "amazon web services", "=AMZN"], ticker: AMZN, universes: [finance, ia]}
+- {id: company:meta, wikidata: Q380, name: Meta, aliases: ["=Meta", "meta platforms", "meta ai", facebook, instagram, whatsapp], ticker: META, universes: [finance, ia]}
+- {id: company:tesla, wikidata: Q478214, name: Tesla, aliases: [tesla, "=TSLA"], ticker: TSLA, universes: [finance]}
+- {id: company:broadcom, wikidata: Q555925, name: Broadcom, aliases: [broadcom], ticker: AVGO, universes: [finance, ia]}
+- {id: company:amd, wikidata: Q128896, name: AMD, aliases: ["=AMD", "advanced micro devices"], ticker: AMD, universes: [finance, ia]}
+- {id: company:intel, wikidata: Q248, name: Intel, aliases: ["=Intel"], ticker: INTC, universes: [finance, ia]}
+- {id: company:tsmc, wikidata: Q713418, name: TSMC, aliases: [tsmc, "taiwan semiconductor"], ticker: TSM, universes: [finance, ia, geopolitique]}
+- {id: company:asml, wikidata: Q297879, name: ASML, aliases: [asml], ticker: ASML, universes: [finance, ia]}
+- {id: company:samsung, wikidata: Q20718, name: Samsung Electronics, aliases: [samsung], universes: [finance, ia]}
+- {id: company:sk-hynix, wikidata: Q370719, name: SK Hynix, aliases: ["sk hynix", hynix], universes: [finance, ia]}
+- {id: company:arm, wikidata: Q296782, name: Arm, aliases: ["arm holdings", "=ARM"], ticker: ARM, universes: [finance, ia]}
+- {id: company:qualcomm, wikidata: Q544847, name: Qualcomm, aliases: [qualcomm], ticker: QCOM, universes: [finance]}
+- {id: company:oracle, wikidata: Q19900, name: Oracle, aliases: ["=Oracle"], ticker: ORCL, universes: [finance, ia]}
+- {id: company:salesforce, wikidata: Q941127, name: Salesforce, aliases: [salesforce], ticker: CRM, universes: [finance, ia]}
+- {id: company:ibm, wikidata: Q37156, name: IBM, aliases: ["=IBM"], ticker: IBM, universes: [finance, ia]}
+- {id: company:palantir, wikidata: Q2047336, name: Palantir, aliases: [palantir], ticker: PLTR, universes: [finance, ia]}
+- {id: company:netflix, wikidata: Q116452644, name: Netflix, aliases: [netflix], ticker: NFLX, universes: [finance]}
+- {id: company:berkshire-hathaway, wikidata: Q217583, name: Berkshire Hathaway, aliases: ["berkshire hathaway", berkshire], universes: [finance]}
+- {id: company:jpmorgan, wikidata: Q192314, name: JPMorgan Chase, aliases: [jpmorgan, "jp morgan", "jpmorgan chase"], ticker: JPM, universes: [finance]}
+- {id: company:goldman-sachs, wikidata: Q193326, name: Goldman Sachs, aliases: ["goldman sachs"], ticker: GS, universes: [finance]}
+- {id: company:blackrock, wikidata: Q219635, name: BlackRock, aliases: [blackrock], ticker: BLK, universes: [finance]}
+- {id: company:visa, wikidata: Q328840, name: Visa, aliases: ["=Visa Inc"], ticker: V, universes: [finance]}
+- {id: company:exxonmobil, wikidata: Q156238, name: ExxonMobil, aliases: [exxonmobil, "exxon mobil", exxon], ticker: XOM, universes: [finance, geopolitique]}
+- {id: company:chevron, wikidata: Q319642, name: Chevron, aliases: [chevron], ticker: CVX, universes: [finance]}
+- {id: company:shell, wikidata: Q154950, name: Shell, aliases: ["=Shell"], ticker: SHEL, universes: [finance]}
+- {id: company:totalenergies, wikidata: Q154037, name: TotalEnergies, aliases: [totalenergies, "total energies"], ticker: TTE, universes: [finance, geopolitique]}
+- {id: company:bp, wikidata: Q152057, name: BP, aliases: ["=BP"], ticker: BP, universes: [finance]}
+- {id: company:saudi-aramco, wikidata: Q679322, name: Saudi Aramco, aliases: [aramco, "saudi aramco"], universes: [finance, geopolitique]}
+- {id: company:lvmh, wikidata: Q504998, name: LVMH, aliases: [lvmh], ticker: MC.PA, universes: [finance]}
+- {id: company:hermes, wikidata: Q843887, name: Hermès, aliases: ["=Hermès"], ticker: RMS.PA, universes: [finance]}
+- {id: company:loreal, wikidata: Q156077, name: L'Oréal, aliases: ["l'oréal", "l’oréal", loreal], ticker: OR.PA, universes: [finance]}
+- {id: company:airbus, wikidata: Q67, name: Airbus, aliases: [airbus], ticker: AIR.PA, universes: [finance]}
+- {id: company:boeing, wikidata: Q66, name: Boeing, aliases: [boeing], ticker: BA, universes: [finance]}
+- {id: company:safran, wikidata: Q1886126, name: Safran, aliases: [safran], ticker: SAF.PA, universes: [finance]}
+- {id: company:thales, wikidata: Q1161666, name: Thales, aliases: ["=Thales"], ticker: HO.PA, universes: [finance, geopolitique]}
+- {id: company:dassault-aviation, wikidata: Q460487, name: Dassault Aviation, aliases: ["dassault aviation", rafale], universes: [finance, geopolitique]}
+- {id: company:schneider-electric, wikidata: Q49053, name: Schneider Electric, aliases: ["schneider electric"], ticker: SU.PA, universes: [finance]}
+- {id: company:sanofi, wikidata: Q158205, name: Sanofi, aliases: [sanofi], ticker: SAN.PA, universes: [finance]}
+- {id: company:novo-nordisk, wikidata: Q818846, name: Novo Nordisk, aliases: ["novo nordisk", ozempic, wegovy], ticker: NVO, universes: [finance]}
+- {id: company:eli-lilly, wikidata: Q632240, name: Eli Lilly, aliases: ["eli lilly"], ticker: LLY, universes: [finance]}
+- {id: company:bnp-paribas, wikidata: Q499707, name: BNP Paribas, aliases: ["bnp paribas", "=BNP"], ticker: BNP.PA, universes: [finance]}
+- {id: company:axa, wikidata: Q160054, name: AXA, aliases: ["=AXA"], ticker: CS.PA, universes: [finance]}
+- {id: company:stellantis, wikidata: Q97439162, name: Stellantis, aliases: [stellantis], ticker: STLA, universes: [finance]}
+- {id: company:renault, wikidata: Q6686, name: Renault, aliases: [renault], ticker: RNO.PA, universes: [finance]}
+- {id: company:volkswagen, wikidata: Q156578, name: Volkswagen, aliases: [volkswagen], universes: [finance]}
+- {id: company:byd, wikidata: Q2608329, name: BYD, aliases: ["=BYD"], universes: [finance]}
+- {id: company:toyota, wikidata: Q53268, name: Toyota, aliases: [toyota], universes: [finance]}
+- {id: company:alibaba, wikidata: Q1359568, name: Alibaba, aliases: [alibaba], ticker: BABA, universes: [finance, ia]}
+- {id: company:tencent, wikidata: Q860580, name: Tencent, aliases: [tencent], universes: [finance, ia]}
+- {id: company:huawei, wikidata: Q160120, name: Huawei, aliases: [huawei], universes: [finance, ia, geopolitique]}
+- {id: company:xiaomi, wikidata: Q1636958, name: Xiaomi, aliases: [xiaomi], universes: [finance]}
+- {id: company:softbank, wikidata: Q201653, name: SoftBank, aliases: [softbank], universes: [finance, ia]}
+- {id: company:coreweave, wikidata: Q121875386, name: CoreWeave, aliases: [coreweave], ticker: CRWV, universes: [finance, ia]}
+- {id: company:lockheed-martin, wikidata: Q7240, name: Lockheed Martin, aliases: ["lockheed martin", lockheed], ticker: LMT, universes: [finance, geopolitique]}
+- {id: company:rheinmetall, wikidata: Q161544, name: Rheinmetall, aliases: [rheinmetall], universes: [finance, geopolitique]}
+- {id: company:siemens, wikidata: Q81230, name: Siemens, aliases: [siemens], universes: [finance]}
+- {id: company:sap, wikidata: Q552581, name: SAP, aliases: ["=SAP"], universes: [finance]}
+- {id: company:coinbase, wikidata: Q16972754, name: Coinbase, aliases: [coinbase], ticker: COIN, universes: [finance]}
+- {id: company:binance, wikidata: Q51403327, name: Binance, aliases: [binance], universes: [finance]}
+- {id: company:strategy, wikidata: Q1192211, name: Strategy (MicroStrategy), aliases: [microstrategy, "=MSTR"], ticker: MSTR, universes: [finance]}
+- {id: company:openai, wikidata: Q21708200, name: OpenAI, aliases: [openai], universes: [ia, finance]}
+- {id: company:anthropic, wikidata: Q116758847, name: Anthropic, aliases: [anthropic], universes: [ia, finance]}
+- {id: company:google-deepmind, wikidata: Q15733006, name: Google DeepMind, aliases: [deepmind, "google deepmind"], universes: [ia]}
+- {id: company:xai, wikidata: Q120599684, name: xAI, aliases: [xai], universes: [ia, finance]}
+- {id: company:mistral-ai, wikidata: Q119718658, name: Mistral AI, aliases: ["mistral ai", "=Mistral"], universes: [ia, finance]}
+- {id: company:deepseek, wikidata: Q131577453, name: DeepSeek, aliases: [deepseek], universes: [ia]}
+- {id: company:perplexity, wikidata: Q124333951, name: Perplexity, aliases: ["=Perplexity"], universes: [ia]}
+- {id: company:hugging-face, wikidata: Q108943604, name: Hugging Face, aliases: ["hugging face", huggingface], universes: [ia]}
+- {id: company:cohere, wikidata: Q110363143, name: Cohere, aliases: ["=Cohere"], universes: [ia]}

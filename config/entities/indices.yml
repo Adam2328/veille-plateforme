@@ -1,0 +1,11 @@
+- {id: index:sp500, wikidata: Q242345, name: S&P 500, aliases: ["s&p 500", "s&p500", "=SPX"], universes: [finance]}
+- {id: index:nasdaq, wikidata: Q507306, name: Nasdaq, aliases: [nasdaq], universes: [finance]}
+- {id: index:dow-jones, wikidata: Q180816, name: Dow Jones, aliases: ["dow jones", "=Dow"], universes: [finance]}
+- {id: index:cac40, wikidata: Q648828, name: CAC 40, aliases: ["cac 40", cac40], universes: [finance]}
+- {id: index:dax, wikidata: Q155718, name: DAX, aliases: ["=DAX"], universes: [finance]}
+- {id: index:euro-stoxx-50, wikidata: Q981010, name: Euro Stoxx 50, aliases: ["euro stoxx 50", eurostoxx], universes: [finance]}
+- {id: index:nikkei, wikidata: Q507338, name: Nikkei 225, aliases: [nikkei], universes: [finance]}
+- {id: index:ftse-100, wikidata: Q466496, name: FTSE 100, aliases: ["ftse 100", "=FTSE"], universes: [finance]}
+- {id: index:hang-seng, wikidata: Q424846, name: Hang Seng, aliases: ["hang seng"], universes: [finance]}
+- {id: index:vix, wikidata: Q1022987, name: VIX (volatilité), aliases: ["=VIX"], universes: [finance]}
+- {id: index:msci-world, wikidata: Q1881843, name: MSCI World, aliases: ["msci world"], universes: [finance]}

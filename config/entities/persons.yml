@@ -1,0 +1,43 @@
+# Personnalités (type person). Les fonctions actuelles viennent de Wikidata, pas de ce fichier.
+- {id: person:emmanuel-macron, wikidata: Q3052772, name: Emmanuel Macron, aliases: [macron], universes: [geopolitique]}
+- {id: person:donald-trump, wikidata: Q22686, name: Donald Trump, aliases: [trump], universes: [geopolitique, finance]}
+- {id: person:jd-vance, wikidata: Q28935729, name: JD Vance, aliases: [vance], universes: [geopolitique]}
+- {id: person:marco-rubio, wikidata: Q324546, name: Marco Rubio, aliases: [rubio], universes: [geopolitique]}
+- {id: person:xi-jinping, wikidata: Q15031, name: Xi Jinping, aliases: ["xi jinping"], universes: [geopolitique]}
+- {id: person:vladimir-poutine, wikidata: Q7747, name: Vladimir Poutine, aliases: [poutine, putin], universes: [geopolitique]}
+- {id: person:volodymyr-zelensky, wikidata: Q3874799, name: Volodymyr Zelensky, aliases: [zelensky, zelenski, zelenskyy], universes: [geopolitique]}
+- {id: person:benyamin-netanyahou, wikidata: Q43723, name: Benyamin Netanyahou, aliases: [netanyahou, netanyahu], universes: [geopolitique]}
+- {id: person:ursula-von-der-leyen, wikidata: Q60772, name: Ursula von der Leyen, aliases: ["von der leyen"], universes: [geopolitique]}
+- {id: person:friedrich-merz, wikidata: Q566257, name: Friedrich Merz, aliases: [merz], universes: [geopolitique]}
+- {id: person:keir-starmer, wikidata: Q6383803, name: Keir Starmer, aliases: [starmer], universes: [geopolitique]}
+- {id: person:giorgia-meloni, wikidata: Q451791, name: Giorgia Meloni, aliases: [meloni], universes: [geopolitique]}
+- {id: person:narendra-modi, wikidata: Q1058, name: Narendra Modi, aliases: [modi], universes: [geopolitique]}
+- {id: person:recep-tayyip-erdogan, wikidata: Q39259, name: Recep Tayyip Erdoğan, aliases: [erdogan, erdoğan], universes: [geopolitique]}
+- {id: person:mohammed-ben-salmane, wikidata: Q6892571, name: Mohammed ben Salmane, aliases: ["ben salmane", "bin salman", "=MBS"], universes: [geopolitique]}
+- {id: person:ali-khamenei, wikidata: Q57336, name: Ali Khamenei, aliases: [khamenei], universes: [geopolitique]}
+- {id: person:kim-jong-un, wikidata: Q56226, name: Kim Jong-un, aliases: ["kim jong-un", "kim jong un"], universes: [geopolitique]}
+- {id: person:lula, wikidata: Q37181, name: Lula da Silva, aliases: ["=Lula"], universes: [geopolitique]}
+- {id: person:javier-milei, wikidata: Q52395487, name: Javier Milei, aliases: [milei], universes: [geopolitique]}
+- {id: person:antonio-guterres, wikidata: Q311440, name: António Guterres, aliases: [guterres], universes: [geopolitique]}
+- {id: person:mark-rutte, wikidata: Q57792, name: Mark Rutte, aliases: [rutte], universes: [geopolitique]}
+- {id: person:kaja-kallas, wikidata: Q11869065, name: Kaja Kallas, aliases: [kallas], universes: [geopolitique]}
+- {id: person:pedro-sanchez, wikidata: Q6070218, name: Pedro Sánchez, aliases: ["pedro sánchez", "pedro sanchez"], universes: [geopolitique]}
+- {id: person:marine-le-pen, wikidata: Q12927, name: Marine Le Pen, aliases: ["marine le pen", "le pen"], universes: [geopolitique]}
+- {id: person:jordan-bardella, wikidata: Q40655898, name: Jordan Bardella, aliases: [bardella], universes: [geopolitique]}
+- {id: person:jerome-powell, wikidata: Q6182718, name: Jerome Powell, aliases: [powell], universes: [finance]}
+- {id: person:christine-lagarde, wikidata: Q484605, name: Christine Lagarde, aliases: [lagarde], universes: [finance]}
+- {id: person:elon-musk, wikidata: Q317521, name: Elon Musk, aliases: [musk], universes: [finance, ia]}
+- {id: person:sam-altman, wikidata: Q7407093, name: Sam Altman, aliases: [altman], universes: [ia]}
+- {id: person:dario-amodei, wikidata: Q103335665, name: Dario Amodei, aliases: [amodei], universes: [ia]}
+- {id: person:demis-hassabis, wikidata: Q3022141, name: Demis Hassabis, aliases: [hassabis], universes: [ia]}
+- {id: person:sundar-pichai, wikidata: Q3503829, name: Sundar Pichai, aliases: [pichai], universes: [ia, finance]}
+- {id: person:satya-nadella, wikidata: Q7426870, name: Satya Nadella, aliases: [nadella], universes: [ia, finance]}
+- {id: person:jensen-huang, wikidata: Q305177, name: Jensen Huang, aliases: ["jensen huang"], universes: [ia, finance]}
+- {id: person:mark-zuckerberg, wikidata: Q36215, name: Mark Zuckerberg, aliases: [zuckerberg], universes: [ia, finance]}
+- {id: person:tim-cook, wikidata: Q265852, name: Tim Cook, aliases: ["tim cook"], universes: [finance]}
+- {id: person:jeff-bezos, wikidata: Q312556, name: Jeff Bezos, aliases: [bezos], universes: [finance]}
+- {id: person:lisa-su, wikidata: Q18207172, name: Lisa Su, aliases: ["lisa su"], universes: [ia, finance]}
+- {id: person:arthur-mensch, wikidata: Q123758735, name: Arthur Mensch, aliases: ["arthur mensch"], universes: [ia]}
+- {id: person:yann-lecun, wikidata: Q3571662, name: Yann LeCun, aliases: [lecun, "le cun"], universes: [ia]}
+- {id: person:warren-buffett, wikidata: Q47213, name: Warren Buffett, aliases: [buffett], universes: [finance]}
+- {id: person:larry-fink, wikidata: Q3218882, name: Larry Fink, aliases: ["larry fink"], universes: [finance]}

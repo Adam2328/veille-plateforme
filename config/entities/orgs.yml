@@ -1,0 +1,26 @@
+- {id: org:onu, wikidata: Q1065, name: ONU, aliases: [onu, "nations unies", "united nations"], universes: [geopolitique]}
+- {id: org:conseil-de-securite, wikidata: Q37470, name: Conseil de sécurité de l'ONU, aliases: ["conseil de sécurité", "security council"], universes: [geopolitique]}
+- {id: org:otan, wikidata: Q7184, name: OTAN, aliases: [otan, nato], universes: [geopolitique]}
+- {id: org:ue, wikidata: Q458, name: Union européenne, aliases: ["union européenne", "european union", "=UE", "=EU"], universes: [geopolitique, finance]}
+- {id: org:commission-europeenne, wikidata: Q8880, name: Commission européenne, aliases: ["commission européenne", "european commission"], universes: [geopolitique, finance]}
+- {id: org:parlement-europeen, wikidata: Q8889, name: Parlement européen, aliases: ["parlement européen", "european parliament"], universes: [geopolitique]}
+- {id: org:fmi, wikidata: Q7804, name: FMI, aliases: [fmi, "=IMF", "fonds monétaire international", "international monetary fund"], universes: [finance, geopolitique]}
+- {id: org:banque-mondiale, wikidata: Q7164, name: Banque mondiale, aliases: ["banque mondiale", "world bank"], universes: [finance, geopolitique]}
+- {id: org:omc, wikidata: Q7825, name: OMC, aliases: ["=OMC", "=WTO", "organisation mondiale du commerce", "world trade organization"], universes: [geopolitique, finance]}
+- {id: org:opep, wikidata: Q7795, name: OPEP, aliases: [opep, opec, "opep+", "opec+"], universes: [finance, geopolitique]}
+- {id: org:g7, wikidata: Q1764511, name: G7, aliases: [g7], universes: [geopolitique]}
+- {id: org:g20, wikidata: Q19771, name: G20, aliases: [g20], universes: [geopolitique]}
+- {id: org:brics, wikidata: Q243630, name: BRICS, aliases: [brics], universes: [geopolitique]}
+- {id: org:oms, wikidata: Q7817, name: OMS, aliases: ["=OMS", "organisation mondiale de la santé", "world health organization"], universes: [geopolitique]}
+- {id: org:aiea, wikidata: Q41984, name: AIEA, aliases: [aiea, iaea], universes: [geopolitique]}
+- {id: org:cpi, wikidata: Q47488, name: Cour pénale internationale, aliases: ["cour pénale internationale", "international criminal court"], universes: [geopolitique]}
+- {id: org:hamas, wikidata: Q38799, name: Hamas, aliases: [hamas], universes: [geopolitique]}
+- {id: org:hezbollah, wikidata: Q41053, name: Hezbollah, aliases: [hezbollah], universes: [geopolitique]}
+- {id: org:houthis, wikidata: Q3042087, name: Houthis, aliases: [houthis, houthi], universes: [geopolitique]}
+- {id: org:sec, wikidata: Q953944, name: SEC (gendarme boursier américain), aliases: ["=SEC", "securities and exchange commission"], universes: [finance]}
+- {id: org:uefa, wikidata: Q35572, name: UEFA, aliases: [uefa], universes: [sport], link_in: [sport]}
+- {id: org:fifa, wikidata: Q253414, name: FIFA, aliases: [fifa], universes: [sport]}
+- {id: org:cio, wikidata: Q40970, name: Comité international olympique, aliases: ["comité international olympique", "=CIO", "=IOC"], universes: [sport]}
+- {id: org:fia, wikidata: Q179412, name: FIA, aliases: ["=FIA"], universes: [sport], link_in: [sport]}
+- {id: org:atp, wikidata: Q744089, name: ATP, aliases: ["=ATP"], universes: [sport], link_in: [sport]}
+- {id: org:wta, wikidata: Q948442, name: WTA, aliases: ["=WTA"], universes: [sport], link_in: [sport]}

@@ -1,0 +1,15 @@
+# Sujets suivis dans le temps (type topic).
+- {id: topic:droits-de-douane, name: Droits de douane, aliases: ["droits de douane", tariffs, tariff, "guerre commerciale", "trade war"], universes: [geopolitique, finance]}
+- {id: topic:sanctions-russie, name: Sanctions contre la Russie, aliases: ["sanctions contre la russie", "sanctions against russia", "russia sanctions"], universes: [geopolitique, finance]}
+- {id: topic:guerre-ukraine, name: Guerre en Ukraine, aliases: ["guerre en ukraine", "war in ukraine", "ukraine war"], universes: [geopolitique]}
+- {id: topic:guerre-gaza, name: Guerre à Gaza, aliases: ["guerre à gaza", "war in gaza", "gaza war"], universes: [geopolitique]}
+- {id: topic:detroit-ormuz, name: Détroit d'Ormuz, aliases: [ormuz, hormuz], universes: [geopolitique, finance]}
+- {id: topic:mer-rouge, name: Mer Rouge, aliases: ["mer rouge", "red sea"], universes: [geopolitique, finance]}
+- {id: topic:sahel, name: Sahel, aliases: [sahel], universes: [geopolitique]}
+- {id: topic:ai-act, name: Règlement européen sur l'IA, aliases: ["ai act", "règlement européen sur l'ia", "règlement sur l'ia"], universes: [ia]}
+- {id: topic:inflation, name: Inflation, aliases: [inflation], universes: [finance]}
+- {id: topic:recession, name: Récession, aliases: [récession, recession], universes: [finance]}
+- {id: topic:stablecoins, name: Stablecoins, aliases: [stablecoin, stablecoins], universes: [finance]}
+- {id: topic:transition-energetique, name: Transition énergétique, aliases: ["transition énergétique", "energy transition"], universes: [finance, geopolitique]}
+- {id: topic:elections-mi-mandat, name: Élections de mi-mandat américaines, aliases: [midterms, "élections de mi-mandat"], universes: [geopolitique]}
+- {id: topic:mercato, name: Mercato, aliases: [mercato, "transfer window"], universes: [sport], link_in: [sport]}

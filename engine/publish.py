@@ -7,9 +7,11 @@ from pathlib import Path
 from .agenda import imported_events
 from .contract import validate
 from .timeutil import iso, parse
+from .today import build_today
 
 _PUBLIC = ("id", "rev", "domain", "kind", "title", "first_seen", "updated_at", "level", "reliability",
            "reliability_reason", "entities")
+_OPTIONAL = ("universe", "entity_ids", "title_fr", "image", "concerned")
 _STAMPS = ("generated_at", "checked_at")
 
 
@@ -25,6 +27,7 @@ def project(ev: dict) -> dict:
         {"name": i["source"], "tier": i["tier"], "url": i["url"], "title": i["title"], "published_at": i["published_at"]}
         for i in sorted(ev["items"], key=lambda i: (i["tier"], i["published_at"]))
     ]
+    p.update({k: ev[k] for k in _OPTIONAL if ev.get(k) is not None})
     return p
 
 
@@ -84,6 +87,20 @@ def learn_card(dom: dict, now: datetime) -> dict | None:
     return {"category": str(c["category"]), "title": str(c["title"]), "text": str(c["text"])}
 
 
+def build_universe(uni: dict, domains: dict, events_by_domain: dict, now: datetime,
+                   agendas: dict | None = None, limit: int = 150) -> dict:
+    cutoff = now - timedelta(days=7)
+    evs = sorted((e for d in uni["domains"] for e in events_by_domain.get(d, [])
+                  if e["level"] >= 1 and parse(e["updated_at"]) >= cutoff), key=lambda e: (-e["importance"], e["id"]))
+    upcoming = sorted(({**u, "domain": d} for d in uni["domains"] if d in domains
+                       for u in upcoming_events(domains[d], now, (agendas or {}).get(d))),
+                      key=lambda u: (u["date"], u["title"]))[:12]
+    meta = {k: uni[k] for k in ("id", "name", "short", "color", "order")}
+    return {"generated_at": iso(now), "universe": {**meta, "subthemes": uni.get("subthemes", [])},
+            "domains": [{"id": d, "name": domains[d]["name"]} for d in uni["domains"] if d in domains],
+            "events": [project(e) for e in evs[:limit]], "upcoming": upcoming}
+
+
 def build_home(cfg: dict, events_by_domain: dict, now: datetime, agendas: dict | None = None) -> dict:
     h = cfg["global"]["home"]
     cutoff = now - timedelta(hours=h["window_hours"])
@@ -98,8 +115,15 @@ def build_home(cfg: dict, events_by_domain: dict, now: datetime, agendas: dict |
         card = learn_card(dom, now)
         domains.append({**entry, "learn": card} if card else entry)
     level_one = sorted((e for e in events.values() if e["level"] == 1), key=lambda e: -e["importance"])
-    return {"generated_at": iso(now), "sample": False, "domains": domains,
-            "retain": [e["id"] for e in level_one[: h["retain_max"]]], "events": events}
+    out = {"generated_at": iso(now), "sample": False, "domains": domains,
+           "retain": [e["id"] for e in level_one[: h["retain_max"]]], "events": events}
+    if cfg.get("universes"):
+        flat = [e for evs in events_by_domain.values() for e in evs]
+        by_id = {e["id"]: e for e in flat}
+        today = build_today(flat, cfg["universes"], cfg["global"], now)
+        events.update({i: project(by_id[i]) for band in today for i in band["ids"]})
+        out["today"] = today
+    return out
 
 
 def write_json(path: Path, obj: dict) -> None:
@@ -121,14 +145,29 @@ def write_if_changed(path: Path, obj: dict, now: datetime | None = None, max_age
     return True
 
 
-def publish(root: Path, home: dict, domain_files: list) -> None:
+def publish(root: Path, home: dict, domain_files: list, universe_files: list | tuple = ()) -> None:
     validate("home", home)
     for d in domain_files:
         validate("domainFile", d)
+    for u in universe_files:
+        validate("universeFile", u)
     out = root / "site" / "data"
     write_if_changed(out / "home.json", home)
     for d in domain_files:
         write_if_changed(out / "domains" / f"{d['domain']['id']}.json", d)
+    for u in universe_files:
+        write_if_changed(out / "universes" / f"{u['universe']['id']}.json", u)
+
+
+def publish_entities(root: Path, index: dict, pages: dict) -> None:
+    validate("entityIndex", index)
+    for page in pages.values():
+        validate("entityFile", page)
+    out = root / "site" / "data" / "entities"
+    write_if_changed(out / "index.json", index)
+    for eid, page in pages.items():
+        etype, name = eid.split(":", 1)
+        write_if_changed(out / etype / f"{name}.json", page)
 
 
 def publish_quotes(root: Path, quotes: dict) -> None:

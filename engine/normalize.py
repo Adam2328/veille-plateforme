@@ -31,11 +31,14 @@ def normalize(raw: dict, source: dict, publishers: dict | None = None) -> dict:
     pub = raw.get("publisher")
     default_origin = (pub or source.get("origin") or source["name"]).lower()
     tier = (publishers or {}).get(default_origin, source["tier"]) if pub else source["tier"]
-    return {
+    image = str(raw.get("image") or "")
+    item = {
         "id": item_id(raw["url"]), "source": pub or source["name"], "tier": tier,
         "origin": origin_of(default_origin, title, snippet), "title": title, "snippet": snippet,
         "url": raw["url"], "published_at": raw["published_at"], "domain": source["domain"],
     }
+    # https uniquement : ni contenu mixte ni schéma exécutable dans la page
+    return {**item, "image": image} if image.startswith("https://") and len(image) <= 500 else item
 
 
 def _title_key(title: str) -> str:

@@ -1,0 +1,9 @@
+- {id: crypto:bitcoin, wikidata: Q131723, name: Bitcoin, aliases: [bitcoin, "=BTC"], universes: [finance]}
+- {id: crypto:ethereum, wikidata: Q29583124, name: Ethereum, aliases: [ethereum, ether, "=ETH"], universes: [finance]}
+- {id: crypto:solana, wikidata: Q108695872, name: Solana, aliases: [solana], universes: [finance]}
+- {id: crypto:xrp, wikidata: Q115623704, name: XRP, aliases: ["=XRP", ripple], universes: [finance]}
+- {id: crypto:bnb, wikidata: Q106007400, name: BNB, aliases: ["=BNB"], universes: [finance]}
+- {id: crypto:tether, wikidata: Q47528658, name: Tether (USDT), aliases: [tether, "=USDT"], universes: [finance]}
+- {id: crypto:usdc, wikidata: Q100781882, name: USD Coin (USDC), aliases: ["=USDC"], universes: [finance]}
+- {id: crypto:dogecoin, wikidata: Q15377916, name: Dogecoin, aliases: [dogecoin], universes: [finance]}
+- {id: crypto:cardano, wikidata: Q47273538, name: Cardano, aliases: [cardano], universes: [finance]}

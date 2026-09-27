@@ -1,0 +1,6 @@
+- {id: rate:us-10y, name: Taux US 10 ans, aliases: ["10-year treasury", "treasury yields", treasuries, "bons du trésor américain", "taux américain à 10 ans"], universes: [finance]}
+- {id: rate:us-2y, name: Taux US 2 ans, aliases: ["2-year treasury", "taux américain à 2 ans"], universes: [finance]}
+- {id: rate:bund, name: Bund allemand 10 ans, aliases: ["=Bund", "bund allemand"], universes: [finance]}
+- {id: rate:oat, name: OAT française 10 ans, aliases: ["=OAT", "obligations assimilables du trésor"], universes: [finance]}
+- {id: rate:spread-oat-bund, name: Écart OAT–Bund, aliases: ["spread oat", "écart oat-bund", "écart de taux franco-allemand", "spread français"], universes: [finance]}
+- {id: rate:credit-spreads, name: Écarts de crédit, aliases: ["spreads de crédit", "credit spreads", "high yield", "junk bonds", "obligations à haut rendement"], universes: [finance]}

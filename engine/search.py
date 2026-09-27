@@ -11,10 +11,11 @@ CAP = 3000           # ~1,5 Mo au plus, chargé à la demande côté site
 
 def _entry(ev: dict) -> dict:
     best = min(ev["items"], key=lambda i: (i["tier"], i["published_at"]))
-    return {"id": ev["id"], "domain": ev["domain"], "title": ev["title"],
-            "retenir": (ev.get("summary") or {}).get("retenir", ""), "entities": ev.get("entities", []),
-            "date": ev["updated_at"], "level": ev["level"], "reliability": ev["reliability"],
-            "source": best["source"], "url": best["url"]}
+    entry = {"id": ev["id"], "domain": ev["domain"], "title": ev["title"],
+             "retenir": (ev.get("summary") or {}).get("retenir", ""), "entities": ev.get("entities", []),
+             "date": ev["updated_at"], "level": ev["level"], "reliability": ev["reliability"],
+             "source": best["source"], "url": best["url"]}
+    return {**entry, **{k: ev[k] for k in ("universe", "entity_ids", "title_fr", "image") if ev.get(k) is not None}}
 
 
 def build_index(events: list, domains: dict, now: datetime, cap: int = CAP) -> dict:

@@ -17,6 +17,12 @@ def detect_kind(text: str, kinds_cfg: dict) -> str:
     return max(hits)[1] if hits else "other"
 
 
+def event_image(ev: dict) -> str | None:
+    """Photo de l'événement : celle de la meilleure source (tier le plus bas), la plus récente à tier égal."""
+    with_image = sorted((i for i in ev["items"] if i.get("image")), key=lambda i: i["published_at"], reverse=True)
+    return min(with_image, key=lambda i: i["tier"])["image"] if with_image else None
+
+
 def is_relevant(text: str, dom: dict) -> bool:
     """Vrai si le texte cite une entité de la veille ou contient un mot-clé d'un de ses types d'événements."""
     return bool(extract_entities(text, dom["entities"])) or detect_kind(text, dom["kinds"]) != "other"

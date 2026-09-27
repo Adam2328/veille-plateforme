@@ -1,0 +1,44 @@
+# Joueuses et joueurs (type player), rattachés uniquement dans l'univers Sport.
+- {id: player:kylian-mbappe, wikidata: Q21621995, name: Kylian Mbappé, aliases: [mbappé, mbappe], universes: [sport], link_in: [sport]}
+- {id: player:erling-haaland, wikidata: Q28967995, name: Erling Haaland, aliases: [haaland], universes: [sport], link_in: [sport]}
+- {id: player:vinicius-junior, wikidata: Q28973866, name: Vinícius Júnior, aliases: [vinícius, vinicius], universes: [sport], link_in: [sport]}
+- {id: player:jude-bellingham, wikidata: Q66241169, name: Jude Bellingham, aliases: [bellingham], universes: [sport], link_in: [sport]}
+- {id: player:lamine-yamal, wikidata: Q113704154, name: Lamine Yamal, aliases: [yamal], universes: [sport], link_in: [sport]}
+- {id: player:ousmane-dembele, wikidata: Q20851003, name: Ousmane Dembélé, aliases: [dembélé, dembele], universes: [sport], link_in: [sport]}
+- {id: player:mohamed-salah, wikidata: Q1354960, name: Mohamed Salah, aliases: [salah], universes: [sport], link_in: [sport]}
+- {id: player:harry-kane, wikidata: Q969725, name: Harry Kane, aliases: ["harry kane"], universes: [sport], link_in: [sport]}
+- {id: player:lionel-messi, wikidata: Q615, name: Lionel Messi, aliases: [messi], universes: [sport], link_in: [sport]}
+- {id: player:cristiano-ronaldo, wikidata: Q11571, name: Cristiano Ronaldo, aliases: [ronaldo, "cristiano ronaldo"], universes: [sport], link_in: [sport]}
+- {id: player:jannik-sinner, wikidata: Q54812588, name: Jannik Sinner, aliases: [sinner], universes: [sport], link_in: [sport]}
+- {id: player:carlos-alcaraz, wikidata: Q85518537, name: Carlos Alcaraz, aliases: [alcaraz], universes: [sport], link_in: [sport]}
+- {id: player:novak-djokovic, wikidata: Q5812, name: Novak Djokovic, aliases: [djokovic], universes: [sport], link_in: [sport]}
+- {id: player:alexander-zverev, wikidata: Q13990552, name: Alexander Zverev, aliases: [zverev], universes: [sport], link_in: [sport]}
+- {id: player:daniil-medvedev, wikidata: Q21622022, name: Daniil Medvedev, aliases: [medvedev], universes: [sport], link_in: [sport]}
+- {id: player:taylor-fritz, wikidata: Q17660516, name: Taylor Fritz, aliases: [fritz], universes: [sport], link_in: [sport]}
+- {id: player:jack-draper, wikidata: Q65030599, name: Jack Draper, aliases: [draper], universes: [sport], link_in: [sport]}
+- {id: player:holger-rune, wikidata: Q48200561, name: Holger Rune, aliases: ["=Rune"], universes: [sport], link_in: [sport]}
+- {id: player:arthur-fils, wikidata: Q107207693, name: Arthur Fils, aliases: ["arthur fils", "=Fils"], universes: [sport], link_in: [sport]}
+- {id: player:giovanni-mpetshi-perricard, wikidata: Q107207704, name: Giovanni Mpetshi Perricard, aliases: ["mpetshi perricard", mpetshi], universes: [sport], link_in: [sport]}
+- {id: player:aryna-sabalenka, wikidata: Q23448791, name: Aryna Sabalenka, aliases: [sabalenka], universes: [sport], link_in: [sport]}
+- {id: player:iga-swiatek, wikidata: Q26840238, name: Iga Świątek, aliases: [swiatek, świątek], universes: [sport], link_in: [sport]}
+- {id: player:coco-gauff, wikidata: Q39263365, name: Coco Gauff, aliases: [gauff], universes: [sport], link_in: [sport]}
+- {id: player:elena-rybakina, wikidata: Q42055714, name: Elena Rybakina, aliases: [rybakina], universes: [sport], link_in: [sport]}
+- {id: player:jessica-pegula, wikidata: Q24159, name: Jessica Pegula, aliases: [pegula], universes: [sport], link_in: [sport]}
+- {id: player:mirra-andreeva, wikidata: Q114402278, name: Mirra Andreeva, aliases: [andreeva], universes: [sport], link_in: [sport]}
+- {id: player:victor-wembanyama, wikidata: Q72941595, name: Victor Wembanyama, aliases: [wembanyama, wemby], universes: [sport], link_in: [sport]}
+- {id: player:lebron-james, wikidata: Q36159, name: LeBron James, aliases: [lebron], universes: [sport], link_in: [sport]}
+- {id: player:stephen-curry, wikidata: Q352159, name: Stephen Curry, aliases: ["stephen curry", "steph curry"], universes: [sport], link_in: [sport]}
+- {id: player:kevin-durant, wikidata: Q29545, name: Kevin Durant, aliases: [durant], universes: [sport], link_in: [sport]}
+- {id: player:nikola-jokic, wikidata: Q17281073, name: Nikola Jokić, aliases: [jokic, jokić], universes: [sport], link_in: [sport]}
+- {id: player:giannis-antetokounmpo, wikidata: Q8991894, name: Giannis Antetokounmpo, aliases: [antetokounmpo, giannis], universes: [sport], link_in: [sport]}
+- {id: player:shai-gilgeous-alexander, wikidata: Q32860369, name: Shai Gilgeous-Alexander, aliases: ["gilgeous-alexander", "=SGA"], universes: [sport], link_in: [sport]}
+- {id: player:luka-doncic, wikidata: Q19844712, name: Luka Dončić, aliases: [doncic, dončić], universes: [sport], link_in: [sport]}
+- {id: player:jayson-tatum, wikidata: Q21623063, name: Jayson Tatum, aliases: [tatum], universes: [sport], link_in: [sport]}
+- {id: player:anthony-edwards, wikidata: Q60951627, name: Anthony Edwards, aliases: ["anthony edwards"], universes: [sport], link_in: [sport]}
+- {id: player:rudy-gobert, wikidata: Q3446792, name: Rudy Gobert, aliases: [gobert], universes: [sport], link_in: [sport]}
+- {id: player:earvin-ngapeth, wikidata: Q3046479, name: Earvin Ngapeth, aliases: [ngapeth], universes: [sport], link_in: [sport]}
+- {id: player:jean-patry, wikidata: Q39399417, name: Jean Patry, aliases: [patry], universes: [sport], link_in: [sport]}
+- {id: player:antoine-brizard, wikidata: Q29246384, name: Antoine Brizard, aliases: [brizard], universes: [sport], link_in: [sport]}
+- {id: player:kevin-tillie, wikidata: Q3201170, name: Kévin Tillie, aliases: [tillie], universes: [sport], link_in: [sport]}
+- {id: player:trevor-clevenot, wikidata: Q16681339, name: Trévor Clévenot, aliases: [clevenot, clévenot], universes: [sport], link_in: [sport]}
+- {id: player:stephen-boyer, wikidata: Q23829142, name: Stephen Boyer, aliases: ["stephen boyer", "=Boyer"], universes: [sport], link_in: [sport]}

@@ -38,6 +38,13 @@ GEOPOLITICS_EXTRA = (
     "Reste strictement factuel : ne prends jamais parti, ne qualifie pas moralement les acteurs, "
     "et ne présente jamais la déclaration d'un acteur comme un fait établi."
 )
+ENTITY_EXTRA = (
+    "Pour chaque événement, ajoute aussi : « titre » : le titre de l'événement en français, fidèle aux sources, "
+    "120 caractères au plus ; « entites » : la liste des identifiants, choisis UNIQUEMENT dans la ligne "
+    "« Entités candidates » de l'événement, des entités réellement concernées (retire les homonymes et les mentions "
+    "accessoires) ; « inconnus » : 0 à 3 noms propres importants (personnes, entreprises, pays, organisations) "
+    "cités par les sources et absents des candidats."
+)
 PROFILES = {
     "default": {"layers": False, "extra": ""},
     "finance": {"layers": True, "extra": FINANCE_EXTRA},
@@ -53,7 +60,9 @@ _ADVICE = re.compile(
 
 
 def fingerprint(ev: dict) -> str:
-    return hashlib.sha1("|".join(sorted(i["id"] for i in ev["items"])).encode("utf-8")).hexdigest()[:16]
+    # « v2| » : titres traduits et entités confirmées (lot 1A). Changer le préfixe fait résumer à nouveau, par lots.
+    ids = "|".join(sorted(i["id"] for i in ev["items"]))
+    return hashlib.sha1(f"v2|{ids}".encode("utf-8")).hexdigest()[:16]
 
 
 def extractive(ev: dict) -> dict:
@@ -83,8 +92,9 @@ def _prompt(events: list, profile: str = "default") -> str:
     for ev in events:
         lines = "\n".join(f"- [tier {i['tier']}] {i['source']} (publié le {i['published_at'][:10]}) : {i['title']} — {i['snippet'][:300]}"
                           for i in sorted(ev["items"], key=lambda i: i["tier"])[:6])
-        blocks.append(f"## {ev['id']}\nSujet : {ev['title']}\nFiabilité : {ev.get('reliability', '?')}\n{lines}")
-    return f"{SYSTEM}{' ' + extra if extra else ''}\n\n" + "\n\n".join(blocks)
+        cands = f"\nEntités candidates : {', '.join(ev['candidates'])}" if ev.get("candidates") else ""
+        blocks.append(f"## {ev['id']}\nSujet : {ev['title']}\nFiabilité : {ev.get('reliability', '?')}{cands}\n{lines}")
+    return f"{SYSTEM}{' ' + extra if extra else ''} {ENTITY_EXTRA}\n\n" + "\n\n".join(blocks)
 
 
 def _layers(raw: object) -> dict | None:
@@ -99,7 +109,24 @@ def _layers(raw: object) -> dict | None:
     return out if any(out.values()) else None
 
 
-def _parse(text: str, ids: list[str], profile: str = "default") -> dict:
+def _extras(s: dict, offered: set) -> dict:
+    """Titre français, entités confirmées (parmi les candidats seulement) et noms inconnus ; tout champ mal formé est ignoré."""
+    out = {}
+    title = s.get("titre")
+    if isinstance(title, str) and title.strip():
+        out["title_fr"] = title.strip()[:200]
+    chosen = s.get("entites")
+    if isinstance(chosen, list):
+        valid = [x for x in chosen if isinstance(x, str) and x in offered]
+        if valid or not chosen:        # des noms au lieu d'identifiants : réponse ignorée, les candidats restent
+            out["entities_llm"] = valid
+    unknown = s.get("inconnus")
+    if isinstance(unknown, list):
+        out["unknown"] = [x.strip()[:80] for x in unknown if isinstance(x, str) and x.strip()][:3]
+    return out
+
+
+def _parse(text: str, ids: list[str], profile: str = "default", offered: dict | None = None) -> dict:
     text = text.strip().removeprefix(_FENCE + "json").removeprefix(_FENCE).removesuffix(_FENCE).strip()
     data = json.loads(text)
     if not isinstance(data, dict):
@@ -113,15 +140,16 @@ def _parse(text: str, ids: list[str], profile: str = "default") -> dict:
         layers = _layers(s.get("layers")) if PROFILES[profile]["layers"] else None
         if has_advice(summary, layers):
             continue
-        ok[i] = {**summary, "layers": layers} if layers else summary
+        ok[i] = {**summary, **({"layers": layers} if layers else {}), **_extras(s, (offered or {}).get(i, set()))}
     return ok
 
 
 def _ask(batch: list, call: Callable[[str], str], profile: str = "default") -> tuple[dict, str | None]:
     prompt, error = _prompt(batch, profile), None
+    offered = {e["id"]: set(e.get("candidates", [])) for e in batch}
     for _ in range(2):
         try:
-            return _parse(call(prompt), [e["id"] for e in batch], profile), None
+            return _parse(call(prompt), [e["id"] for e in batch], profile, offered), None
         except Exception as exc:  # le repli extractif couvre tous les échecs, l'erreur est remontée
             msg = f"{type(exc).__name__}: {exc}"
             if "429" in msg or "RESOURCE_EXHAUSTED" in msg:
