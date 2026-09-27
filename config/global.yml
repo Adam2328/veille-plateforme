@@ -104,6 +104,8 @@ today:                   # « Ce qu'il faut savoir aujourd'hui » (spec §6)
   evolution_bonus: 5     # nouvelle révision (nouvelles sources) dans les 12 dernières heures
 links:
   cooccurrence_min: 3    # deux entités citées ensemble dans au moins 3 événements (30 jours) sont reliées
+  # types d'événement pour lesquels un pays ouvre une chaîne « Concernés » (sinon bruit sur les actualités non économiques)
+  country_start_kinds: [conflict, sanctions, commodities, markets, macro_data, central_bank, earnings, m_and_a, regulation]
 band:                    # bandeau Vigie (spec §9)
   quotes: ["^FCHI", "^GSPC", "^IXIC", "^STOXX50E", "EURUSD=X", "^TNX", "BZ=F", "GC=F", "BTC-USD"]
   new_hours: 6
