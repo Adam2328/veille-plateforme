@@ -149,3 +149,34 @@ def test_geopolitics_profile_returns_layers_and_asks_for_attributed_statements()
     assert results["ev_1"][1] == "llm" and set(results["ev_1"][0]["layers"]) == set(LAYER_KEYS)
     assert "déclarations" in seen[0].lower() and "attribu" in seen[0].lower() and "parti" in seen[0].lower()
     assert PROFILES["geopolitique"]["layers"] is True
+
+
+def test_prompt_lists_the_candidates_and_asks_for_a_french_title():
+    e = {**ev("ev_1", "OpenAI launches GPT-6"), "candidates": ["company:openai", "ai_model:gpt"]}
+    prompts = []
+    summarize([e], lambda p: prompts.append(p) or json.dumps({"ev_1": GOOD}))
+    assert "Entités candidates : company:openai, ai_model:gpt" in prompts[0] and "« titre »" in prompts[0]
+
+
+def test_extras_are_parsed_and_entities_outside_the_offer_are_dropped():
+    e = {**ev("ev_1", "OpenAI launches GPT-6"), "candidates": ["company:openai", "ai_model:gpt"]}
+    answer = {"ev_1": {**GOOD, "titre": " OpenAI lance GPT-6 ", "entites": ["ai_model:gpt", "company:inventee", 3],
+                       "inconnus": ["Sam Altman", "", 7, "A", "B", "C"]}}
+    results, _ = summarize([e], lambda p: json.dumps(answer))
+    summary, mode = results["ev_1"]
+    assert mode == "llm" and summary["title_fr"] == "OpenAI lance GPT-6"
+    assert summary["entities_llm"] == ["ai_model:gpt"] and summary["unknown"] == ["Sam Altman", "A", "B"]
+    assert {k: summary[k] for k in KEYS} == GOOD
+
+
+def test_malformed_extras_are_ignored_without_losing_the_summary():
+    answer = {"ev_1": {**GOOD, "titre": 42, "entites": "company:openai", "inconnus": None}}
+    results, _ = summarize([ev("ev_1", "T")], lambda p: json.dumps(answer))
+    assert results["ev_1"] == (GOOD, "llm")
+
+
+def test_fingerprint_is_versioned():
+    import hashlib
+    assert fingerprint(ev("ev_1", "T")) != fingerprint({**ev("ev_1", "T"), "items": []})
+    ids = "|".join(sorted(i["id"] for i in ev("ev_1", "T")["items"]))
+    assert fingerprint(ev("ev_1", "T")) == hashlib.sha1(("v2|" + ids).encode("utf-8")).hexdigest()[:16]
