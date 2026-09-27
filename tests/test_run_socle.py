@@ -96,3 +96,17 @@ def test_countries_start_a_concerned_chain_only_for_economic_or_conflict_events(
     base = {"level": 1, "entity_ids": ["country:chine"]}
     assert "concerned" not in _with_concerned({**base, "kind": "diplomacy"}, adj, catalog, g)
     assert _with_concerned({**base, "kind": "sanctions"}, adj, catalog, g)["concerned"][0][0]["to"] == "commodity:terres-rares"
+
+
+def test_events_without_an_llm_summary_are_summarised_before_older_ones():
+    old = {**mk_event([mk_item("o", "Ancien")], id="ev_old"), "importance": 90, "level": 1, "reliability": "confirmé",
+           "summary": {"quoi": "x"}, "summary_mode": "llm", "summary_fp": "v1"}
+    new = {**mk_event([mk_item("n", "Nouveau")], id="ev_new"), "importance": 60, "level": 1, "reliability": "confirmé"}
+    asked = []
+
+    def call(prompt):
+        asked.append(prompt.split("## ")[1].split("\n")[0])
+        return json.dumps({asked[-1]: {k: "v" for k in KEYS}})
+
+    add_summaries([old, new], DOM, {**G, "ai": {**G["ai"], "max_events_per_run": 1}}, call)
+    assert asked == ["ev_new"]

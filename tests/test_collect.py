@@ -63,3 +63,11 @@ def test_rss_images_come_from_media_enclosure_or_the_first_img_tag():
     assert health["ok"]
     assert [r.get("image") for r in raws] == ["https://img.ex.com/a.jpg", "https://img.ex.com/b.png",
                                               "https://img.ex.com/c.webp", None]
+
+
+def test_escaped_ampersands_in_img_urls_are_decoded():
+    feed = b"""<?xml version="1.0"?><rss version="2.0"><channel><title>t</title>
+<item><title>E</title><link>https://ex.com/e</link><description>&lt;img src="https://img.ex.com/e.jpg?w=600&amp;amp;h=400"&gt;</description></item>
+</channel></rss>"""
+    raws, _ = collect_rss({"id": "s", "url": "mem://"}, lambda url: feed)
+    assert raws[0]["image"] == "https://img.ex.com/e.jpg?w=600&h=400"

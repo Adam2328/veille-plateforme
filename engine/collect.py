@@ -1,3 +1,4 @@
+import html
 import re
 from collections.abc import Callable
 from datetime import datetime, timezone
@@ -36,7 +37,7 @@ def _image(entry: dict) -> str | None:
         if str(enc.get("type", "")).startswith("image/") and enc.get("href"):
             return enc["href"]
     m = _IMG.search(entry.get("summary", "") or "")
-    return m.group(1) if m else None
+    return html.unescape(m.group(1)) if m else None      # « &amp; » dans l'attribut : sinon URL cassée
 
 
 def collect_rss(source: dict, fetch: Callable[[str], bytes] = fetch_bytes, limit: int = 30) -> tuple[list, dict]:

@@ -67,8 +67,9 @@ def annotate(ev: dict, universe: str | None, matcher: dict | None) -> dict:
 
 
 def add_summaries(events: list, dom: dict, g: dict, call: Callable[[str], str] | None) -> tuple[list, set, list]:
+    # Les événements sans résumé LLM passent d'abord : un changement d'empreinte (v2) ne retarde pas les nouveautés.
     need = sorted((e for e in events if e["level"] in (1, 2) and e.get("summary_fp") != fingerprint(e)),
-                  key=lambda e: -e["importance"])[: g["ai"]["max_events_per_run"]]
+                  key=lambda e: (e.get("summary_mode") == "llm", -e["importance"]))[: g["ai"]["max_events_per_run"]]
     results, errors = summarize(need, call, profile=dom.get("summary_profile", "default"))
     done, touched = {}, set()
     for e in need:
