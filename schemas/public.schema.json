@@ -92,13 +92,19 @@
                   "3": {"type": "array", "items": {"type": "string"}}
                 }
               },
-              "upcoming": {"$ref": "#/$defs/upcoming"}
+              "upcoming": {"$ref": "#/$defs/upcoming"},
+              "learn": {"$ref": "#/$defs/learn"}
             }
           }
         },
         "retain": {"type": "array", "items": {"type": "string"}},
         "events": {"type": "object", "additionalProperties": {"$ref": "#/$defs/event"}}
       }
+    },
+    "learn": {
+      "type": "object",
+      "required": ["category", "title", "text"],
+      "properties": {"category": {"type": "string"}, "title": {"type": "string"}, "text": {"type": "string"}}
     },
     "domainFile": {
       "type": "object",
@@ -108,6 +114,7 @@
         "domain": {"$ref": "#/$defs/domainRef"},
         "events": {"type": "array", "items": {"$ref": "#/$defs/event"}},
         "upcoming": {"$ref": "#/$defs/upcoming"},
+        "learn": {"$ref": "#/$defs/learn"},
         "links": {
           "type": "array",
           "items": {"type": "object", "required": ["title", "url"],

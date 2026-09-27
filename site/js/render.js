@@ -264,6 +264,7 @@ export function domainBlock(dom, events, state, now, quotes = null, football = n
     ${more}
     ${dom.id === 'football' ? footballStrip(football) : ''}
     ${dom.id === 'f1' ? f1Strip(f1) : ''}
+    ${learnBlock(dom.learn)}
     ${upcomingList(dom.upcoming)}
   </section>`;
 }
@@ -280,6 +281,12 @@ export function renderHome(home, state, now, since = null, quotes = null, footba
     ${home.domains.map((d) => domainBlock(d, home.events, state, now, quotes, football, f1)).join('')}`;
 }
 
+// Fiche pédagogique du jour (« À connaître »), écrite dans la config de la veille.
+function learnBlock(card) {
+  if (!card) return '';
+  return `<aside class="learn"><p class="cmp">À connaître · ${esc(card.category)}</p><h3>${esc(card.title)}</h3><p>${esc(card.text)}</p></aside>`;
+}
+
 // Liens « Approfondir » déclarés dans la config de la veille (ex. pages Flashscore des tournois).
 function linksBlock(links) {
   const safe = (links ?? []).map((l) => ({ title: l.title, url: safeUrl(l.url) })).filter((l) => l.url && l.url.startsWith('https://'));
@@ -294,6 +301,7 @@ export function renderDomain(file, state, now, quotes = null, football = null, t
   return `<div style="--dom:${color(file.domain.accent)}"><a class="back" href="#/">← Accueil</a>
     <h1>${esc(file.domain.name)}</h1>
     ${file.domain.id === 'finance' ? renderQuotes(quotes, now) : ''}
+    ${learnBlock(file.learn)}
     ${empty ? '<p class="meta">Rien d’important pour l’instant.</p>' : ''}
     ${eventSections(file.events, state, now)}
     ${upcomingList(file.upcoming)}

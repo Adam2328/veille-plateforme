@@ -1,0 +1,118 @@
+id: nba
+name: Basket / NBA
+accent: "#1D428A"
+order: 7
+quota: 10
+max_l1: 3
+thresholds: {l1: 72, l2: 60, l3: 48}   # abaissés le 27/09/2026 : avant-saison, et cette veille doit faire découvrir le basket
+relevance: true
+rumor_markers: ["serait", "reportedly", "linked with", "interested in", "eyeing", "in talks", "pourrait rejoindre", "piste"]
+explicit_rumor_markers: ["rumeur", "rumour", "rumor", "trade rumors", "trade buzz"]
+
+exclude: ["pronostic", "cote ", "cotes ", "bookmaker", "betting", "odds", "best bets", "player props", "promo code", "sponsored",
+          "fantasy", "nba 2k", "_dn-"]
+
+entities:
+  LeBron James: [lebron]
+  Stephen Curry: [curry]
+  Kevin Durant: [durant]
+  Nikola Jokić: [jokic, jokić]
+  Giannis Antetokounmpo: [giannis, antetokounmpo]
+  Shai Gilgeous-Alexander: [gilgeous-alexander, "sga"]
+  Luka Dončić: [doncic, dončić]
+  Victor Wembanyama: [wembanyama, wemby]
+  Jayson Tatum: [tatum]
+  Anthony Edwards: ["anthony edwards"]
+  Rudy Gobert: [gobert]
+  Lakers: [lakers]
+  Celtics: [celtics]
+  Warriors: [warriors]
+  Knicks: [knicks]
+  Thunder: [thunder, "oklahoma city"]
+  Spurs: [spurs, "san antonio"]
+  Nuggets: [nuggets]
+  Bucks: [bucks]
+  Heat: ["miami heat"]
+  Mavericks: [mavericks, mavs]
+  Timberwolves: [timberwolves, wolves]
+  Cavaliers: [cavaliers, cavs]
+  Équipe de France: ["équipe de france", bleus]
+
+kinds:
+  result:
+    weight: 22
+    keywords: [victoire, défaite, "s'impose", "l'emporte", wins, beat, beats, "game 7", "match 7", finale, finals, playoffs, "play-in"]
+  performance:
+    weight: 18
+    keywords: [points, "triple-double", record, rebonds, rebounds, passes, assists, "career-high", "carrière"]
+  trade:
+    weight: 20
+    keywords: [trade, échange, "free agent", "agent libre", signe, signs, signing, contract, contrat, extension, "max deal", waived, coupé]
+  injury:
+    weight: 18
+    keywords: [blessure, blessé, injury, injured, "out for", forfait, "torn", déchirure, surgery, opération]
+  award:
+    weight: 15
+    keywords: [mvp, "rookie of the year", "rookie de l'année", "défenseur de l'année", "defensive player", "all-star", "all-nba", "sixth man"]
+  coach:
+    weight: 15
+    keywords: [entraîneur, coach, limogé, fired, hired, "head coach"]
+  draft:
+    weight: 12
+    keywords: [draft, lottery, loterie, "premier choix", "first pick", "no. 1 pick"]
+
+links:                                  # « Approfondir » (adresses testées le 27/09/2026)
+  - {title: "Classement NBA (Flashscore)", url: "https://www.flashscore.fr/basket/usa/nba/classement/"}
+  - {title: "Résultats NBA (Flashscore)", url: "https://www.flashscore.fr/basket/usa/nba/resultats/"}
+  - {title: "Classement officiel (nba.com)", url: "https://www.nba.com/standings"}
+  - {title: "Calendrier officiel (nba.com)", url: "https://www.nba.com/schedule"}
+
+# « À connaître » : une fiche par jour, dans l'ordre. Faits intemporels uniquement (aucun chiffre de saison en cours).
+learn:
+  - {category: "Organisation", title: "30 franchises, 2 conférences", text: "La NBA compte 30 équipes réparties en deux conférences, Est et Ouest, de 15 équipes chacune. Chaque équipe joue 82 matchs de saison régulière, d'octobre à avril."}
+  - {category: "Organisation", title: "Les playoffs", text: "Seize équipes, huit par conférence, disputent les playoffs au printemps. Chaque tour se joue au meilleur des sept matchs : il faut quatre victoires pour passer. Les deux champions de conférence s'affrontent en finale NBA, en juin."}
+  - {category: "Organisation", title: "Le play-in", text: "Depuis 2020-2021, les équipes classées de la 7e à la 10e place de chaque conférence jouent un mini-tournoi, le play-in, pour décrocher les deux dernières places qualificatives pour les playoffs."}
+  - {category: "Organisation", title: "La Draft", text: "Chaque année en juin, les franchises choisissent les meilleurs jeunes joueurs lors de la Draft, en deux tours. Les équipes non qualifiées pour les playoffs participent à une loterie qui fixe l'ordre des premiers choix."}
+  - {category: "Organisation", title: "La NBA Cup", text: "Depuis la saison 2023-2024, un tournoi disputé en début de saison, la NBA Cup, attribue un trophée à part entière. La plupart de ses matchs comptent aussi pour la saison régulière."}
+  - {category: "Organisation", title: "Plafond salarial et marché des transferts", text: "Les salaires sont encadrés par un plafond (salary cap) et une taxe de luxe au-delà d'un certain seuil. Les échanges (trades) sont possibles jusqu'à la date limite de février ; les agents libres signent à partir de juillet."}
+  - {category: "Règle", title: "Le shot clock", text: "Une équipe dispose de 24 secondes pour tenter un tir qui touche le cercle. Cette règle, introduite en 1954, a accéléré le jeu et reste au cœur du rythme de la NBA."}
+  - {category: "Règle", title: "Durée d'un match", text: "Un match NBA se joue en quatre quart-temps de 12 minutes, soit 48 minutes, contre 40 minutes en FIBA. En cas d'égalité, on joue des prolongations de 5 minutes."}
+  - {category: "Règle", title: "La ligne à trois points", text: "La ligne à trois points est à 7,24 m du panier au sommet et à 6,70 m dans les coins. Le tir dans le coin, plus court, est donc très recherché."}
+  - {category: "Règle", title: "Six fautes et c'est fini", text: "En NBA, un joueur est exclu du match à sa sixième faute personnelle (cinq en FIBA). Les fautes pèsent donc lourd sur la gestion des minutes des meilleurs joueurs."}
+  - {category: "Règle", title: "Le goaltending", text: "Il est interdit de toucher le ballon quand il redescend vers le cercle ou quand il est au-dessus du cylindre du panier. Le panier est alors accordé à l'attaque (goaltending)."}
+  - {category: "Vocabulaire", title: "Le triple-double", text: "Un joueur réalise un triple-double quand il atteint au moins 10 unités dans trois catégories statistiques au cours d'un match, le plus souvent points, rebonds et passes décisives."}
+  - {category: "Vocabulaire", title: "Le pick and roll", text: "Action la plus jouée en NBA : un joueur pose un écran (pick) pour le porteur du ballon, puis se dirige vers le panier (roll) pour recevoir une passe."}
+  - {category: "Vocabulaire", title: "And-one", text: "On parle d'« and-one » quand un joueur marque en subissant une faute : le panier compte et il obtient un lancer franc supplémentaire."}
+  - {category: "Vocabulaire", title: "Buzzer beater", text: "Un « buzzer beater » est un tir réussi au moment où la sirène retentit, à la fin d'un quart-temps ou du match. Les plus célèbres décident d'une série de playoffs."}
+  - {category: "Vocabulaire", title: "Sixth man", text: "Le « sixth man » est le premier remplaçant, souvent un joueur capable de marquer beaucoup en sortie de banc. Un trophée récompense le meilleur chaque saison."}
+  - {category: "Récompense", title: "Le MVP", text: "Le trophée de meilleur joueur de la saison régulière (MVP) est attribué par un vote de journalistes. Le trophée du meilleur joueur des finales porte le nom de Bill Russell."}
+  - {category: "Récompense", title: "Le trophée Larry O'Brien", text: "Le trophée remis au champion NBA porte le nom de Larry O'Brien, commissaire de la ligue de 1975 à 1984."}
+  - {category: "Récompense", title: "Le All-Star Game", text: "Chaque mois de février, les meilleurs joueurs de la saison se retrouvent pour le All-Star Game, un week-end de gala avec concours de dunks et de tirs à trois points."}
+  - {category: "Légende", title: "Michael Jordan", text: "Six titres avec les Chicago Bulls (1991-1993 puis 1996-1998) et six trophées de MVP des finales : Michael Jordan est souvent considéré comme le plus grand joueur de l'histoire."}
+  - {category: "Légende", title: "Bill Russell", text: "Pivot des Boston Celtics, Bill Russell a remporté 11 titres entre 1957 et 1969, un record. Le trophée de MVP des finales porte son nom."}
+  - {category: "Légende", title: "Wilt Chamberlain et les 100 points", text: "Le 2 mars 1962, Wilt Chamberlain a marqué 100 points en un match, un record jamais égalé depuis."}
+  - {category: "Légende", title: "Kobe Bryant", text: "Kobe Bryant a passé toute sa carrière aux Los Angeles Lakers (1996-2016), avec cinq titres. Il a inscrit 81 points face à Toronto en 2006, deuxième plus gros total de l'histoire."}
+  - {category: "Légende", title: "LeBron James", text: "LeBron James a été champion avec trois franchises (Miami, Cleveland, Los Angeles Lakers). En février 2023, il est devenu le meilleur marqueur de l'histoire de la NBA, devant Kareem Abdul-Jabbar."}
+  - {category: "Légende", title: "Stephen Curry", text: "Meneur des Golden State Warriors, Stephen Curry a transformé le jeu par son adresse à trois points : il détient le record de paniers à trois points réussis en carrière."}
+  - {category: "Rivalité", title: "Lakers contre Celtics", text: "La plus grande rivalité de la NBA oppose les deux franchises les plus titrées de l'histoire. Elle a culminé dans les années 1980 avec les duels Magic Johnson - Larry Bird en finale."}
+  - {category: "Rivalité", title: "Bulls contre Pistons", text: "À la fin des années 1980, les « Bad Boys » de Detroit, réputés pour leur défense rugueuse, ont barré la route de Michael Jordan avant que Chicago ne prenne le dessus en 1991."}
+  - {category: "Rivalité", title: "Warriors contre Cavaliers", text: "Golden State et Cleveland se sont affrontés quatre fois de suite en finale, de 2015 à 2018 : trois titres pour les Warriors, un pour les Cavaliers en 2016."}
+  - {category: "Franchise", title: "Les Boston Celtics", text: "Fondés en 1946, les Celtics sont l'une des franchises historiques. Ils ont dominé les années 1960 autour de Bill Russell et restent, avec les Lakers, l'équipe la plus titrée."}
+  - {category: "Franchise", title: "Les Los Angeles Lakers", text: "Nés à Minneapolis avant de déménager à Los Angeles en 1960, les Lakers ont compté Magic Johnson, Kareem Abdul-Jabbar, Shaquille O'Neal, Kobe Bryant et LeBron James."}
+  - {category: "Franchise", title: "Les San Antonio Spurs", text: "Les Spurs ont remporté cinq titres entre 1999 et 2014 autour de Tim Duncan, Tony Parker et Manu Ginóbili, un modèle de stabilité. Ils ont drafté Victor Wembanyama en 2023."}
+  - {category: "Salle", title: "Le Madison Square Garden", text: "Salle des New York Knicks, au cœur de Manhattan, le Madison Square Garden est surnommé « La Mecque du basket »."}
+  - {category: "Joueur français", title: "Tony Parker", text: "Meneur des San Antonio Spurs, Tony Parker a remporté quatre titres NBA (2003, 2005, 2007, 2014) et a été élu MVP des finales 2007, une première pour un joueur européen."}
+  - {category: "Joueur français", title: "Rudy Gobert", text: "Pivot français, Rudy Gobert a été élu quatre fois meilleur défenseur de l'année en NBA (2018, 2019, 2021, 2024), un record partagé."}
+  - {category: "Joueur français", title: "Victor Wembanyama", text: "Premier choix de la Draft 2023 par les San Antonio Spurs, Victor Wembanyama a été élu rookie de l'année en 2024. Sa taille (2,24 m) et son adresse en font un profil inédit."}
+
+sources:                                # flux testés le 27/09/2026 ; balldontlie (clé requise) écarté
+  - {id: lequipe-basket, name: "L'Équipe (basket)", tier: 2, origin: "l'équipe", type: rss, url: "https://dwh.lequipe.fr/api/edito/rss?path=/Basket/"}
+  - {id: rmc-basket, name: "RMC Sport (basket)", tier: 2, origin: rmc sport, type: rss, url: "https://rmcsport.bfmtv.com/rss/basket/"}
+  - {id: figaro-basket, name: "Le Figaro (basket)", tier: 2, origin: le figaro, type: rss, url: "https://www.lefigaro.fr/rss/figaro_basket.xml"}
+  - {id: basketusa, name: "Basket USA", tier: 3, origin: basket usa, type: rss, url: "https://www.basketusa.com/feed/"}
+  - {id: espn-nba, name: "ESPN (NBA)", tier: 2, origin: espn, type: rss, url: "https://www.espn.com/espn/rss/nba/news"}
+  - {id: cbs-nba, name: "CBS Sports (NBA)", tier: 2, origin: cbs sports, type: rss, url: "https://www.cbssports.com/rss/headlines/nba/"}
+  - {id: guardian-nba, name: "The Guardian (NBA)", tier: 2, origin: the guardian, type: rss, url: "https://www.theguardian.com/sport/nba/rss"}
+  - {id: bbc-basket, name: "BBC Sport (basketball)", tier: 2, origin: bbc sport, type: rss, url: "https://feeds.bbci.co.uk/sport/basketball/rss.xml"}
+  - {id: reddit-nba, name: "Reddit r/nba", tier: 5, origin: reddit, type: rss, url: "https://www.reddit.com/r/nba/.rss"}
+  - {id: gn-nba, name: "Google Actualités : NBA", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=NBA+when:1d&hl=fr&gl=FR&ceid=FR:fr"}

@@ -69,7 +69,19 @@ def build_domain(dom: dict, events: list, now: datetime, imported: list[str] | N
              if isinstance(link, dict) and link.get("title") and str(link.get("url", "")).startswith("https://")]
     if links:
         out["links"] = links
+    card = learn_card(dom, now)
+    if card:
+        out["learn"] = card
     return out
+
+
+def learn_card(dom: dict, now: datetime) -> dict | None:
+    """Fiche « À connaître » du jour : tourne une fois par jour dans la liste écrite en config (aucun LLM)."""
+    cards = [c for c in dom.get("learn", []) if isinstance(c, dict) and all(c.get(k) for k in ("category", "title", "text"))]
+    if not cards:
+        return None
+    c = cards[now.date().toordinal() % len(cards)]
+    return {"category": str(c["category"]), "title": str(c["title"]), "text": str(c["text"])}
 
 
 def build_home(cfg: dict, events_by_domain: dict, now: datetime, agendas: dict | None = None) -> dict:
@@ -81,7 +93,10 @@ def build_home(cfg: dict, events_by_domain: dict, now: datetime, agendas: dict |
                      key=lambda e: -e["importance"])[: dom["quota"]]
         levels = {str(n): [e["id"] for e in top if e["level"] == n] for n in (1, 2, 3)}
         events.update({e["id"]: project(e) for e in top})
-        domains.append({"id": dom["id"], "name": dom["name"], "accent": dom["accent"], "levels": levels, "upcoming": upcoming_events(dom, now, (agendas or {}).get(dom["id"]))})
+        entry = {"id": dom["id"], "name": dom["name"], "accent": dom["accent"], "levels": levels,
+                 "upcoming": upcoming_events(dom, now, (agendas or {}).get(dom["id"]))}
+        card = learn_card(dom, now)
+        domains.append({**entry, "learn": card} if card else entry)
     level_one = sorted((e for e in events.values() if e["level"] == 1), key=lambda e: -e["importance"])
     return {"generated_at": iso(now), "sample": False, "domains": domains,
             "retain": [e["id"] for e in level_one[: h["retain_max"]]], "events": events}

@@ -152,3 +152,23 @@ def test_domain_file_carries_only_https_links_from_the_config():
     validate("domainFile", f)
     assert f["links"] == [{"title": "Classement ATP", "url": "https://www.flashscore.fr/tennis/classements/atp/"}]
     assert "links" not in build_domain(CFG["domains"]["ia"], [], NOW)
+
+
+LEARN = [{"category": "Règle", "title": "Le shot clock", "text": "24 secondes pour tirer."},
+         {"category": "Légende", "title": "Michael Jordan", "text": "Six titres avec Chicago."}]
+
+
+def test_a_learn_card_rotates_daily_and_is_published_on_home_and_domain_file():
+    from engine.publish import learn_card
+    dom = {**CFG["domains"]["ia"], "learn": LEARN}
+    day1, day2 = learn_card(dom, NOW), learn_card(dom, NOW + timedelta(days=1))
+    assert day1 != day2 and {day1["title"], day2["title"]} == {"Le shot clock", "Michael Jordan"}
+    assert learn_card(dom, NOW) == learn_card(dom, NOW.replace(hour=23))          # stable sur la journée
+    assert learn_card(CFG["domains"]["ia"], NOW) is None
+    home = build_home({"global": CFG["global"], "domains": {"ia": dom}}, {"ia": []}, NOW)
+    validate("home", home)
+    assert home["domains"][0]["learn"] == day1
+    f = build_domain(dom, [], NOW)
+    validate("domainFile", f)
+    assert f["learn"] == day1
+    assert "learn" not in build_home(CFG, {"ia": []}, NOW)["domains"][0]
