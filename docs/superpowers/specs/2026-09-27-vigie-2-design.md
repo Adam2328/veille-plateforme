@@ -160,16 +160,19 @@ Les événements gagnent `entities: [ids]`, `concerned: [[ids…]]`, `universe`,
 - Thème sombre bleu nuit ou clair selon le réglage de l'appareil, avec un bouton pour forcer l'un ou l'autre (choix gardé dans le navigateur). Un seul accent ambre, réservé au signal (nouveau, important, alerte).
 - **Tout en français** : titres et résumés traduits si la source est étrangère, lien vers l'article original. La traduction du titre est faite dans l'appel Gemini de résumé existant (niveaux 1 et 2) ; les événements de niveau 3, sans résumé, gardent leur titre d'origine (limite du quota gratuit).
 - **Lecture courte puis dépliée** : un événement montre d'abord 2 à 3 phrases (ce qui s'est passé, pourquoi c'est important) ; un geste déplie l'analyse, le contexte, la chronologie, les Concernés.
-- **Images** : photo de l'article source quand le flux en fournit une (champ `image` des éléments collectés), sinon logo, drapeau ou photo de l'entité principale ; graphiques et mini-cartes en plus.
-- Couleurs d'univers en filets et points, jamais en aplats : Sport vert, Géopolitique brique, Finance bleu acier, IA violet.
+- **Chaque information a une image.** Ordre : photo de l'article source si le flux en fournit une (champ `image` des éléments collectés) ; sinon **illustration générée** par le site en SVG (aucun coût) : fond aux couleurs de l'univers, motif, icône du type d'événement, chiffre clé si l'événement en porte un. Même format pour toutes les cartes.
+- Couleurs d'univers en filets, points et fonds d'illustration : Sport vert, Géopolitique brique, Finance bleu acier, IA violet.
 - Typographies : titres en Newsreader, données en IBM Plex Mono, texte en sans-serif système. Deux polices Google Fonts, pas plus.
-- Accueil : quatre bandes éditoriales (une info principale en grand + lignes compactes), pas de grille de cartes. Colonne « Radar » (suivis, entités en hausse) sur grand écran.
-- Navigation basse sur mobile : Aujourd'hui · Sport · Géo · Finance · IA ; recherche en haut.
-- **Pastille d'entité** : nom souligné pointillé + icône de type ; toucher → panneau (bas sur mobile, droite sur ordinateur) avec faits clés, 3 dernières actualités, relations, « Ouvrir la fiche ».
-- **Fiche entité** : en-tête (nom, type, ligne de données clés), constellation SVG radiale des voisins cliquables, chronologie, bloc de données propre au type.
-- **Événement** : ce qui s'est passé → pourquoi c'est important → Concernés (chaînes) → chronologie → sources et fiabilité.
-- **Bandeau Vigie** : une ligne en haut, défilement lent, pause au survol/toucher, segments marqués de la couleur de l'univers (marchés, matchs du jour, agenda, alertes, nouveautés).
-- Mouvement utile uniquement : transitions 150 ms, glissement des panneaux, marqueur « nouveau » qui s'allume brièvement, mini-graphiques réactifs au survol ; tout coupé sous `prefers-reduced-motion`.
+- Densité équilibrée : environ deux univers visibles par écran de téléphone.
+- **Accueil** : quatre bandes d'univers ; chaque bande est une **grille de cartes de même taille** (2 colonnes sur téléphone, 3 à 4 sur ordinateur), la plus importante en premier.
+- **Carte** : photo au-dessus, titre, résumé d'une ligne (« pourquoi c'est important »), 2 à 3 pastilles d'entités. Pas de source ni d'heure sur la carte. Badge de fiabilité **uniquement** pour « Rumeur », « Non confirmé » et « En développement » (une rumeur ne doit jamais passer pour un fait) ; officiel/confirmé/rapporté sans badge. Point ambre si nouveau ou mis à jour depuis la dernière visite.
+- **Ordinateur** : pleine largeur + colonne « Radar » à droite (suivis, entités en hausse, marchés, prochains matchs).
+- **Téléphone** : barre de navigation en bas (Aujourd'hui · Sport · Géo · Finance · IA), recherche en haut.
+- **Pastille d'entité** : nom souligné pointillé + icône de type ; toucher → panneau d'aperçu (bas sur mobile, droite sur ordinateur) avec faits clés, 3 dernières actualités, relations, « Ouvrir la fiche ».
+- **Fiche entité** : en-tête dominé par un **grand visuel** (photo, logo, drapeau, sinon illustration) avec le nom, le type et une ligne de chiffres clés ; puis constellation SVG radiale des voisins cliquables, chronologie, bloc de données propre au type.
+- **Événement** : grande photo en tête, puis rangée de visuels de données (visages/logos des entités concernées, mini-graphique, carte si pertinent) ; ensuite ce qui s'est passé → pourquoi c'est important → [déplier] analyse, Concernés (chaînes), chronologie → sources et fiabilité détaillée.
+- **Bandeau Vigie** : une ligne en haut qui défile lentement en continu **et** se fait glisser au doigt ; pause au survol/toucher ; segments marqués de la couleur de l'univers (marchés, matchs du jour, agenda, alertes, nouveautés).
+- **Mouvement présent mais utile** : transitions de page courtes, panneaux qui glissent, apparition des cartes au défilement, léger effet de profondeur sur les images, constellation animée, marqueur « nouveau » qui s'allume brièvement, mini-graphiques réactifs au survol. Tout est coupé sous `prefers-reduced-motion`.
 
 ## 10. Finance & Marchés (esquisse validée, détaillée avant son lot comme les autres univers)
 
