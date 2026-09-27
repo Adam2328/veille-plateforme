@@ -159,6 +159,17 @@ def publish(root: Path, home: dict, domain_files: list, universe_files: list | t
         write_if_changed(out / "universes" / f"{u['universe']['id']}.json", u)
 
 
+def publish_entities(root: Path, index: dict, pages: dict) -> None:
+    validate("entityIndex", index)
+    for page in pages.values():
+        validate("entityFile", page)
+    out = root / "site" / "data" / "entities"
+    write_if_changed(out / "index.json", index)
+    for eid, page in pages.items():
+        etype, name = eid.split(":", 1)
+        write_if_changed(out / etype / f"{name}.json", page)
+
+
 def publish_quotes(root: Path, quotes: dict) -> None:
     validate("quotes", quotes)
     write_if_changed(root / "site" / "data" / "quotes.json", quotes)
