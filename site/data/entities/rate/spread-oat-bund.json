@@ -1,0 +1,1 @@
+{"generated_at":"2026-09-27T17:57:23+00:00","entity":{"id":"rate:spread-oat-bund","name":"Écart OAT–Bund","type":"rate","type_label":"Taux","universes":["finance"]},"description":null,"image":null,"facts":[],"relations":[{"id":"country:france","name":"France","type":"country","label":"exposé à","origin":"config","weight":1}],"events":[]}

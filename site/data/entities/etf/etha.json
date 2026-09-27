@@ -1,0 +1,1 @@
+{"generated_at":"2026-09-27T17:57:23+00:00","entity":{"id":"etf:etha","name":"iShares Ethereum Trust (ETHA)","type":"etf","type_label":"ETF","universes":["finance"],"ticker":"ETHA"},"description":null,"image":null,"facts":[],"relations":[{"id":"crypto:ethereum","name":"Ethereum","type":"crypto","label":"suit","origin":"config","weight":1}],"events":[]}

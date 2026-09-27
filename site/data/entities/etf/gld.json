@@ -1,0 +1,1 @@
+{"generated_at":"2026-09-27T17:57:23+00:00","entity":{"id":"etf:gld","name":"SPDR Gold Shares (GLD)","type":"etf","type_label":"ETF","universes":["finance"],"ticker":"GLD"},"description":null,"image":null,"facts":[],"relations":[{"id":"commodity:or","name":"Or","type":"commodity","label":"suit","origin":"config","weight":1}],"events":[]}

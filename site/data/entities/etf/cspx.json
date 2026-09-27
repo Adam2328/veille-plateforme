@@ -1,0 +1,1 @@
+{"generated_at":"2026-09-27T17:57:23+00:00","entity":{"id":"etf:cspx","name":"iShares Core S&P 500 UCITS (CSPX)","type":"etf","type_label":"ETF","universes":["finance"],"ticker":"CSPX"},"description":null,"image":null,"facts":[],"relations":[{"id":"index:sp500","name":"S&P 500","type":"index","label":"suit","origin":"config","weight":1}],"events":[]}

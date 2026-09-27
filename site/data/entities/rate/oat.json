@@ -1,0 +1,1 @@
+{"generated_at":"2026-09-27T17:57:23+00:00","entity":{"id":"rate:oat","name":"OAT française 10 ans","type":"rate","type_label":"Taux","universes":["finance"]},"description":null,"image":null,"facts":[],"relations":[{"id":"central_bank:bce","name":"Banque centrale européenne (BCE)","type":"central_bank","label":"exposé à","origin":"config","weight":1}],"events":[]}

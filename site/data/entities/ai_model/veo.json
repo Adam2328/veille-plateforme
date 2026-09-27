@@ -1,0 +1,1 @@
+{"generated_at":"2026-09-27T17:57:23+00:00","entity":{"id":"ai_model:veo","name":"Veo","type":"ai_model","type_label":"Modèle d'IA","universes":["ia"]},"description":null,"image":null,"facts":[],"relations":[{"id":"company:google-deepmind","name":"Google DeepMind","type":"company","label":"produit par","origin":"config","weight":1}],"events":[]}

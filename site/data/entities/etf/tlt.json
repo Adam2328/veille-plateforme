@@ -1,0 +1,1 @@
+{"generated_at":"2026-09-27T17:57:23+00:00","entity":{"id":"etf:tlt","name":"iShares 20+ Year Treasury Bond (TLT)","type":"etf","type_label":"ETF","universes":["finance"],"ticker":"TLT"},"description":null,"image":null,"facts":[],"relations":[{"id":"rate:us-10y","name":"Taux US 10 ans","type":"rate","label":"exposé à","origin":"config","weight":1}],"events":[]}

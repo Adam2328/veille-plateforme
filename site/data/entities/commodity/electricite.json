@@ -1,0 +1,1 @@
+{"generated_at":"2026-09-27T17:57:23+00:00","entity":{"id":"commodity:electricite","name":"Électricité","type":"commodity","type_label":"Matière première","universes":["finance","ia"]},"description":null,"image":null,"facts":[],"relations":[{"id":"tech:data-centers","name":"Data centers","type":"tech","label":"influence","origin":"config","weight":1}],"events":[]}

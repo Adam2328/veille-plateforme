@@ -1,0 +1,1 @@
+{"generated_at":"2026-09-27T17:57:23+00:00","entity":{"id":"etf:ita","name":"iShares U.S. Aerospace & Defense (ITA)","type":"etf","type_label":"ETF","universes":["finance","geopolitique"],"ticker":"ITA"},"description":null,"image":null,"facts":[],"relations":[{"id":"sector:defense","name":"Défense","type":"sector","label":"suit","origin":"config","weight":1}],"events":[]}

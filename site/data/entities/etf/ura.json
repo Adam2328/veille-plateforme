@@ -1,0 +1,1 @@
+{"generated_at":"2026-09-27T17:57:23+00:00","entity":{"id":"etf:ura","name":"Global X Uranium (URA)","type":"etf","type_label":"ETF","universes":["finance"],"ticker":"URA"},"description":null,"image":null,"facts":[],"relations":[{"id":"commodity:uranium","name":"Uranium","type":"commodity","label":"suit","origin":"config","weight":1}],"events":[]}

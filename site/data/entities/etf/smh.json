@@ -1,0 +1,1 @@
+{"generated_at":"2026-09-27T17:57:23+00:00","entity":{"id":"etf:smh","name":"VanEck Semiconductor (SMH)","type":"etf","type_label":"ETF","universes":["finance","ia"],"ticker":"SMH"},"description":null,"image":null,"facts":[],"relations":[{"id":"sector:semi-conducteurs","name":"Semi-conducteurs","type":"sector","label":"suit","origin":"config","weight":1}],"events":[]}

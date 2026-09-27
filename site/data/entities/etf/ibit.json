@@ -1,0 +1,1 @@
+{"generated_at":"2026-09-27T17:57:23+00:00","entity":{"id":"etf:ibit","name":"iShares Bitcoin Trust (IBIT)","type":"etf","type_label":"ETF","universes":["finance"],"ticker":"IBIT"},"description":null,"image":null,"facts":[],"relations":[{"id":"crypto:bitcoin","name":"Bitcoin","type":"crypto","label":"suit","origin":"config","weight":1}],"events":[]}
