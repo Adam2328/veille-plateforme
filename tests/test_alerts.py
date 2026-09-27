@@ -50,7 +50,7 @@ def test_send_ntfy_posts_a_short_message_that_opens_the_event_page():
     url, kw = calls[0]
     assert url == "https://ntfy.sh/mon-canal"
     assert kw["headers"]["Click"] == "https://veille.example/#/e/a"
-    assert kw["headers"]["Title"].startswith("IA") and "Titre a" in kw["data"].decode("utf-8")
+    assert kw["headers"]["Title"] == "Vigie - IA" and "Titre a" in kw["data"].decode("utf-8")
     assert "À retenir a" in kw["data"].decode("utf-8") and kw["timeout"] > 0
 
 

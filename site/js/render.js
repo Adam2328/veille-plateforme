@@ -390,7 +390,7 @@ export function renderNav(home, state, activeHash) {
   const isActive = (h) => (h === '#/' ? activeHash === h : activeHash === h || activeHash.startsWith(`${h}/`));
   const link = (h, label, n) =>
     `<a href="${h}"${isActive(h) ? ' aria-current="page"' : ''}><span>${esc(label)}</span>${n ? `<span class="count">${n}</span>` : ''}</a>`;
-  return `<div class="brand">Veille</div>${link('#/', 'Accueil', 0)}${link('#/s/', 'Rechercher', 0)}${home.domains.map((d) => link(`#/d/${enc(d.id)}`, d.name, changed(d))).join('')}`;
+  return `<div class="brand">Vigie</div>${link('#/', 'Accueil', 0)}${link('#/s/', 'Rechercher', 0)}${home.domains.map((d) => link(`#/d/${enc(d.id)}`, d.name, changed(d))).join('')}`;
 }
 
 export function renderError(message, canRetry = false) {

@@ -36,9 +36,9 @@ def send_ntfy(topic: str, event: dict, dom: dict, g: dict,
     body = f"{event['title']}\n{retenir}".strip()
     link = f"{g['alerts']['site_url']}#/e/{quote(event['id'])}"
     # Les en-têtes HTTP doivent rester en ASCII : le texte accentué passe dans le corps (UTF-8).
-    title = dom["name"].encode("ascii", "ignore").decode() or "Veille"
+    name = dom["name"].encode("ascii", "ignore").decode().strip()
     post(f"https://ntfy.sh/{quote(topic, safe='')}", data=body.encode("utf-8"), timeout=15,
-         headers={"Title": f"{title} - alerte", "Click": link, "Tags": "rotating_light", "Priority": "high"})
+         headers={"Title": f"Vigie - {name}" if name else "Vigie", "Click": link, "Tags": "rotating_light", "Priority": "high"})
 
 
 def prune_sent(sent: dict, now: datetime, days: int = 7) -> dict:
