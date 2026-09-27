@@ -27,9 +27,21 @@ FINANCE_EXTRA = (
     "INTERDIT : recommander d'acheter, de vendre, de renforcer ou d'alléger un actif, donner un conseil personnalisé, "
     "ou annoncer un cours cible qui ne figure pas dans les sources."
 )
+GEOPOLITICS_EXTRA = (
+    "Pour chaque événement, ajoute aussi une clé « layers » : {faits, analyse, interpretation, incertitude, actifs, "
+    "favorables, risques, a_surveiller}, chacune une liste de 0 à 4 puces courtes (une phrase). "
+    "faits : ce qui s'est passé, établi par les sources (lieux, dates, bilans, décisions). "
+    "analyse : déclarations des acteurs (gouvernements, organisations, belligérants), chacune attribuée à son auteur (« selon… », « X affirme… »). "
+    "interpretation : conséquences possibles, formulées avec prudence (« pourrait », « risque de »). "
+    "incertitude : ce qui reste inconnu, contesté ou invérifiable. actifs : pays, organisations et acteurs concernés. "
+    "favorables et risques : laisser vides. a_surveiller : prochaines échéances (réunions, votes, ultimatums). "
+    "Reste strictement factuel : ne prends jamais parti, ne qualifie pas moralement les acteurs, "
+    "et ne présente jamais la déclaration d'un acteur comme un fait établi."
+)
 PROFILES = {
     "default": {"layers": False, "extra": ""},
     "finance": {"layers": True, "extra": FINANCE_EXTRA},
+    "geopolitique": {"layers": True, "extra": GEOPOLITICS_EXTRA},
 }
 # Impératifs et recommandations à la première personne uniquement : rapporter la note d'un analyste
 # (« relève sa recommandation à l'achat ») ou un fait (« Apple va vendre ses parts ») reste permis.

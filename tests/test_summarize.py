@@ -141,3 +141,11 @@ def test_advice_patterns_are_detected():
 
 def test_profiles_are_declared():
     assert PROFILES["default"]["layers"] is False and PROFILES["finance"]["layers"] is True
+
+
+def test_geopolitics_profile_returns_layers_and_asks_for_attributed_statements():
+    seen = []
+    results, _ = summarize([ev("ev_1", "T")], lambda p: seen.append(p) or json.dumps(fin_answer()), profile="geopolitique")
+    assert results["ev_1"][1] == "llm" and set(results["ev_1"][0]["layers"]) == set(LAYER_KEYS)
+    assert "déclarations" in seen[0].lower() and "attribu" in seen[0].lower() and "parti" in seen[0].lower()
+    assert PROFILES["geopolitique"]["layers"] is True

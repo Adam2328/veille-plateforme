@@ -148,7 +148,7 @@ test('le ruban n’apparaît que dans le bloc finance et sur la page de la veill
 });
 
 test('la fiche affiche les couches non vides avec le rappel « pas un conseil »', () => {
-  const html = renderEvent(ev({ layers: LAYERS }), defaultState(), NOW);
+  const html = renderEvent(ev({ layers: LAYERS, domain: 'finance' }), defaultState(), NOW);
   for (const title of ['Faits', 'Analyse', 'Incertitude', 'Actifs concernés']) assert.ok(html.includes(title), title);
   assert.ok(!html.includes('Interprétation'));
   assert.ok(!html.includes('Risques'));
