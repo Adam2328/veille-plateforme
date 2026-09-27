@@ -130,4 +130,6 @@ document.addEventListener('keydown', (e) => {
   }
 });
 window.addEventListener('hashchange', route);
+// Application installable et lecture hors ligne ; sans support ou en cas d'échec, le site fonctionne normalement.
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 init();
