@@ -126,3 +126,6 @@ button.link { background: none; border: 0; color: var(--accent); font: inherit; 
 .links { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .links a { display: inline-block; padding: 6px 10px; border: 1px solid var(--line); background: var(--card); border-radius: var(--radius); text-decoration: none; font-size: 13px; }
 .links a:hover { border-color: var(--dom, var(--accent)); }
+
+.f1-weekend { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0 16px; }
+.f1-strip p { margin: 0; }

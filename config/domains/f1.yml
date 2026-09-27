@@ -1,0 +1,77 @@
+id: f1
+name: F1
+accent: "#C1121F"
+order: 6
+quota: 10
+max_l1: 3
+thresholds: {l1: 75, l2: 65, l3: 58}   # valeurs de départ, calibrées sur les données réelles
+relevance: true
+rumor_markers: ["serait", "pourrait rejoindre", "linked with", "reportedly", "in talks", "en discussions", "piste"]
+explicit_rumor_markers: ["rumeur", "rumour", "rumor", "silly season"]
+
+exclude: ["pronostic", "cote ", "cotes ", "bookmaker", "betting", "odds", "promo code", "sponsored", "quiz", "f1 25", "f1 26 game", "fantasy", "_dn-"]   # « _dn- » : pages-dossiers de RMC Sport
+
+entities:
+  Verstappen: [verstappen]
+  Russell: [russell]
+  Antonelli: [antonelli]
+  Hamilton: [hamilton]
+  Leclerc: [leclerc]
+  Norris: [norris]
+  Piastri: [piastri]
+  Alonso: [alonso]
+  Gasly: [gasly]
+  Ocon: [ocon]
+  Hadjar: [hadjar]
+  Mercedes: [mercedes]
+  Ferrari: [ferrari, "scuderia"]
+  Red Bull: ["red bull"]
+  McLaren: [mclaren]
+  Aston Martin: ["aston martin"]
+  Alpine: [alpine]
+  Williams: [williams]
+  Audi: [audi, sauber]
+  Cadillac: [cadillac]
+  FIA: [fia]
+
+kinds:
+  race_result:
+    weight: 25
+    keywords: [remporte, victoire, "wins the", "win in", vainqueur, winner, podium]   # « grand prix » retiré : présent dans presque tous les articles
+  qualifying:
+    weight: 20
+    keywords: [pole, "pole position", qualifications, qualifying, "sprint"]
+  penalty:
+    weight: 20
+    keywords: [pénalité, penalty, sanction, disqualifié, disqualified, "commissaires", stewards, "drive-through", "grid drop", "recul sur la grille"]
+  transfer:
+    weight: 18
+    keywords: [contrat, contract, signe, signs, "rejoint", joins, "baquet", seat, "line-up", "remplacé", replaced, prolonge, extension]
+  incident:
+    weight: 18
+    keywords: [accident, crash, collision, "drapeau rouge", "red flag", "safety car", abandon, retires, dnf, "voiture de sécurité"]
+  technical:
+    weight: 12
+    keywords: [règlement, regulations, "moteur", engine, "power unit", aileron, upgrade, évolution, "budget cap", "plafond budgétaire"]
+  championship:
+    weight: 15
+    keywords: [championnat, championship, "titre mondial", "world title", "leader", "points d'avance"]
+
+links:                                  # « Approfondir » : site officiel (adresses testées le 27/09/2026)
+  - {title: "Calendrier 2026", url: "https://www.formula1.com/en/racing/2026"}
+  - {title: "Résultats des Grands Prix", url: "https://www.formula1.com/en/results/2026/races"}
+  - {title: "Classement pilotes", url: "https://www.formula1.com/en/results/2026/drivers"}
+  - {title: "Classement constructeurs", url: "https://www.formula1.com/en/results/2026/team"}
+
+sources:                                # flux testés le 27/09/2026
+  - {id: f1-official, name: "Formula 1 (site officiel, articles éditoriaux)", tier: 2, origin: formula 1, type: rss, url: "https://www.formula1.com/content/fom-website/en/latest/all.xml"}
+  - {id: lequipe-f1, name: "L'Équipe (F1)", tier: 2, origin: "l'équipe", type: rss, url: "https://dwh.lequipe.fr/api/edito/rss?path=/Formule-1/"}
+  - {id: rmc-f1, name: "RMC Sport (F1)", tier: 2, origin: rmc sport, type: rss, url: "https://rmcsport.bfmtv.com/rss/auto-moto/f1/"}
+  - {id: figaro-f1, name: "Le Figaro (F1)", tier: 2, origin: le figaro, type: rss, url: "https://www.lefigaro.fr/rss/figaro_formule-1.xml"}
+  - {id: bbc-f1, name: "BBC Sport (F1)", tier: 2, origin: bbc sport, type: rss, url: "https://feeds.bbci.co.uk/sport/formula1/rss.xml"}
+  - {id: sky-f1, name: "Sky Sports (F1)", tier: 2, origin: sky sports, type: rss, url: "https://www.skysports.com/rss/12433"}
+  - {id: autosport-f1, name: "Autosport (F1)", tier: 2, origin: autosport, type: rss, url: "https://www.autosport.com/rss/f1/news/"}
+  - {id: motorsport-fr, name: "Motorsport.com (F1, fr)", tier: 2, origin: motorsport.com, type: rss, url: "https://fr.motorsport.com/rss/f1/news/"}
+  - {id: guardian-f1, name: "The Guardian (F1)", tier: 2, origin: the guardian, type: rss, url: "https://www.theguardian.com/sport/formulaone/rss"}
+  - {id: the-race, name: "The Race", tier: 3, origin: the race, type: rss, url: "https://www.the-race.com/feed/"}
+  - {id: reddit-f1, name: "Reddit r/formula1", tier: 5, origin: reddit, type: rss, url: "https://www.reddit.com/r/formula1/.rss"}

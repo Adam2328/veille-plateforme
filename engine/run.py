@@ -12,8 +12,10 @@ from .collect import collect_source, fetch_bytes
 from .config import ROOT, load_config
 from .enrich import is_relevant
 from .normalize import dedupe, excluded, normalize, recent
+from .f1_data import collect_f1
+from .f1_data import fetch_json as fetch_f1
 from .football_data import collect_football, fetch_fd
-from .publish import build_domain, build_home, publish, publish_football, publish_quotes, write_if_changed
+from .publish import build_domain, build_home, publish, publish_football, publish_json, publish_quotes, write_if_changed
 from .quotes import collect_quotes, fetch_relay
 from .reliability import classify
 from .score import assign_levels, importance
@@ -96,14 +98,15 @@ def run(root: Path = ROOT, now: datetime | None = None, only: list[str] | None =
         quote_fetch: Callable[[str], dict] = fetch_relay,
         agenda_fetch: Callable[[str], list[str]] = fetch_points,
         football_token: str | None = None,
-        football_fetch: Callable[[str, str], dict] = fetch_fd) -> dict:
+        football_fetch: Callable[[str, str], dict] = fetch_fd,
+        f1_fetch: Callable[[str], dict] = fetch_f1) -> dict:
     now = now or now_utc()
     cfg = load_config(root)
     g = cfg["global"]
     stored = load_recent(root, now)
     report = {"collected": 0, "new_items": 0, "events": {"1": 0, "2": 0, "3": 0}, "reliability": {},
               "ai": {"llm": 0, "extractif": 0, "errors": []}, "quotes": {"ok": 0, "failed": 0},
-              "football": {"ok": 0, "failed": 0}, "sources_failed": []}
+              "football": {"ok": 0, "failed": 0}, "f1": {"ok": 0, "failed": 0}, "sources_failed": []}
     health, by_domain = [], {}
     for dom in sorted(cfg["domains"].values(), key=lambda d: d["order"]):
         mine = [e for e in stored if e["domain"] == dom["id"]]
@@ -132,6 +135,12 @@ def run(root: Path = ROOT, now: datetime | None = None, only: list[str] | None =
         health += qhealth
         symbols = [h for h in qhealth if h["source"] != "quote-relay"]
         report["quotes"] = {"ok": sum(h["ok"] for h in symbols), "failed": sum(not h["ok"] for h in qhealth)}
+    if "f1" in cfg["domains"] and (only is None or "f1-data" in only or "f1" in only):
+        f1, f1health = collect_f1(_previous(root, "f1.json"), now, f1_fetch)
+        if f1 is not None:
+            publish_json(root, "f1", "f1.json", f1)
+        health += f1health
+        report["f1"] = {"ok": sum(h["ok"] for h in f1health), "failed": sum(not h["ok"] for h in f1health)}
     if cfg["football"] and (only is None or "football-data" in only):
         data, fhealth = collect_football(cfg["football"], football_token, _previous(root, "football.json"), now, football_fetch)
         if data is not None:
