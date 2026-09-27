@@ -36,3 +36,16 @@ Date : 2026-09-26 (semaine de Ligue des nations : Turquie-France, première de Z
 ## Décision
 
 L'actualité Football est utilisable. Il reste à valider les classements, résultats et calendrier avec la clé football-data.org de l'utilisateur (tâche 7), puis à mettre en production.
+
+## Résultats de production (27/09/2026, GitHub Actions)
+
+| Mesure | Valeur |
+|---|---|
+| Runs automatiques depuis la mise en ligne | tous en succès (dont 09h39, 10h10, 10h39 UTC) |
+| Appels football-data.org par cycle | 9 / 9 réussis (6 classements, résultats, calendrier, fenêtre suivante pendant la trêve) |
+| Données publiées | 6 classements (18 à 36 équipes, liens Flashscore), 40 résultats, 40 matchs à venir à partir du 9 octobre |
+| Synthèses Gemini (3 veilles) | 56 `llm`, 0 `extractif`, 0 erreur de quota |
+| Sources en échec | aucune |
+| Site en production | 12 événements par veille sur l'Accueil, code de la page Football déployé ; vérification visuelle non refaite en production (extension de navigateur déconnectée), faite en local sur les mêmes données |
+
+Validation de l'API réelle : le format supposé était juste, à un détail près (`form` vaut `null`, déjà géré). Découverte : l'API refuse toute fenêtre de plus de 10 jours (HTTP 400), d'où la fenêtre suivante pendant les trêves. Des réponses réelles réduites sont figées dans `tests/fixtures/`.
