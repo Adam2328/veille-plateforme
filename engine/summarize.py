@@ -117,7 +117,9 @@ def _extras(s: dict, offered: set) -> dict:
         out["title_fr"] = title.strip()[:200]
     chosen = s.get("entites")
     if isinstance(chosen, list):
-        out["entities_llm"] = [x for x in chosen if isinstance(x, str) and x in offered]
+        valid = [x for x in chosen if isinstance(x, str) and x in offered]
+        if valid or not chosen:        # des noms au lieu d'identifiants : réponse ignorée, les candidats restent
+            out["entities_llm"] = valid
     unknown = s.get("inconnus")
     if isinstance(unknown, list):
         out["unknown"] = [x.strip()[:80] for x in unknown if isinstance(x, str) and x.strip()][:3]

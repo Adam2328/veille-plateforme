@@ -180,3 +180,11 @@ def test_fingerprint_is_versioned():
     assert fingerprint(ev("ev_1", "T")) != fingerprint({**ev("ev_1", "T"), "items": []})
     ids = "|".join(sorted(i["id"] for i in ev("ev_1", "T")["items"]))
     assert fingerprint(ev("ev_1", "T")) == hashlib.sha1(("v2|" + ids).encode("utf-8")).hexdigest()[:16]
+
+
+def test_an_entity_list_without_any_valid_id_is_treated_as_absent():
+    e = {**ev("ev_1", "OpenAI launches GPT-6"), "candidates": ["company:openai"]}
+    results, _ = summarize([e], lambda p: json.dumps({"ev_1": {**GOOD, "entites": ["OpenAI", "Company:OpenAI"]}}))
+    assert "entities_llm" not in results["ev_1"][0]
+    results, _ = summarize([e], lambda p: json.dumps({"ev_1": {**GOOD, "entites": []}}))
+    assert results["ev_1"][0]["entities_llm"] == []                   # « aucune » est une réponse valable
