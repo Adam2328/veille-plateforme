@@ -1,6 +1,6 @@
 {
-  "name": "Veille",
-  "short_name": "Veille",
+  "name": "Vigie",
+  "short_name": "Vigie",
   "description": "Centre de contrôle personnel de l'information",
   "lang": "fr",
   "start_url": "./#/",

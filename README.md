@@ -1,4 +1,6 @@
-# Plateforme de veille
+# Vigie
+
+Plateforme personnelle de veille multi-domaines (anciennement « plateforme de veille »).
 
 Centre de contrôle personnel de l'information : un moteur commun (collecte, regroupement, fiabilité, importance, synthèse) et une configuration par veille.
 
