@@ -1,46 +1,46 @@
 # Équipes (type team). Les autres équipes de football sont générées depuis les classements publiés.
-- {id: team:psg, name: Paris Saint-Germain, aliases: [psg, "paris saint-germain", "paris sg"], universes: [sport], link_in: [sport]}
-- {id: team:om, name: Olympique de Marseille, aliases: ["=OM", "olympique de marseille", marseille], universes: [sport], link_in: [sport]}
-- {id: team:ol, name: Olympique lyonnais, aliases: ["=OL", "olympique lyonnais", "olympique lyon", lyon], universes: [sport], link_in: [sport]}
-- {id: team:monaco, name: AS Monaco, aliases: ["as monaco", "=Monaco"], universes: [sport], link_in: [sport]}
-- {id: team:lille, name: LOSC Lille, aliases: ["=LOSC", lille], universes: [sport], link_in: [sport]}
-- {id: team:lens, name: RC Lens, aliases: ["rc lens", "=Lens"], universes: [sport], link_in: [sport]}
-- {id: team:real-madrid, name: Real Madrid, aliases: ["real madrid"], universes: [sport], link_in: [sport]}
-- {id: team:fc-barcelone, name: FC Barcelone, aliases: [barça, barca, "fc barcelone", barcelone, barcelona], universes: [sport], link_in: [sport]}
-- {id: team:atletico-madrid, name: Atlético de Madrid, aliases: [atlético, atletico], universes: [sport], link_in: [sport]}
-- {id: team:manchester-city, name: Manchester City, aliases: ["manchester city", "man city"], universes: [sport], link_in: [sport]}
-- {id: team:manchester-united, name: Manchester United, aliases: ["manchester united", "man united", "man utd"], universes: [sport], link_in: [sport]}
-- {id: team:liverpool, name: Liverpool FC, aliases: [liverpool], universes: [sport], link_in: [sport]}
-- {id: team:arsenal, name: Arsenal, aliases: [arsenal], universes: [sport], link_in: [sport]}
-- {id: team:chelsea, name: Chelsea, aliases: [chelsea], universes: [sport], link_in: [sport]}
-- {id: team:tottenham, name: Tottenham Hotspur, aliases: [tottenham], universes: [sport], link_in: [sport]}
-- {id: team:bayern-munich, name: Bayern Munich, aliases: [bayern], universes: [sport], link_in: [sport]}
-- {id: team:dortmund, name: Borussia Dortmund, aliases: [dortmund], universes: [sport], link_in: [sport]}
-- {id: team:juventus, name: Juventus, aliases: [juventus, juve], universes: [sport], link_in: [sport]}
-- {id: team:inter-milan, name: Inter Milan, aliases: ["inter milan", "=Inter"], universes: [sport], link_in: [sport]}
-- {id: team:ac-milan, name: AC Milan, aliases: ["milan ac", "ac milan"], universes: [sport], link_in: [sport]}
-- {id: team:napoli, name: SSC Naples, aliases: [napoli, naples], universes: [sport], link_in: [sport]}
-- {id: team:equipe-de-france, name: Équipe de France, aliases: ["équipe de france", "les bleus", "les bleues", "=Bleus", "=Bleues"], universes: [sport], link_in: [sport]}
-- {id: team:lakers, name: Los Angeles Lakers, aliases: [lakers], universes: [sport], link_in: [sport]}
-- {id: team:celtics, name: Boston Celtics, aliases: [celtics], universes: [sport], link_in: [sport]}
-- {id: team:warriors, name: Golden State Warriors, aliases: [warriors], universes: [sport], link_in: [sport]}
-- {id: team:knicks, name: New York Knicks, aliases: [knicks], universes: [sport], link_in: [sport]}
-- {id: team:thunder, name: Oklahoma City Thunder, aliases: [thunder, "oklahoma city"], universes: [sport], link_in: [sport]}
-- {id: team:spurs, name: San Antonio Spurs, aliases: ["san antonio spurs", "san antonio", "=Spurs"], universes: [sport], link_in: [sport]}
-- {id: team:nuggets, name: Denver Nuggets, aliases: [nuggets], universes: [sport], link_in: [sport]}
-- {id: team:bucks, name: Milwaukee Bucks, aliases: [bucks], universes: [sport], link_in: [sport]}
-- {id: team:miami-heat, name: Miami Heat, aliases: ["miami heat"], universes: [sport], link_in: [sport]}
-- {id: team:mavericks, name: Dallas Mavericks, aliases: [mavericks, mavs], universes: [sport], link_in: [sport]}
-- {id: team:timberwolves, name: Minnesota Timberwolves, aliases: [timberwolves, wolves], universes: [sport], link_in: [sport]}
-- {id: team:cavaliers, name: Cleveland Cavaliers, aliases: [cavaliers, cavs], universes: [sport], link_in: [sport]}
-- {id: team:mercedes-f1, name: Mercedes (F1), aliases: ["=Mercedes"], universes: [sport], link_in: [sport]}
-- {id: team:ferrari, name: Ferrari (F1), aliases: [ferrari, scuderia], universes: [sport], link_in: [sport]}
-- {id: team:red-bull-racing, name: Red Bull Racing, aliases: ["red bull"], universes: [sport], link_in: [sport]}
-- {id: team:racing-bulls, name: Racing Bulls, aliases: ["racing bulls"], universes: [sport], link_in: [sport]}
-- {id: team:mclaren, name: McLaren, aliases: [mclaren], universes: [sport], link_in: [sport]}
-- {id: team:aston-martin, name: Aston Martin (F1), aliases: ["aston martin"], universes: [sport], link_in: [sport]}
-- {id: team:alpine-f1, name: Alpine (F1), aliases: ["=Alpine"], universes: [sport], link_in: [sport]}
-- {id: team:williams, name: Williams, aliases: ["=Williams"], universes: [sport], link_in: [sport]}
-- {id: team:audi-f1, name: Audi (F1), aliases: ["=Audi", sauber], universes: [sport], link_in: [sport]}
-- {id: team:cadillac-f1, name: Cadillac (F1), aliases: ["=Cadillac"], universes: [sport], link_in: [sport]}
-- {id: team:haas, name: Haas, aliases: ["=Haas"], universes: [sport], link_in: [sport]}
+- {id: team:psg, wikidata: Q483020, name: Paris Saint-Germain, aliases: [psg, "paris saint-germain", "paris sg"], universes: [sport], link_in: [sport]}
+- {id: team:om, wikidata: Q132885, name: Olympique de Marseille, aliases: ["=OM", "olympique de marseille", marseille], universes: [sport], link_in: [sport]}
+- {id: team:ol, wikidata: Q704, name: Olympique lyonnais, aliases: ["=OL", "olympique lyonnais", "olympique lyon", lyon], universes: [sport], link_in: [sport]}
+- {id: team:monaco, wikidata: Q180305, name: AS Monaco, aliases: ["as monaco", "=Monaco"], universes: [sport], link_in: [sport]}
+- {id: team:lille, wikidata: Q19516, name: LOSC Lille, aliases: ["=LOSC", lille], universes: [sport], link_in: [sport]}
+- {id: team:lens, wikidata: Q191843, name: RC Lens, aliases: ["rc lens", "=Lens"], universes: [sport], link_in: [sport]}
+- {id: team:real-madrid, wikidata: Q8682, name: Real Madrid, aliases: ["real madrid"], universes: [sport], link_in: [sport]}
+- {id: team:fc-barcelone, wikidata: Q7156, name: FC Barcelone, aliases: [barça, barca, "fc barcelone", barcelone, barcelona], universes: [sport], link_in: [sport]}
+- {id: team:atletico-madrid, wikidata: Q8701, name: Atlético de Madrid, aliases: [atlético, atletico], universes: [sport], link_in: [sport]}
+- {id: team:manchester-city, wikidata: Q50602, name: Manchester City, aliases: ["manchester city", "man city"], universes: [sport], link_in: [sport]}
+- {id: team:manchester-united, wikidata: Q18656, name: Manchester United, aliases: ["manchester united", "man united", "man utd"], universes: [sport], link_in: [sport]}
+- {id: team:liverpool, wikidata: Q1130849, name: Liverpool FC, aliases: [liverpool], universes: [sport], link_in: [sport]}
+- {id: team:arsenal, wikidata: Q9617, name: Arsenal, aliases: [arsenal], universes: [sport], link_in: [sport]}
+- {id: team:chelsea, wikidata: Q9616, name: Chelsea, aliases: [chelsea], universes: [sport], link_in: [sport]}
+- {id: team:tottenham, wikidata: Q18741, name: Tottenham Hotspur, aliases: [tottenham], universes: [sport], link_in: [sport]}
+- {id: team:bayern-munich, wikidata: Q15789, name: Bayern Munich, aliases: [bayern], universes: [sport], link_in: [sport]}
+- {id: team:dortmund, wikidata: Q41420, name: Borussia Dortmund, aliases: [dortmund], universes: [sport], link_in: [sport]}
+- {id: team:juventus, wikidata: Q1422, name: Juventus, aliases: [juventus, juve], universes: [sport], link_in: [sport]}
+- {id: team:inter-milan, wikidata: Q631, name: Inter Milan, aliases: ["inter milan", "=Inter"], universes: [sport], link_in: [sport]}
+- {id: team:ac-milan, wikidata: Q1543, name: AC Milan, aliases: ["milan ac", "ac milan"], universes: [sport], link_in: [sport]}
+- {id: team:napoli, wikidata: Q2641, name: SSC Naples, aliases: [napoli, naples], universes: [sport], link_in: [sport]}
+- {id: team:equipe-de-france, wikidata: Q47774, name: Équipe de France, aliases: ["équipe de france", "les bleus", "les bleues", "=Bleus", "=Bleues"], universes: [sport], link_in: [sport]}
+- {id: team:lakers, wikidata: Q121783, name: Los Angeles Lakers, aliases: [lakers], universes: [sport], link_in: [sport]}
+- {id: team:celtics, wikidata: Q131371, name: Boston Celtics, aliases: [celtics], universes: [sport], link_in: [sport]}
+- {id: team:warriors, wikidata: Q157376, name: Golden State Warriors, aliases: [warriors], universes: [sport], link_in: [sport]}
+- {id: team:knicks, wikidata: Q131364, name: New York Knicks, aliases: [knicks], universes: [sport], link_in: [sport]}
+- {id: team:thunder, wikidata: Q180950, name: Oklahoma City Thunder, aliases: [thunder, "oklahoma city"], universes: [sport], link_in: [sport]}
+- {id: team:spurs, wikidata: Q159729, name: San Antonio Spurs, aliases: ["san antonio spurs", "san antonio", "=Spurs"], universes: [sport], link_in: [sport]}
+- {id: team:nuggets, wikidata: Q162954, name: Denver Nuggets, aliases: [nuggets], universes: [sport], link_in: [sport]}
+- {id: team:bucks, wikidata: Q169637, name: Milwaukee Bucks, aliases: [bucks], universes: [sport], link_in: [sport]}
+- {id: team:miami-heat, wikidata: Q169138, name: Miami Heat, aliases: ["miami heat"], universes: [sport], link_in: [sport]}
+- {id: team:mavericks, wikidata: Q132893, name: Dallas Mavericks, aliases: [mavericks, mavs], universes: [sport], link_in: [sport]}
+- {id: team:timberwolves, wikidata: Q170558, name: Minnesota Timberwolves, aliases: [timberwolves, wolves], universes: [sport], link_in: [sport]}
+- {id: team:cavaliers, wikidata: Q162990, name: Cleveland Cavaliers, aliases: [cavaliers, cavs], universes: [sport], link_in: [sport]}
+- {id: team:mercedes-f1, wikidata: Q172721, name: Mercedes (F1), aliases: ["=Mercedes"], universes: [sport], link_in: [sport]}
+- {id: team:ferrari, wikidata: Q169898, name: Ferrari (F1), aliases: [ferrari, scuderia], universes: [sport], link_in: [sport]}
+- {id: team:red-bull-racing, wikidata: Q173663, name: Red Bull Racing, aliases: ["red bull"], universes: [sport], link_in: [sport]}
+- {id: team:racing-bulls, wikidata: Q124350606, name: Racing Bulls, aliases: ["racing bulls"], universes: [sport], link_in: [sport]}
+- {id: team:mclaren, wikidata: Q172030, name: McLaren, aliases: [mclaren], universes: [sport], link_in: [sport]}
+- {id: team:aston-martin, wikidata: Q104620704, name: Aston Martin (F1), aliases: ["aston martin"], universes: [sport], link_in: [sport]}
+- {id: team:alpine-f1, wikidata: Q98930155, name: Alpine (F1), aliases: ["=Alpine"], universes: [sport], link_in: [sport]}
+- {id: team:williams, wikidata: Q171337, name: Williams, aliases: ["=Williams"], universes: [sport], link_in: [sport]}
+- {id: team:audi-f1, wikidata: Q120756696, name: Audi (F1), aliases: ["=Audi", sauber], universes: [sport], link_in: [sport]}
+- {id: team:cadillac-f1, wikidata: Q131323328, name: Cadillac (F1), aliases: ["=Cadillac"], universes: [sport], link_in: [sport]}
+- {id: team:haas, wikidata: Q16300222, name: Haas, aliases: ["=Haas"], universes: [sport], link_in: [sport]}
