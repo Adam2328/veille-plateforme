@@ -27,9 +27,9 @@ Usage visé : coups d'œil de 2 à 5 minutes plusieurs fois par jour, surtout su
 
 ## 3. Ce qui est conservé / supprimé / refactorisé
 
-Conservé : collecte des 147 sources, `normalize`, `cluster`/`merge_events`, `reliability`, `score`, `summarize` (couches Faits/Analyse/Interprétation/Incertitude), `store` (historique jsonl), connecteurs football-data, Jolpica F1, relais de cours, agenda, alertes ntfy ; côté site : état « depuis ma dernière visite », suivis, garde contre les rendus périmés, PWA, service worker.
+Conservé : collecte des 147 sources, `normalize`, `cluster`/`merge_events`, `reliability`, `score`, `summarize` (couches Faits/Analyse/Interprétation/Incertitude), `store` (historique jsonl), connecteurs football-data, Jolpica F1, relais de cours, agenda, alertes ntfy, dictionnaires `entities` des rubriques (score et filtre de pertinence calibrés ; le catalogue les couvre tous) ; côté site : état « depuis ma dernière visite », suivis, garde contre les rendus périmés, PWA, service worker.
 
-Supprimé : navigation par 9 rubriques, dictionnaires `entities` par rubrique (migrés dans le catalogue), `app.css` et la mise en page actuelle, cartes « À connaître » sous leur forme actuelle (deviennent contenu de fiche), rubrique « Sport, l'essentiel » comme page (fondue dans l'accueil Sport).
+Supprimé : navigation par 9 rubriques, `app.css` et la mise en page actuelle, cartes « À connaître » sous leur forme actuelle (deviennent contenu de fiche), rubrique « Sport, l'essentiel » comme page (fondue dans l'accueil Sport).
 
 Refactorisé : `render.js` découpé en vues et composants ; `enrich.extract_entities` renvoie des identifiants d'entités ; `publish` produit fiches entités et graphe ; `search` indexe entités + événements.
 
@@ -75,7 +75,7 @@ Un sous-thème est un filtre (types d'événement ou types d'entités) ; il ne c
   universes: [finance, ia]
 ```
 
-Types : `company, country, org, person, etf, crypto, rate, commodity, sector, tech, ai_model, central_bank, team, player, driver, competition, topic`. Identifiant `type:slug`, unique. Ajouter un type = ajouter un fichier et un gabarit de fiche.
+Types : `company, country, org, person, etf, crypto, index, rate, commodity, sector, tech, ai_model, central_bank, team, player, driver, competition, topic`. Identifiant `type:slug`, unique. Ajouter un type = ajouter un fichier et un gabarit de fiche.
 
 Amorce rédigée (~400) : ~60 entreprises, ~40 pays, ~25 organisations, ~40 personnes, ~20 ETF, ~15 crypto, ~30 labos/modèles IA, ~30 technologies/sujets, ~20 matières premières/taux. Les 160 entrées des dictionnaires actuels y sont migrées.
 Générées automatiquement : équipes et joueurs (football-data), pilotes et écuries (Jolpica).
@@ -108,6 +108,7 @@ Vocabulaire fixe, chaque verbe a un libellé dans les deux sens :
 | joue_pour | joue pour | effectif |
 | participe | participe à | participants |
 | investit | investit dans | financé par |
+| secteur | appartient au secteur | regroupe |
 | voisin | frontalier de | frontalier de |
 
 Sources : `config/relations.yml` (triplets rédigés), faits Wikidata (appartenances, dirigeants), données sportives (effectifs), et **co-occurrence** : deux entités présentes ensemble dans ≥ 3 événements sur 30 jours → lien `lie_a` pondéré, recalculé à chaque cycle.
@@ -135,13 +136,13 @@ site/data/home.json                 aujourd'hui + bandeau
 site/data/universes/<id>.json       page univers : chaud, sous-thèmes, blocs de données
 site/data/entities/index.json       id, nom, type, alias, univers (recherche + pastilles)
 site/data/entities/<type>/<slug>.json  fiche : faits, données, relations, événements récents (30 j)
-site/data/graph.json                arêtes (source, verbe, cible, poids, origine)
+site/data/band.json                 bandeau Vigie (nouveautés, agenda, matchs, Grand Prix, marchés)
 site/data/markets.json              tableau Marchés (remplace quotes.json)
 site/data/search.json               événements 30 j (existant)
 football.json, f1.json, health.json (existants)
 ```
 
-Les événements gagnent `entities: [ids]`, `concerned: [[ids…]]`, `universe`, `title_fr` (niveaux 1-2) et `image` (URL de la photo de l'article, si fournie). Les éléments collectés gagnent `image`.
+Les événements gagnent `entity_ids: [ids]` (le champ `entities` garde les noms), `concerned: [[ids…]]`, `universe`, `title_fr` (niveaux 1-2) et `image` (URL de la photo de l'article, si fournie). Les éléments collectés gagnent `image`.
 
 ## 8. Pages et adresses
 
@@ -216,7 +217,7 @@ Limites assumées : pas de chiffres trimestriels pour les entreprises non améri
 
 Un univers après l'autre, après un socle commun. Chaque lot est mis en production à sa fin, a sa propre section détaillée ajoutée à cette spec puis son propre plan d'implémentation.
 
-1. **Socle** : univers, catalogue + faits Wikidata, rattachement, relations, « Concernés », sélection du jour, traduction des titres, images, nouvelles pages (Aujourd'hui, univers, fiche entité générique, événement), pastilles et panneau d'aperçu, bandeau Vigie, recherche par catégorie, identité visuelle A, thème, redirections. Les quatre univers y sont au même niveau.
+1. **Socle**, en deux parties : A (données, faite et mesurée le 2026-09-27, voir `docs/superpowers/measurements/lot-1a.md`) puis B (interface) : univers, catalogue + faits Wikidata, rattachement, relations, « Concernés », sélection du jour, traduction des titres, images, nouvelles pages (Aujourd'hui, univers, fiche entité générique, événement), pastilles et panneau d'aperçu, bandeau Vigie, recherche par catégorie, identité visuelle A, thème, redirections. Les quatre univers y sont au même niveau.
 2. **Sport** : essai des sources puis §11.
 3. à 5. **Géopolitique, Finance, IA** : ordre choisi par l'utilisateur à la fin du lot Sport.
 
