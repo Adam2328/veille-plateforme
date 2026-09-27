@@ -1,3 +1,4 @@
+import re
 from collections.abc import Callable
 from datetime import datetime, timezone
 
@@ -20,6 +21,24 @@ def _entry_time(entry: dict) -> datetime:
     return datetime(*t[:6], tzinfo=timezone.utc) if t else now_utc()
 
 
+_IMG = re.compile(r"""<img[^>]+src=["']([^"']+)["']""", re.IGNORECASE)
+
+
+def _image(entry: dict) -> str | None:
+    """Photo de l'article : media:content ou media:thumbnail, pièce jointe image, sinon première balise <img>."""
+    for key in ("media_content", "media_thumbnail"):
+        for m in entry.get(key) or []:
+            url = m.get("url")
+            if url and (key == "media_thumbnail" or m.get("medium") == "image"
+                        or str(m.get("type", "")).startswith("image/")):
+                return url
+    for enc in entry.get("enclosures") or []:
+        if str(enc.get("type", "")).startswith("image/") and enc.get("href"):
+            return enc["href"]
+    m = _IMG.search(entry.get("summary", "") or "")
+    return m.group(1) if m else None
+
+
 def collect_rss(source: dict, fetch: Callable[[str], bytes] = fetch_bytes, limit: int = 30) -> tuple[list, dict]:
     try:
         feed = feedparser.parse(fetch(source["url"]))
@@ -30,7 +49,7 @@ def collect_rss(source: dict, fetch: Callable[[str], bytes] = fetch_bytes, limit
             if not e.get("link") or not e.get("title"):
                 continue
             raw = {"title": e["title"], "url": e["link"], "snippet": e.get("summary", ""),
-                   "published_at": iso(_entry_time(e))}
+                   "published_at": iso(_entry_time(e)), "image": _image(e)}
             if source.get("publisher_suffix"):
                 head, sep, pub = raw["title"].rpartition(" - ")
                 if sep:

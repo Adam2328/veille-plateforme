@@ -69,3 +69,13 @@ def test_excluded_also_matches_the_url():
     tag_page = {**mk_item("a", "Real Madrid"), "url": "https://rmcsport.bfmtv.com/football/liga/real-madrid_DN-202304140701.html"}
     assert excluded(tag_page, ["_dn-"]) is True
     assert excluded(mk_item("b", "Real Madrid gagne"), ["_dn-"]) is False
+
+
+def test_only_https_images_are_kept():
+    source = {"id": "s", "name": "S", "tier": 2, "domain": "ia"}
+    base = {"title": "T", "url": "https://ex.com/1", "published_at": "2026-09-26T10:00:00+00:00"}
+    assert normalize({**base, "image": "https://i.ex.com/x.jpg"}, source)["image"] == "https://i.ex.com/x.jpg"
+    assert "image" not in normalize({**base, "image": "http://i.ex.com/x.jpg"}, source)
+    assert "image" not in normalize({**base, "image": "javascript:alert(1)"}, source)
+    assert "image" not in normalize({**base, "image": "https://i.ex.com/" + "x" * 600}, source)
+    assert "image" not in normalize(base, source)
