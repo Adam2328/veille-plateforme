@@ -109,3 +109,5 @@ sources:                                # flux testés le 26/09/2026 ; Eurosport
   - {id: gn-champions, name: "Google Actualités : Ligue des champions", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=Ligue+des+champions+OR+Champions+League+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
   - {id: gn-bleus, name: "Google Actualités : équipe de France", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=%C3%A9quipe+de+France+football+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
   - {id: gn-feminin, name: "Google Actualités : football féminin", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=football+f%C3%A9minin+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
+
+alert_kinds: [transfer, injury, competition]          # types qui peuvent déclencher une alerte (voir alerts dans global.yml)

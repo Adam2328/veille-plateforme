@@ -50,3 +50,5 @@ sources:                                # flux testés le 27/09/2026 ; FFVolley,
   - {id: worldofvolley, name: "World of Volley", tier: 3, origin: world of volley, type: rss, url: "https://www.worldofvolley.com/rss"}
   - {id: gn-volley-fr, name: "Google Actualités : volley, équipe de France", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=volley+%C3%A9quipe+de+France+when:3d&hl=fr&gl=FR&ceid=FR:fr"}
   - {id: gn-volley-intl, name: "Google Actualités : volley international", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=volleyball+nations+league+OR+world+championship+OR+EuroVolley+when:3d&hl=en-US&gl=US&ceid=US:en"}
+
+alert_kinds: [major_event]          # types qui peuvent déclencher une alerte (voir alerts dans global.yml)

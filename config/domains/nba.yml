@@ -115,3 +115,5 @@ sources:                                # flux testés le 27/09/2026 ; balldontl
   - {id: guardian-nba, name: "The Guardian (NBA)", tier: 2, origin: the guardian, type: rss, url: "https://www.theguardian.com/sport/nba/rss"}
   - {id: bbc-basket, name: "BBC Sport (basketball)", tier: 2, origin: bbc sport, type: rss, url: "https://feeds.bbci.co.uk/sport/basketball/rss.xml"}
   - {id: gn-nba, name: "Google Actualités : NBA", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=NBA+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
+
+alert_kinds: [result]          # types qui peuvent déclencher une alerte (voir alerts dans global.yml)

@@ -94,3 +94,5 @@ sources:                                # flux testés le 26/09/2026 ; Les Echos
   - {id: gn-matieres, name: "Google Actualités : matières premières", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=oil+OR+OPEC+OR+gold+prices+when:1d&hl=en-US&gl=US&ceid=US:en"}
   - {id: gn-taux, name: "Google Actualités : taux obligataires", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=Treasury+yields+OR+Bund+OR+OAT+when:1d&hl=en-US&gl=US&ceid=US:en"}
   - {id: gn-bourse-fr, name: "Google Actualités : Bourse de Paris", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=CAC+40+bourse+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
+
+alert_kinds: [central_bank]          # types qui peuvent déclencher une alerte (voir alerts dans global.yml)

@@ -6,7 +6,10 @@ from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
 
+import requests
+
 from .agenda import fetch_points
+from .alerts import prune_sent, select_alerts, send_ntfy
 from .cluster import cluster, merge_events
 from .collect import collect_source, fetch_bytes
 from .config import ROOT, load_config
@@ -94,20 +97,47 @@ def _import_agendas(cfg: dict, only: list[str] | None, fetch_agenda: Callable[[s
     return agendas
 
 
+def _send_alerts(root: Path, cfg: dict, by_domain: dict, now: datetime, topic: str,
+                 post: Callable[..., object], health: list) -> int:
+    path = root / "data" / "alerts.json"
+    sent = prune_sent(_read_json(path) or {}, now)
+    events = [e for evs in by_domain.values() for e in evs]
+    count, error = 0, None
+    for e in select_alerts(events, cfg["domains"], cfg["global"], sent, now):
+        try:
+            send_ntfy(topic, e, cfg["domains"][e["domain"]], cfg["global"], post)
+            sent[e["id"]] = iso(now)       # enregistré seulement si l'envoi a réussi : sinon, nouvel essai au cycle suivant
+            count += 1
+        except Exception as exc:  # ntfy injoignable : ne doit jamais arrêter le cycle
+            error = f"{type(exc).__name__}: {exc}"
+    health.append({"source": "alerts:ntfy", "ok": error is None, "count": count, "error": error})
+    write_if_changed(path, sent)
+    return count
+
+
+def _read_json(path: Path) -> dict | None:
+    try:
+        return json.loads(path.read_text("utf-8")) if path.exists() else None
+    except ValueError:
+        return None
+
+
 def run(root: Path = ROOT, now: datetime | None = None, only: list[str] | None = None,
         call: Callable[[str], str] | None = None, fetch: Callable[[str], bytes] = fetch_bytes,
         quote_fetch: Callable[[str], dict] = fetch_relay,
         agenda_fetch: Callable[[str], list[str]] = fetch_points,
         football_token: str | None = None,
         football_fetch: Callable[[str, str], dict] = fetch_fd,
-        f1_fetch: Callable[[str], dict] = fetch_f1) -> dict:
+        f1_fetch: Callable[[str], dict] = fetch_f1,
+        ntfy_topic: str | None = None,
+        ntfy_post: Callable[..., object] = requests.post) -> dict:
     now = now or now_utc()
     cfg = load_config(root)
     g = cfg["global"]
     stored = load_recent(root, now)
     report = {"collected": 0, "new_items": 0, "events": {"1": 0, "2": 0, "3": 0}, "reliability": {},
               "ai": {"llm": 0, "extractif": 0, "errors": []}, "quotes": {"ok": 0, "failed": 0},
-              "football": {"ok": 0, "failed": 0}, "f1": {"ok": 0, "failed": 0}, "sources_failed": []}
+              "football": {"ok": 0, "failed": 0}, "f1": {"ok": 0, "failed": 0}, "alerts": 0, "sources_failed": []}
     health, by_domain = [], {}
     for dom in sorted(cfg["domains"].values(), key=lambda d: d["order"]):
         mine = [e for e in stored if e["domain"] == dom["id"]]
@@ -151,6 +181,8 @@ def run(root: Path = ROOT, now: datetime | None = None, only: list[str] | None =
             publish_football(root, data)
         health += fhealth
         report["football"] = {"ok": sum(h["ok"] for h in fhealth), "failed": sum(not h["ok"] for h in fhealth)}
+    if ntfy_topic and g.get("alerts"):
+        report["alerts"] = _send_alerts(root, cfg, by_domain, now, ntfy_topic, ntfy_post, health)
     report["sources_failed"] = [h["source"] for h in health if not h["ok"]]
     write_if_changed(root / "site" / "data" / "health.json",
                      {"checked_at": iso(now), "sources": health, "ai": report["ai"]}, now, max_age_min=55)
@@ -169,7 +201,8 @@ def main() -> None:
     ap.add_argument("--no-ai", action="store_true", help="résumés extractifs uniquement")
     args = ap.parse_args()
     call = gemini_call() if os.environ.get("GEMINI_API_KEY") and not args.no_ai else None
-    report = run(only=args.only, call=call, football_token=os.environ.get("FOOTBALL_DATA_TOKEN"))
+    report = run(only=args.only, call=call, football_token=os.environ.get("FOOTBALL_DATA_TOKEN"),
+                 ntfy_topic=os.environ.get("NTFY_TOPIC"))
     print(json.dumps(report, ensure_ascii=False, indent=2))
 
 

@@ -76,3 +76,5 @@ sources:                                # flux testés le 27/09/2026 ; OTAN (404
   - {id: foreign-affairs, name: "Foreign Affairs", tier: 3, origin: foreign affairs, type: rss, url: "https://www.foreignaffairs.com/rss.xml"}
   - {id: crisis-group, name: "International Crisis Group", tier: 3, origin: crisis group, type: rss, url: "https://www.crisisgroup.org/rss.xml"}
   - {id: gn-geo, name: "Google Actualités : diplomatie et géopolitique", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=g%C3%A9opolitique+OR+diplomatie+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
+
+alert_kinds: [conflict, sanctions, election]          # types qui peuvent déclencher une alerte (voir alerts dans global.yml)

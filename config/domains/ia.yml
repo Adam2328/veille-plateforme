@@ -54,3 +54,5 @@ sources:
   - {id: gn-xai, name: "Google Actualités : xAI", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=xAI+Grok+when:1d&hl=en-US&gl=US&ceid=US:en"}
   - {id: gn-meta, name: "Google Actualités : Meta AI", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=Meta+AI+Llama+when:1d&hl=en-US&gl=US&ceid=US:en"}
   - {id: gn-ia-fr, name: "Google Actualités : IA (FR)", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=intelligence+artificielle+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
+
+alert_kinds: [model_release, regulation]          # types qui peuvent déclencher une alerte (voir alerts dans global.yml)

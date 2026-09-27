@@ -91,3 +91,7 @@ publishers:              # tier attribué aux éditeurs repérés dans les agré
   basket usa: 3
   the athletic: 2
   yahoo sports: 3
+alerts:                  # rares et justifiées : niveau 1, officiel ou confirmé, type listé par veille (alert_kinds), score >= l1 + 10 (ou alert_min)
+  max_per_day: 3
+  recent_hours: 6        # jamais d'alerte sur un événement détecté il y a plus de 6 h
+  site_url: "https://veille-plateforme.vercel.app/"

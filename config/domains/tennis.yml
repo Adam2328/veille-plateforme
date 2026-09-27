@@ -76,3 +76,5 @@ sources:                                # flux testés le 27/09/2026 ; ATP (403)
   - {id: guardian-tennis, name: "The Guardian (tennis)", tier: 2, origin: the guardian, type: rss, url: "https://www.theguardian.com/sport/tennis/rss"}
   - {id: tennismajors, name: "Tennis Majors", tier: 3, origin: tennis majors, type: rss, url: "https://www.tennismajors.com/feed"}
   - {id: gn-tennis, name: "Google Actualités : tennis", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=tennis+ATP+OR+WTA+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
+
+alert_kinds: [grand_slam]          # types qui peuvent déclencher une alerte (voir alerts dans global.yml)

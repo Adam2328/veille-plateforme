@@ -48,3 +48,5 @@ sources:                                # flux testés le 27/09/2026
   - {id: rmc-hiver, name: "RMC Sport (sports d'hiver)", tier: 2, origin: rmc sport, type: rss, url: "https://rmcsport.bfmtv.com/rss/sports-d-hiver/"}
   - {id: bbc-sport, name: "BBC Sport", tier: 2, origin: bbc sport, type: rss, url: "https://feeds.bbci.co.uk/sport/rss.xml"}
   - {id: gn-champion, name: "Google Actualités : champions et records", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=%22champion+du+monde%22+OR+%22record+du+monde%22+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
+
+alert_kinds: [world_title, record]          # types qui peuvent déclencher une alerte (voir alerts dans global.yml)
