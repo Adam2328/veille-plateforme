@@ -1,6 +1,6 @@
 # Vigie 2 — poste d'observation personnel de l'information
 
-Statut : validé en conversation le 2026-09-27 (socle, identité visuelle A, Finance, clé FRED).
+Statut : validé en conversation le 2026-09-27 (socle, identité visuelle A, esquisse Finance, clé FRED), puis précisé par questionnaire (usage, accueil, lecture, langue, univers, ordre des lots).
 Remplace la navigation de la spec du 2026-09-26 ; le moteur de cette spec (collecte → regroupement → fiabilité → score → résumé → publication) reste la base.
 
 ## 1. But
@@ -8,6 +8,10 @@ Remplace la navigation de la spec du 2026-09-26 ; le moteur de cette spec (colle
 Passer d'un agrégateur par rubriques à un système de veille où chaque information est reliée à des **entités** (entreprise, pays, joueur, ETF, modèle d'IA…) et où l'on peut **explorer** : événement → entité → autres événements → entités voisines → autre univers.
 
 Principe : Observer → Détecter → Comprendre → Explorer. Critère de réussite : en ouvrant Vigie, « voici ce que je dois savoir aujourd'hui », puis pouvoir comprendre pourquoi et aller plus loin en un ou deux gestes.
+
+Les quatre univers ont **la même importance** : aucun n'est prioritaire, chacun reçoit le même niveau de soin.
+
+Usage visé : coups d'œil de 2 à 5 minutes plusieurs fois par jour, surtout sur téléphone, et de temps en temps une séance d'exploration de 20 à 30 minutes.
 
 ## 2. Contraintes globales
 
@@ -50,12 +54,12 @@ subthemes:
 
 Un sous-thème est un filtre (types d'événement ou types d'entités) ; il ne crée pas de collecte.
 
-| Univers | Rubriques | Quota « aujourd'hui » (défaut) |
+| Univers | Rubriques | Angles prioritaires |
 |---|---|---|
-| Sport | football, tennis, nba, f1, volley, sport-essentiel, rugby (nouvelle) | 3 |
-| Géopolitique | geopolitique | 5 |
-| Finance & Marchés | finance | 7 |
-| IA | ia | 4 |
+| Sport | football, tennis, f1 (couverture riche) ; nba, volley, rugby (nouvelle), sport-essentiel (actualités seulement) | d'abord les équipes, joueurs et compétitions suivis |
+| Géopolitique | geopolitique | grandes puissances, conflits en cours, France et Europe, économie et ressources |
+| Finance & Marchés | finance | investisseur long terme : tendances de fond, résultats, stratégie, macro, ETF |
+| IA | ia | produits et modèles, business et argent, infrastructure, société et régulation |
 
 ## 5. Entités et relations
 
@@ -114,7 +118,15 @@ Pour chaque événement de niveau 1 ou 2 : parcours en largeur sur 2 sauts maxim
 
 ## 6. Sélection « Ce qu'il faut savoir aujourd'hui »
 
-Score du jour = importance + bonus nouveauté (< 24 h) + bonus évolution (révision récente avec nouvelles sources) ; bonus suivis appliqué côté navigateur. Quotas par univers (§4). Diversité : au plus 2 événements par entité dominante. Les réglages sont dans `config/global.yml` (`today:`).
+Score du jour = importance + bonus nouveauté (< 24 h) + bonus évolution (révision récente avec nouvelles sources) ; bonus suivis appliqué côté navigateur.
+
+Répartition : **plancher de 3 événements par univers**, puis les places restantes (total visé 16 à 20) vont aux meilleurs scores du jour, tous univers confondus ; un univers peut donc prendre plus de place un jour de forte actualité. Diversité : au plus 2 événements par entité dominante. Réglages dans `config/global.yml` (`today: {floor: 3, total: 18}`).
+
+Ordre des bandes : fixe, **Finance · IA · Géopolitique · Sport** par défaut, modifiable dans le site (préférence gardée dans le navigateur).
+
+Suivis : bouton « suivre » sur toute entité (comme aujourd'hui) ; pas de liste personnelle à gérer.
+
+Nouveau depuis la dernière visite : point ambre sur les événements nouveaux ou mis à jour + compteur en tête (« 7 nouveaux depuis 8 h 12 »). Pas de section dédiée.
 
 ## 7. Données publiées
 
@@ -129,7 +141,7 @@ site/data/search.json               événements 30 j (existant)
 football.json, f1.json, health.json (existants)
 ```
 
-Les événements gagnent `entities: [ids]`, `concerned: [[ids…]]`, `universe`.
+Les événements gagnent `entities: [ids]`, `concerned: [[ids…]]`, `universe`, `title_fr` (niveaux 1-2) et `image` (URL de la photo de l'article, si fournie). Les éléments collectés gagnent `image`.
 
 ## 8. Pages et adresses
 
@@ -145,7 +157,10 @@ Les événements gagnent `entities: [ids]`, `concerned: [[ids…]]`, `universe`.
 
 ## 9. Identité visuelle (direction A « Poste d'observation »)
 
-- Sombre bleu nuit par défaut, variante claire selon le système. Un seul accent ambre, réservé au signal (nouveau, important, alerte).
+- Thème sombre bleu nuit ou clair selon le réglage de l'appareil, avec un bouton pour forcer l'un ou l'autre (choix gardé dans le navigateur). Un seul accent ambre, réservé au signal (nouveau, important, alerte).
+- **Tout en français** : titres et résumés traduits si la source est étrangère, lien vers l'article original. La traduction du titre est faite dans l'appel Gemini de résumé existant (niveaux 1 et 2) ; les événements de niveau 3, sans résumé, gardent leur titre d'origine (limite du quota gratuit).
+- **Lecture courte puis dépliée** : un événement montre d'abord 2 à 3 phrases (ce qui s'est passé, pourquoi c'est important) ; un geste déplie l'analyse, le contexte, la chronologie, les Concernés.
+- **Images** : photo de l'article source quand le flux en fournit une (champ `image` des éléments collectés), sinon logo, drapeau ou photo de l'entité principale ; graphiques et mini-cartes en plus.
 - Couleurs d'univers en filets et points, jamais en aplats : Sport vert, Géopolitique brique, Finance bleu acier, IA violet.
 - Typographies : titres en Newsreader, données en IBM Plex Mono, texte en sans-serif système. Deux polices Google Fonts, pas plus.
 - Accueil : quatre bandes éditoriales (une info principale en grand + lignes compactes), pas de grille de cartes. Colonne « Radar » (suivis, entités en hausse) sur grand écran.
@@ -156,7 +171,9 @@ Les événements gagnent `entities: [ids]`, `concerned: [[ids…]]`, `universe`.
 - **Bandeau Vigie** : une ligne en haut, défilement lent, pause au survol/toucher, segments marqués de la couleur de l'univers (marchés, matchs du jour, agenda, alertes, nouveautés).
 - Mouvement utile uniquement : transitions 150 ms, glissement des panneaux, marqueur « nouveau » qui s'allume brièvement, mini-graphiques réactifs au survol ; tout coupé sous `prefers-reduced-motion`.
 
-## 10. Finance & Marchés (détaillé)
+## 10. Finance & Marchés (esquisse validée, détaillée avant son lot comme les autres univers)
+
+Angle : investisseur long terme. Les tendances de fond, résultats, stratégie, macro et ETF passent avant les mouvements de court terme.
 
 Page univers :
 1. **Chaud (24 h)** : événements Finance de niveau 1-2 + événements des autres univers dont une chaîne « Concernés » atteint une entité cotée ; chaque actif concerné montre sa variation du jour. Couches Faits/Analyse/Interprétation/Incertitude conservées.
@@ -189,18 +206,16 @@ Limites assumées : pas de chiffres trimestriels pour les entreprises non améri
 ## 11. Géopolitique, Sport, IA (grandes lignes, détaillés avant leur lot)
 
 - **Géopolitique** : fiches pays (drapeau, capitale, population, dirigeant, régime, monnaie, PIB, appartenances, partenaires, sujets en cours, actualités), organisations, personnes ; sujets suivis dans le temps (`topic`) avec chronologie ; ponts vers Finance via `expose` (pays → matières premières → secteurs → entreprises/ETF).
-- **Sport** : accueil (aujourd'hui, à venir, résultats, compétitions, actualités), fiches match avant/après, équipes, joueurs, rugby. Préalable : essai des offres gratuites (football-data, API-Football, TheSportsDB, balldontlie) pour savoir quelles données de match (compositions, buteurs, cartons, statistiques) sont réellement accessibles ; la fiche après match sera limitée à ce que ces sources fournissent. Pas de données tennis structurées gratuites connues : actualités + liens Flashscore.
+- **Sport** : accueil centré d'abord sur les équipes, joueurs et compétitions suivis, puis aujourd'hui, à venir, résultats, actualités. Couverture riche pour football, tennis et F1 (fiches match avant/après, équipes, joueurs, pilotes, classements) ; NBA, rugby et volley en actualités et entités simples. Préalable : essai des offres gratuites (football-data, API-Football, TheSportsDB, sources tennis) pour savoir quelles données de match (compositions, buteurs, cartons, statistiques, tableaux de tournoi) sont réellement accessibles ; les fiches seront limitées à ce que ces sources fournissent. À défaut de données tennis structurées gratuites : actualités, fiches joueurs, liens Flashscore.
 - **IA** : labos, modèles, financements, infrastructures (GPU, data centers, énergie), réglementation ; ponts IA → infrastructure → entreprises cotées → marchés.
 
 ## 12. Découpage en lots
 
-Chaque lot est mis en production à sa fin et a son propre plan d'implémentation.
+Un univers après l'autre, après un socle commun. Chaque lot est mis en production à sa fin, a sa propre section détaillée ajoutée à cette spec puis son propre plan d'implémentation.
 
-1. **Socle** : univers, catalogue + faits Wikidata, rattachement, relations, « Concernés », sélection du jour, nouvelles pages (Aujourd'hui, univers, fiche entité générique, événement), pastilles et panneau, bandeau Vigie, recherche par catégorie, identité visuelle A, redirections.
-2. **Finance** : §10.
-3. **Géopolitique** : §11.
-4. **Sport** : essai des sources puis §11.
-5. **IA** : §11 et ponts inter-univers.
+1. **Socle** : univers, catalogue + faits Wikidata, rattachement, relations, « Concernés », sélection du jour, traduction des titres, images, nouvelles pages (Aujourd'hui, univers, fiche entité générique, événement), pastilles et panneau d'aperçu, bandeau Vigie, recherche par catégorie, identité visuelle A, thème, redirections. Les quatre univers y sont au même niveau.
+2. **Sport** : essai des sources puis §11.
+3. à 5. **Géopolitique, Finance, IA** : ordre choisi par l'utilisateur à la fin du lot Sport.
 
 ## 13. Tests et mesures
 
