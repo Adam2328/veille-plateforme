@@ -1,0 +1,50 @@
+id: sport-essentiel
+name: Sport - L'essentiel
+accent: "#2D6A4F"
+order: 9
+quota: 6                                # très sélectif : ne jamais rater un événement majeur, sinon rien
+max_l1: 2
+thresholds: {l1: 80, l2: 72, l3: 66}   # élevés à dessein : la veille peut rester vide
+relevance: true                         # sans entités : seuls passent les articles qui contiennent un mot-clé d'événement majeur
+
+# Sports déjà couverts par leur propre veille, et bruit habituel.
+exclude: ["football", "ligue 1", "ligue des champions", "mercato", "tennis", "roland-garros", "wimbledon", "nba", "basket",
+          "formule 1", "formula 1", " f1 ", "grand prix de f1", "volley",
+          "pronostic", "cote ", "cotes ", "betting", "odds", "abonnement", "quelle chaîne", "chaîne tv", "en direct", "direct.", "résumé", "en vidéo", "promo code", "_dn-"]
+
+entities: {}
+
+kinds:
+  world_title:
+    weight: 30
+    keywords: ["champion du monde", "championne du monde", "champions du monde", "world champion", "titre mondial", "world title", "sacré champion", "sacrée championne", "mondiaux"]
+  record:
+    weight: 30
+    keywords: ["record du monde", "world record", "record olympique", "record historique", "historique"]
+  olympic:
+    weight: 25
+    keywords: ["médaille d'or", "gold medal", "jeux olympiques", "olympic", "paralympique"]
+  major_final:
+    weight: 25
+    keywords: ["finale de la coupe du monde", "grand chelem", "six nations", "tournoi des six nations", "tour de france", "giro", "vuelta", "ryder cup", "masters d'augusta", "super bowl", "coupe du monde de rugby", "ufc", "championnat d'europe"]
+  french_feat:
+    weight: 20
+    keywords: ["premier français", "première française", "exploit", "sacre", "sacré", "sacrée", "médaille"]
+  scandal:
+    weight: 25
+    keywords: [dopage, doping, "suspendu pour", "contrôle positif", "positive test", corruption, "affaire"]
+
+sources:                                # flux testés le 27/09/2026
+  - {id: lequipe-rugby, name: "L'Équipe (rugby)", tier: 2, origin: "l'équipe", type: rss, url: "https://dwh.lequipe.fr/api/edito/rss?path=/Rugby/"}
+  - {id: lequipe-cyclisme, name: "L'Équipe (cyclisme)", tier: 2, origin: "l'équipe", type: rss, url: "https://dwh.lequipe.fr/api/edito/rss?path=/Cyclisme-sur-route/"}
+  - {id: lequipe-athle, name: "L'Équipe (athlétisme)", tier: 2, origin: "l'équipe", type: rss, url: "https://dwh.lequipe.fr/api/edito/rss?path=/Athletisme/"}
+  - {id: lequipe-natation, name: "L'Équipe (natation)", tier: 2, origin: "l'équipe", type: rss, url: "https://dwh.lequipe.fr/api/edito/rss?path=/Natation/"}
+  - {id: lequipe-golf, name: "L'Équipe (golf)", tier: 2, origin: "l'équipe", type: rss, url: "https://dwh.lequipe.fr/api/edito/rss?path=/Golf/"}
+  - {id: lequipe-handball, name: "L'Équipe (handball)", tier: 2, origin: "l'équipe", type: rss, url: "https://dwh.lequipe.fr/api/edito/rss?path=/Handball/"}
+  - {id: lequipe-combat, name: "L'Équipe (sports de combat)", tier: 2, origin: "l'équipe", type: rss, url: "https://dwh.lequipe.fr/api/edito/rss?path=/Sports-de-combat/"}
+  - {id: rmc-rugby, name: "RMC Sport (rugby)", tier: 2, origin: rmc sport, type: rss, url: "https://rmcsport.bfmtv.com/rss/rugby/"}
+  - {id: rmc-cyclisme, name: "RMC Sport (cyclisme)", tier: 2, origin: rmc sport, type: rss, url: "https://rmcsport.bfmtv.com/rss/cyclisme/"}
+  - {id: rmc-athle, name: "RMC Sport (athlétisme)", tier: 2, origin: rmc sport, type: rss, url: "https://rmcsport.bfmtv.com/rss/athletisme/"}
+  - {id: rmc-hiver, name: "RMC Sport (sports d'hiver)", tier: 2, origin: rmc sport, type: rss, url: "https://rmcsport.bfmtv.com/rss/sports-d-hiver/"}
+  - {id: bbc-sport, name: "BBC Sport", tier: 2, origin: bbc sport, type: rss, url: "https://feeds.bbci.co.uk/sport/rss.xml"}
+  - {id: gn-champion, name: "Google Actualités : champions et records", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=%22champion+du+monde%22+OR+%22record+du+monde%22+when:1d&hl=fr&gl=FR&ceid=FR:fr"}
