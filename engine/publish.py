@@ -63,8 +63,13 @@ def upcoming_events(dom: dict, now: datetime, imported: list[str] | None = None,
 def build_domain(dom: dict, events: list, now: datetime, imported: list[str] | None = None) -> dict:
     cutoff = now - timedelta(days=7)
     shown = sorted((e for e in events if e["level"] >= 1 and parse(e["updated_at"]) >= cutoff), key=lambda e: -e["importance"])
-    return {"generated_at": iso(now), "domain": {k: dom[k] for k in ("id", "name", "accent")},
-            "events": [project(e) for e in shown], "upcoming": upcoming_events(dom, now, imported)}
+    out = {"generated_at": iso(now), "domain": {k: dom[k] for k in ("id", "name", "accent")},
+           "events": [project(e) for e in shown], "upcoming": upcoming_events(dom, now, imported)}
+    links = [{"title": str(link["title"]), "url": link["url"]} for link in dom.get("links", [])
+             if isinstance(link, dict) and link.get("title") and str(link.get("url", "")).startswith("https://")]
+    if links:
+        out["links"] = links
+    return out
 
 
 def build_home(cfg: dict, events_by_domain: dict, now: datetime, agendas: dict | None = None) -> dict:

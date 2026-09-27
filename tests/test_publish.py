@@ -143,3 +143,12 @@ def test_upcoming_events_applies_the_domain_agenda_exclusions():
     dom = {"agenda_keywords": ["bce"], "agenda_exclude": ["discours"]}
     imported = ["30/09 :: europe :: mkt-n :: Discours BCE", "30/09 :: europe :: mkt-n :: Décision BCE"]
     assert [a["title"] for a in upcoming_events(dom, NOW, imported)] == ["Europe · Décision BCE"]
+
+
+def test_domain_file_carries_only_https_links_from_the_config():
+    dom = {**CFG["domains"]["ia"], "links": [{"title": "Classement ATP", "url": "https://www.flashscore.fr/tennis/classements/atp/"},
+                                             {"title": "Mauvais", "url": "javascript:alert(1)"}, {"title": "Sans url"}]}
+    f = build_domain(dom, [], NOW)
+    validate("domainFile", f)
+    assert f["links"] == [{"title": "Classement ATP", "url": "https://www.flashscore.fr/tennis/classements/atp/"}]
+    assert "links" not in build_domain(CFG["domains"]["ia"], [], NOW)

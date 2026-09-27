@@ -122,3 +122,7 @@ button.link { background: none; border: 0; color: var(--accent); font: inherit; 
 .standings .tn { text-align: left; }
 .standings .form { font-family: var(--mono); letter-spacing: 1px; color: var(--soft); }
 @media (max-width: 768px) { .standings .form { display: none; } .standings th:last-child { display: none; } .match .ms { min-width: 70px; } }
+
+.links { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.links a { display: inline-block; padding: 6px 10px; border: 1px solid var(--line); background: var(--card); border-radius: var(--radius); text-decoration: none; font-size: 13px; }
+.links a:hover { border-color: var(--dom, var(--accent)); }

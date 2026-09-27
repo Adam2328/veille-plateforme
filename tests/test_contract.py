@@ -116,3 +116,10 @@ def test_football_rejects_missing_fields_and_wrong_types():
                 {**FOOTBALL, "competitions": [{"code": "FL1", "name": "L1", "standings": []}]}):
         with pytest.raises(ValidationError):
             validate("football", bad)
+
+
+def test_domain_file_may_carry_links_with_title_and_url():
+    validate("domainFile", {**DOMAIN_FILE, "links": [{"title": "Classement ATP", "url": "https://www.flashscore.fr/tennis/classements/atp/"}]})
+    for bad in ([{"title": "x"}], [{"url": "https://a"}], "pas une liste"):
+        with pytest.raises(ValidationError):
+            validate("domainFile", {**DOMAIN_FILE, "links": bad})

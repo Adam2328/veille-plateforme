@@ -1,0 +1,79 @@
+id: tennis
+name: Tennis
+accent: "#B5651D"
+order: 5
+quota: 8                                # moins profond que le football (demande de l'utilisateur)
+max_l1: 3
+thresholds: {l1: 75, l2: 65, l3: 58}   # valeurs de départ, calibrées sur les données réelles
+relevance: true
+rumor_markers: ["serait", "reportedly", "could withdraw", "pourrait déclarer forfait"]
+
+exclude: ["pronostic", "cote ", "cotes ", "bookmaker", "paris sportifs", "betting", "odds", "promo code", "sponsored", "quiz", "padel", "pickleball",
+          "atp 250", "wta 250", "challenger", "itf "]      # petits tournois : hors du périmètre demandé (Grands Chelems, Masters 1000, grandes finales)
+
+entities:                               # joueurs et joueuses majeurs, tournois majeurs
+  Sinner: [sinner]
+  Alcaraz: [alcaraz]
+  Djokovic: [djokovic]
+  Zverev: [zverev]
+  Medvedev: [medvedev]
+  Fritz: [fritz]
+  Draper: [draper]
+  Rune: [rune]
+  Fils: ["arthur fils"]
+  Mpetshi Perricard: [mpetshi]
+  Sabalenka: [sabalenka]
+  Swiatek: [swiatek, świątek]
+  Gauff: [gauff]
+  Rybakina: [rybakina]
+  Pegula: [pegula]
+  Andreeva: [andreeva]
+  Grands Chelems: ["grand chelem", "grand slam", "roland-garros", "roland garros", wimbledon, "us open", "open d'australie", "australian open"]
+  Masters 1000: ["masters 1000", "indian wells", miami, "monte-carlo", "monte carlo", madrid, rome, "canada", montréal, toronto, cincinnati, shanghai, "paris-bercy", "rolex paris masters"]
+  Finales: ["atp finals", "wta finals", "masters de fin d'année", "coupe davis", "davis cup", "billie jean king cup"]
+
+kinds:
+  final:
+    weight: 25
+    keywords: ["en finale", "remporte le titre", "wins title", "wins the title", "titre", sacre, sacré, sacrée, "champion", championne]   # « finale » seul retiré : il captait demi-finales et quarts
+  grand_slam:
+    weight: 25
+    keywords: ["grand chelem", "grand slam", "roland-garros", wimbledon, "us open", "open d'australie", "australian open"]
+  ranking:
+    weight: 18
+    keywords: [classement, ranking, "numéro 1", "world no. 1", "world number one", "no. 1"]
+  injury:
+    weight: 18
+    keywords: [blessure, blessé, blessée, injury, injured, forfait, withdraws, withdrawal, abandon, retires]
+  masters:
+    weight: 15
+    keywords: ["masters 1000", "atp finals", "wta finals", "indian wells", miami, "monte-carlo", madrid, rome, cincinnati, shanghai, "paris-bercy"]
+  upset:
+    weight: 12
+    keywords: [surprise, upset, élimine, éliminé, éliminée, stuns, "knocked out", "out of"]
+  retirement:
+    weight: 15
+    keywords: [retraite, retirement, "met un terme", "adieux", farewell]
+
+links:                                  # « Approfondir » : pages Flashscore (adresses testées le 27/09/2026)
+  - {title: "Classement ATP", url: "https://www.flashscore.fr/tennis/classements/atp/"}
+  - {title: "Classement WTA", url: "https://www.flashscore.fr/tennis/classements/wta/"}
+  - {title: "Open d'Australie", url: "https://www.flashscore.fr/tennis/atp-simples/open-d-australie/"}
+  - {title: "Roland-Garros", url: "https://www.flashscore.fr/tennis/atp-simples/internationaux-de-france/"}
+  - {title: "Wimbledon", url: "https://www.flashscore.fr/tennis/atp-simples/wimbledon/"}
+  - {title: "US Open", url: "https://www.flashscore.fr/tennis/atp-simples/us-open/"}
+  - {title: "Masters de Paris", url: "https://www.flashscore.fr/tennis/atp-simples/paris/"}
+  - {title: "ATP Finals", url: "https://www.flashscore.fr/tennis/atp-simples/finals-turin/"}
+  - {title: "WTA Finals", url: "https://www.flashscore.fr/tennis/wta-simples/finals-riyadh/"}
+
+sources:                                # flux testés le 27/09/2026 ; ATP (403) et WTA (404) écartés
+  - {id: lequipe-tennis, name: "L'Équipe (tennis)", tier: 2, origin: "l'équipe", type: rss, url: "https://dwh.lequipe.fr/api/edito/rss?path=/Tennis/"}
+  - {id: rmc-tennis, name: "RMC Sport (tennis)", tier: 2, origin: rmc sport, type: rss, url: "https://rmcsport.bfmtv.com/rss/tennis/"}
+  - {id: figaro-tennis, name: "Le Figaro (tennis)", tier: 2, origin: le figaro, type: rss, url: "https://www.lefigaro.fr/rss/figaro_tennis.xml"}
+  - {id: bbc-tennis, name: "BBC Sport (tennis)", tier: 2, origin: bbc sport, type: rss, url: "https://feeds.bbci.co.uk/sport/tennis/rss.xml"}
+  - {id: sky-tennis, name: "Sky Sports (tennis)", tier: 2, origin: sky sports, type: rss, url: "https://www.skysports.com/rss/12110"}
+  - {id: espn-tennis, name: "ESPN (tennis)", tier: 2, origin: espn, type: rss, url: "https://www.espn.com/espn/rss/tennis/news"}
+  - {id: guardian-tennis, name: "The Guardian (tennis)", tier: 2, origin: the guardian, type: rss, url: "https://www.theguardian.com/sport/tennis/rss"}
+  - {id: tennismajors, name: "Tennis Majors", tier: 3, origin: tennis majors, type: rss, url: "https://www.tennismajors.com/feed"}
+  - {id: reddit-tennis, name: "Reddit r/tennis", tier: 5, origin: reddit, type: rss, url: "https://www.reddit.com/r/tennis/.rss"}
+  - {id: gn-tennis, name: "Google Actualités : tennis", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=tennis+ATP+OR+WTA+when:1d&hl=fr&gl=FR&ceid=FR:fr"}

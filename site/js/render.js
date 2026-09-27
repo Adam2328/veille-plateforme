@@ -226,6 +226,13 @@ export function renderHome(home, state, now, since = null, quotes = null, footba
     ${home.domains.map((d) => domainBlock(d, home.events, state, now, quotes, football)).join('')}`;
 }
 
+// Liens « Approfondir » déclarés dans la config de la veille (ex. pages Flashscore des tournois).
+function linksBlock(links) {
+  const safe = (links ?? []).map((l) => ({ title: l.title, url: safeUrl(l.url) })).filter((l) => l.url && l.url.startsWith('https://'));
+  if (!safe.length) return '';
+  return `<h2>Approfondir</h2><ul class="links">${safe.map((l) => `<li><a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">${esc(l.title)}</a></li>`).join('')}</ul>`;
+}
+
 export function renderDomain(file, state, now, quotes = null, football = null, tab = 'actu', arg = null) {
   if (file.domain.id === 'football') return renderFootball(file, football, tab, arg, state, now);
   const empty = !file.events.length;
@@ -234,7 +241,8 @@ export function renderDomain(file, state, now, quotes = null, football = null, t
     ${file.domain.id === 'finance' ? renderQuotes(quotes, now) : ''}
     ${empty ? '<p class="meta">Rien d’important pour l’instant.</p>' : ''}
     ${eventSections(file.events, state, now)}
-    ${upcomingList(file.upcoming)}</div>`;
+    ${upcomingList(file.upcoming)}
+    ${linksBlock(file.links)}</div>`;
 }
 
 export function renderEvent(ev, state, now) {
