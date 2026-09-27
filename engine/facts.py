@@ -38,7 +38,7 @@ EDGES = {"P463": ("membre_de", "out"), "P35": ("dirige", "in"), "P6": ("dirige",
 
 
 def fetch_json(url: str, params: dict | None = None) -> object:
-    r = requests.get(url, params=params, headers=HEADERS, timeout=20)
+    r = requests.get(url, params=params, headers=HEADERS, timeout=(5, 10))   # le cycle entier doit tenir en 15 min
     r.raise_for_status()
     return r.json()
 
@@ -65,6 +65,8 @@ def _entities(ids: list[str], fetch: Callable) -> dict:
     for start in range(0, len(ids), BATCH):
         data = fetch(WIKIDATA, {"action": "wbgetentities", "ids": "|".join(ids[start:start + BATCH]),
                                 "props": "labels|descriptions|claims", "languages": "fr|en", "format": "json"})
+        if "error" in data:              # réponse HTTP 200 porteuse d'une erreur : ne jamais écraser les faits connus
+            raise ValueError(f"Wikidata : {data['error'].get('code')} {data['error'].get('info', '')}".strip())
         out.update(data.get("entities", {}))
     return {q: e for q, e in out.items() if "missing" not in e}
 
@@ -136,7 +138,9 @@ def collect_facts(catalog: dict, fetch: Callable = fetch_json) -> dict:
     labels = {q: _text(e, "labels") for q, e in {**_entities(refs, fetch), **main}.items()}
     out = {}
     for qid, ent in main.items():
-        eid = by_qid[qid]
+        eid = by_qid.get(qid)
+        if eid is None:                  # clé inattendue (ex. élément redirigé) : ignorée, les autres fiches restent
+            continue
         etype = catalog[eid]["type"]
         images = _claims(ent, IMAGE.get(etype, "P18")) or _claims(ent, "P18")
         iso2 = next((dv["value"] for dv in _claims(ent, "P297")), None) if etype == "country" else None
@@ -151,7 +155,7 @@ def with_gdp(facts: dict, fetch: Callable = fetch_json) -> tuple[dict, list[str]
     out, errors = {}, []
     for eid, f in facts.items():
         extra = []
-        if f.get("iso2"):
+        if f.get("iso2") and not errors:     # coupe-circuit : une banque lente ne coûte qu'un seul délai d'attente
             try:
                 data = fetch(WORLD_BANK.format(iso2=f["iso2"]), {"format": "json", "mrnev": 1})
                 rows = data[1] if isinstance(data, list) and len(data) > 1 and data[1] else []

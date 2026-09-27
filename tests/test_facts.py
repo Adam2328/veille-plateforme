@@ -103,3 +103,35 @@ def test_no_wikidata_id_means_no_network_call(tmp_path):
     def never(url, params=None):
         raise AssertionError("aucun appel attendu")
     assert refresh_facts(tmp_path, {"company:x": {"type": "company"}}, NOW, never) == ({}, None)
+
+
+def test_gdp_stops_after_the_first_failure_so_a_slow_bank_cannot_block_the_cycle():
+    calls = []
+
+    def slow(url, params=None):
+        calls.append(url)
+        raise TimeoutError("Banque mondiale trop lente")
+
+    base = {f"country:{c}": {"facts": [], "iso2": c.upper(), "edges": []} for c in ("fr", "de", "it")}
+    facts, errors = with_gdp(base, slow)
+    assert len(calls) == 1 and facts == base and len(errors) == 1
+
+
+def test_a_wikidata_error_body_keeps_the_previous_facts(tmp_path):
+    facts, _ = refresh_facts(tmp_path, CAT, NOW, fake())
+
+    def error_body(url, params=None):
+        return {"error": {"code": "maxlag", "info": "surcharge"}}
+
+    kept, health = refresh_facts(tmp_path, CAT, NOW + timedelta(days=8), error_body)
+    assert kept == facts and health["ok"] is False and "maxlag" in health["error"]
+
+
+def test_an_unexpected_entity_key_is_skipped_instead_of_failing():
+    entities = {**ENTITIES, "Q142": {**ENTITIES["Q142"]}}
+    def redirected(url, params=None):
+        data = fake(entities)(url, params)
+        data["entities"]["Q999999"] = item("Cible d'une redirection")
+        return data
+    facts = collect_facts(CAT, redirected)
+    assert "country:france" in facts
