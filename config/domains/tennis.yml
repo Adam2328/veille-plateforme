@@ -75,5 +75,4 @@ sources:                                # flux testés le 27/09/2026 ; ATP (403)
   - {id: espn-tennis, name: "ESPN (tennis)", tier: 2, origin: espn, type: rss, url: "https://www.espn.com/espn/rss/tennis/news"}
   - {id: guardian-tennis, name: "The Guardian (tennis)", tier: 2, origin: the guardian, type: rss, url: "https://www.theguardian.com/sport/tennis/rss"}
   - {id: tennismajors, name: "Tennis Majors", tier: 3, origin: tennis majors, type: rss, url: "https://www.tennismajors.com/feed"}
-  - {id: reddit-tennis, name: "Reddit r/tennis", tier: 5, origin: reddit, type: rss, url: "https://www.reddit.com/r/tennis/.rss"}
   - {id: gn-tennis, name: "Google Actualités : tennis", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=tennis+ATP+OR+WTA+when:1d&hl=fr&gl=FR&ceid=FR:fr"}

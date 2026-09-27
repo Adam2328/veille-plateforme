@@ -1,0 +1,52 @@
+id: volley
+name: Volley
+accent: "#6A4C93"
+order: 8
+quota: 6                                # veille volontairement ciblée : équipes de France et grandes compétitions
+max_l1: 2
+thresholds: {l1: 72, l2: 60, l3: 50}   # valeurs de départ, calibrées sur les données réelles
+relevance: true
+
+# Bruit des clubs volontairement écarté (demande de l'utilisateur).
+exclude: ["ligue a", "ligue as", "ligue b", "marmara", "superlega", "plusliga", "bundesliga", "coupe de france",
+          "ligue des champions", "champions league", "cev cup", "challenge cup", "mercato", "transfert", "recrue",
+          "pronostic", "betting", "odds", "promo code", "sponsored",
+          "quelle chaîne", "chaîne tv", "en vidéo", "meilleurs moments", "à quelle heure"]      # programmes TV et vidéos : pas d'information
+
+entities:
+  Équipe de France: ["équipe de france", "les bleus", "les bleues", bleus, bleues, "france men", "france women", "french team", "team france"]
+  Ngapeth: [ngapeth]
+  Patry: [patry]
+  Brizard: [brizard]
+  Tillie: [tillie]
+  Clevenot: [clevenot]
+  Boyer: ["stephen boyer"]
+  Bleues: ["équipe de france féminine", "volley féminin"]
+
+kinds:
+  major_event:
+    weight: 25
+    keywords: ["jeux olympiques", "olympic", "jo ", "championnat du monde", "world championship", "championnat d'europe", "euro de volley", eurovolley, "ligue des nations", "nations league", vnl, "la28", "la 2028", "tournoi de qualification olympique"]
+  result:
+    weight: 22
+    keywords: [victoire, défaite, finale, final, "demi-finale", "semi-final", "s'impose", "battus", "battue", "remporte", champion, championne, médaille, medal, bronze, argent, silver, or, gold]
+  team:
+    weight: 15
+    keywords: [sélection, sélectionneur, "liste des", convoqué, "coach", entraîneur, "head coach", capitaine]
+  injury:
+    weight: 12
+    keywords: [blessure, blessé, blessée, injury, forfait]
+
+links:                                  # « Approfondir » : pages Flashscore (adresses testées le 27/09/2026)
+  - {title: "Championnat d'Europe (hommes)", url: "https://www.flashscore.fr/volleyball/europe/championnat-d-europe/"}
+  - {title: "Championnat d'Europe (femmes)", url: "https://www.flashscore.fr/volleyball/europe/championnat-d-europe-femmes/"}
+  - {title: "Championnat du monde (hommes)", url: "https://www.flashscore.fr/volleyball/monde/championnat-du-monde/"}
+  - {title: "Championnat du monde (femmes)", url: "https://www.flashscore.fr/volleyball/monde/championnat-du-monde-femmes/"}
+
+sources:                                # flux testés le 27/09/2026 ; FFVolley, CEV, Volleyball World (404) écartés
+  - {id: fivb, name: "FIVB (officiel)", tier: 1, origin: fivb, type: rss, url: "https://www.fivb.com/rss"}
+  - {id: lequipe-volley, name: "L'Équipe (volley)", tier: 2, origin: "l'équipe", type: rss, url: "https://dwh.lequipe.fr/api/edito/rss?path=/Volley-ball/"}
+  - {id: rmc-volley, name: "RMC Sport (volley)", tier: 2, origin: rmc sport, type: rss, url: "https://rmcsport.bfmtv.com/rss/volley/"}
+  - {id: worldofvolley, name: "World of Volley", tier: 3, origin: world of volley, type: rss, url: "https://www.worldofvolley.com/rss"}
+  - {id: gn-volley-fr, name: "Google Actualités : volley, équipe de France", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=volley+%C3%A9quipe+de+France+when:3d&hl=fr&gl=FR&ceid=FR:fr"}
+  - {id: gn-volley-intl, name: "Google Actualités : volley international", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=volleyball+nations+league+OR+world+championship+OR+EuroVolley+when:3d&hl=en-US&gl=US&ceid=US:en"}

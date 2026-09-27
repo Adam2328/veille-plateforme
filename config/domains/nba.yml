@@ -114,5 +114,4 @@ sources:                                # flux testés le 27/09/2026 ; balldontl
   - {id: cbs-nba, name: "CBS Sports (NBA)", tier: 2, origin: cbs sports, type: rss, url: "https://www.cbssports.com/rss/headlines/nba/"}
   - {id: guardian-nba, name: "The Guardian (NBA)", tier: 2, origin: the guardian, type: rss, url: "https://www.theguardian.com/sport/nba/rss"}
   - {id: bbc-basket, name: "BBC Sport (basketball)", tier: 2, origin: bbc sport, type: rss, url: "https://feeds.bbci.co.uk/sport/basketball/rss.xml"}
-  - {id: reddit-nba, name: "Reddit r/nba", tier: 5, origin: reddit, type: rss, url: "https://www.reddit.com/r/nba/.rss"}
   - {id: gn-nba, name: "Google Actualités : NBA", tier: 4, type: rss, publisher_suffix: true, url: "https://news.google.com/rss/search?q=NBA+when:1d&hl=fr&gl=FR&ceid=FR:fr"}

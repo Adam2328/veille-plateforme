@@ -74,4 +74,3 @@ sources:                                # flux testés le 27/09/2026
   - {id: motorsport-fr, name: "Motorsport.com (F1, fr)", tier: 2, origin: motorsport.com, type: rss, url: "https://fr.motorsport.com/rss/f1/news/"}
   - {id: guardian-f1, name: "The Guardian (F1)", tier: 2, origin: the guardian, type: rss, url: "https://www.theguardian.com/sport/formulaone/rss"}
   - {id: the-race, name: "The Race", tier: 3, origin: the race, type: rss, url: "https://www.the-race.com/feed/"}
-  - {id: reddit-f1, name: "Reddit r/formula1", tier: 5, origin: reddit, type: rss, url: "https://www.reddit.com/r/formula1/.rss"}
