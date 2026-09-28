@@ -6,6 +6,8 @@ from datetime import datetime, timedelta
 from .timeutil import parse
 
 _TAG = re.compile(r"<[^>]+>")
+# ponytail: hôtes qui refusent l'affichage de leurs images sur un autre site (403 constatés le 28/09/2026) ; liste en config si elle grandit
+_NO_HOTLINK = ("https://content-media.investing.com/",)
 _WS = re.compile(r"\s+")
 # ponytail: heuristique de syndication par regex ; un vrai résolveur de citations si les faux positifs pèsent sur les mesures
 _ATTR = re.compile(r"\b(?i:selon|d'après|d’après|according to|via)\s+(?:le |la |l'|l’|the )?"
@@ -38,7 +40,8 @@ def normalize(raw: dict, source: dict, publishers: dict | None = None) -> dict:
         "url": raw["url"], "published_at": raw["published_at"], "domain": source["domain"],
     }
     # https uniquement : ni contenu mixte ni schéma exécutable dans la page
-    return {**item, "image": image} if image.startswith("https://") and len(image) <= 500 else item
+    ok = image.startswith("https://") and len(image) <= 500 and not image.startswith(_NO_HOTLINK)
+    return {**item, "image": image} if ok else item
 
 
 def _title_key(title: str) -> str:

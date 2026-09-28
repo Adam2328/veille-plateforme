@@ -79,3 +79,9 @@ def test_only_https_images_are_kept():
     assert "image" not in normalize({**base, "image": "javascript:alert(1)"}, source)
     assert "image" not in normalize({**base, "image": "https://i.ex.com/" + "x" * 600}, source)
     assert "image" not in normalize(base, source)
+
+
+def test_images_from_hosts_that_refuse_hotlinking_are_dropped():
+    source = {"id": "s", "name": "S", "tier": 2, "domain": "finance"}
+    base = {"title": "T", "url": "https://ex.com/1", "published_at": "2026-09-26T10:00:00+00:00"}
+    assert "image" not in normalize({**base, "image": "https://content-media.investing.com/news/x.jpg"}, source)
