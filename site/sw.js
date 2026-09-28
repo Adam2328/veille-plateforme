@@ -1,6 +1,6 @@
 // Service worker : réseau d'abord, cache en secours (lecture hors ligne du dernier état).
 // Jamais de contenu périmé quand le réseau répond ; aucun préchargement à maintenir à chaque déploiement.
-const CACHE = 'veille-v1';
+const CACHE = 'vigie-v2';
 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (event) => event.waitUntil(self.clients.claim()));

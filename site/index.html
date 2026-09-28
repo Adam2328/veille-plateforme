@@ -2,25 +2,38 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Vigie</title>
-  <meta name="description" content="Vigie : votre centre de contrôle personnel de l'information">
+  <meta name="description" content="Vigie : votre poste d'observation personnel de l'information (sport, géopolitique, finance, IA)">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
-  <meta name="theme-color" content="#1A3A6B">
+  <meta name="theme-color" content="#0B1220">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Vigie">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
+  <a class="skip" href="#main">Aller au contenu</a>
+  <div id="band" class="band" aria-label="Bandeau Vigie"></div>
+  <header class="top">
+    <a class="brand" href="#/" aria-label="Vigie, accueil"><span class="brand-mark" aria-hidden="true"></span>Vigie</a>
+    <nav id="nav" class="topnav" aria-label="Univers"></nav>
+    <div class="top-actions">
+      <a class="icon-btn" href="#/s/" aria-label="Rechercher (Ctrl+K)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg></a>
+      <button type="button" class="icon-btn" data-action="theme-cycle" aria-label="Changer de thème"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg></button>
+    </div>
+  </header>
   <div class="shell">
-    <nav id="nav" aria-label="Veilles"></nav>
-    <main id="main" tabindex="-1"><p class="meta">Chargement…</p></main>
+    <main id="main" tabindex="-1"><p class="meta loading">Chargement…</p></main>
+    <aside id="radar" class="radar" aria-label="Radar"></aside>
   </div>
+  <nav id="tabbar" class="tabbar" aria-label="Navigation principale"></nav>
+  <div id="scrim" class="scrim" hidden data-action="close-panel"></div>
+  <aside id="panel" class="panel" role="dialog" aria-modal="true" aria-labelledby="panel-title" hidden></aside>
   <script type="module" src="js/app.js"></script>
 </body>
 </html>

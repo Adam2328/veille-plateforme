@@ -83,6 +83,7 @@ test('la page événement : court d’abord, puis Concernés, actifs nommés, so
   assert.match(html, /Confirmé[\s\S]*2 origines/);
   assert.match(html, /href="https:\/\/ex\.com\/a"[^>]*noopener/);
   assert.match(html, /Titre original : Title e/);
+  assert.match(html, /href="#\/u\/finance">Finance</);
 });
 
 test('un événement sans résumé montre ses sources, et rien n’est injecté', () => {
@@ -102,6 +103,7 @@ test('la fiche entité : visuel, chiffres clés, suivi, chronologie ; sans relat
   assert.match(html, /data-action="follow" data-entity="company:nvidia"/);
   assert.match(html, /href="#\/e\/e1"[^>]*>Nvidia publie/);
   assert.ok(!html.includes('class="constellation"'));
+  assert.match(html, /href="#\/u\/finance">Finance<\/a>/);                 // nom de l'univers, pas son identifiant
 });
 
 test('la recherche propose entités par catégorie puis actualités ; vide, une invite', () => {

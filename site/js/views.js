@@ -9,6 +9,8 @@ const safeId = (s) => (/^[a-z_-]+$/.test(s) ? s : 'x');
 const enc = encodeURIComponent;
 const REL = { officiel: 'Officiel', 'confirmé': 'Confirmé', 'rapporté': 'Rapporté', 'en_développement': 'En développement', 'non_confirmé': 'Non confirmé', rumeur: 'Rumeur' };
 const UNIVERSES = [['sport', 'Sport'], ['geopolitique', 'Géo'], ['finance', 'Finance'], ['ia', 'IA']];
+const UNAME = { sport: 'Sport', geopolitique: 'Géopolitique', finance: 'Finance', ia: 'IA' };
+const uname = (id) => UNAME[id] ?? id ?? '';
 
 export function navHtml(active) {
   const on = (h) => (h === '#/' ? active === '#/' || active === '' : active === h || active.startsWith(`${h}/`));
@@ -144,7 +146,7 @@ export function viewEvent(ctx, ev) {
   return `<article class="event u-${safeId(ev.universe ?? 'x')}">
     ${visual(ev, ctx.ents, 'hero')}
     <div class="event-in">
-      <p class="crumbs"><a href="#/u/${enc(ev.universe ?? '')}">${esc(ev.universe ?? '')}</a> · mis à jour ${esc(timeAgo(ev.updated_at, ctx.now))}${ev.summary_mode === 'extractif' ? ' · résumé automatique simple' : ''}</p>
+      <p class="crumbs"><a href="#/u/${enc(ev.universe ?? '')}">${esc(uname(ev.universe))}</a> · mis à jour ${esc(timeAgo(ev.updated_at, ctx.now))}${ev.summary_mode === 'extractif' ? ' · résumé automatique simple' : ''}</p>
       <h1>${esc(title(ev))}</h1>
       ${ev.title_fr && ev.title_fr !== ev.title ? `<p class="orig">Titre original : ${esc(ev.title)}</p>` : ''}
       ${faces ? `<div class="faces">${faces}</div>` : ''}
@@ -176,7 +178,7 @@ export function viewEntity(ctx, page) {
       <div class="ehead"><p class="ptype">${esc(e.type_label)}</p><h1>${esc(e.name)}</h1>
         ${key ? `<p class="keyline">${esc(key)}</p>` : ''}${quote}
         ${page.description ? `<p class="desc">${esc(page.description)}</p>` : ''}
-        <div class="pactions">${followButton(e.id, ctx.state.follows.includes(e.id))}${(e.universes ?? []).map((u) => `<a class="chip" href="#/u/${enc(u)}">${esc(u)}</a>`).join('')}</div>
+        <div class="pactions">${followButton(e.id, ctx.state.follows.includes(e.id))}${(e.universes ?? []).map((u) => `<a class="chip" href="#/u/${enc(u)}">${esc(uname(u))}</a>`).join('')}</div>
       </div></header>
     ${svg ? `<section class="data"><h2>Constellation</h2>${svg}</section>` : ''}
     ${(page.facts ?? []).length > 3 ? `<section class="data"><h2>Repères</h2><dl class="facts">${page.facts.map((f) => `<div><dt>${esc(f.label)}</dt><dd>${esc(f.value)}</dd></div>`).join('')}</dl></section>` : ''}
