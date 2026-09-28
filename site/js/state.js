@@ -1,6 +1,8 @@
 const KEY = 'veille.state.v1';
+const THEMES = ['auto', 'dark', 'light'];
+const ENTITY_ID = /^[a-z_]+:[a-z0-9-]+$/;
 
-export const defaultState = () => ({ lastVisit: null, seen: {}, follows: [], favorites: [], weights: {} });
+export const defaultState = () => ({ lastVisit: null, seen: {}, follows: [], favorites: [], weights: {}, prefs: { theme: 'auto', order: null } });
 
 const isPlainObject = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
 
@@ -9,6 +11,14 @@ function sanitize(raw) {
   if (!isPlainObject(s.seen)) s.seen = {};
   if (!isPlainObject(s.weights)) s.weights = {};
   for (const k of ['follows', 'favorites']) if (!Array.isArray(s[k])) s[k] = [];
+  // Vigie 2 : on suit des entités du catalogue (« company:nvidia ») ; les anciens suivis par nom sont ignorés.
+  s.follows = s.follows.filter((x) => typeof x === 'string' && ENTITY_ID.test(x));
+  if (typeof s.lastVisit !== 'string' || Number.isNaN(Date.parse(s.lastVisit))) s.lastVisit = null;
+  const p = isPlainObject(s.prefs) ? s.prefs : {};
+  s.prefs = {
+    theme: THEMES.includes(p.theme) ? p.theme : 'auto',
+    order: Array.isArray(p.order) && p.order.every((x) => typeof x === 'string') ? p.order : null,
+  };
   return s;
 }
 
@@ -58,4 +68,15 @@ export const isFollowed = (state, entity) => state.follows.includes(entity);
 export function toggleFollow(state, entity) {
   const follows = isFollowed(state, entity) ? state.follows.filter((x) => x !== entity) : [...state.follows, entity];
   return { ...state, follows };
+}
+
+export const setTheme = (state, theme) => ({ ...state, prefs: { ...state.prefs, theme: THEMES.includes(theme) ? theme : 'auto' } });
+
+export const setOrder = (state, ids) => ({ ...state, prefs: { ...state.prefs, order: [...ids] } });
+
+// Ordre des bandes de l'accueil : celui choisi par l'utilisateur, les univers non listés gardent leur ordre par défaut.
+export function orderedUniverses(state, bands) {
+  const order = state.prefs?.order ?? [];
+  const rank = (b) => (order.includes(b.id) ? order.indexOf(b.id) : order.length + bands.indexOf(b));
+  return [...bands].sort((a, b) => rank(a) - rank(b));
 }

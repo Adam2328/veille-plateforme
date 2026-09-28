@@ -48,7 +48,7 @@ test('loadState : mauvais types corrigés sans exception', () => {
   assert.deepEqual(s.seen, {});
   assert.deepEqual(s.follows, []);
   assert.deepEqual(s.weights, {});
-  assert.equal(s.lastVisit, 'd');
+  assert.equal(s.lastVisit, null);                 // date invalide : ignorée
 });
 
 test('saveState renvoie false si l’écriture échoue et true sinon', () => {
@@ -69,4 +69,33 @@ test('pruneSeen garde les entrées les plus récentes', () => {
   const s = { ...defaultState(), seen: { a: 1, b: 1, c: 1, d: 1, e: 1 } };
   assert.deepEqual(Object.keys(pruneSeen(s, 3).seen), ['c', 'd', 'e']);
   assert.equal(pruneSeen(s, 10), s);
+});
+
+test('préférences corrompues : thème et ordre reviennent aux valeurs par défaut ; anciens suivis par nom ignorés', async () => {
+  const { loadState: load } = await import('../js/state.js');
+  const bad = memory(JSON.stringify({ prefs: { theme: 'fluo', order: 'finance' }, follows: ['Nvidia', 'company:nvidia', 3] }));
+  const s = load(bad);
+  assert.deepEqual(s.prefs, { theme: 'auto', order: null });
+  assert.deepEqual(s.follows, ['company:nvidia']);
+  const ok = load(memory(JSON.stringify({ prefs: { theme: 'dark', order: ['ia', 'sport'] } })));
+  assert.deepEqual(ok.prefs, { theme: 'dark', order: ['ia', 'sport'] });
+});
+
+test('setTheme, setOrder et orderedUniverses', async () => {
+  const { setTheme, setOrder, orderedUniverses } = await import('../js/state.js');
+  const s0 = defaultState();
+  assert.equal(setTheme(s0, 'light').prefs.theme, 'light');
+  assert.equal(setTheme(s0, 'fluo').prefs.theme, 'auto');
+  assert.equal(s0.prefs.theme, 'auto');                                   // immuable
+  const bands = [{ id: 'finance' }, { id: 'ia' }, { id: 'geopolitique' }, { id: 'sport' }];
+  assert.deepEqual(orderedUniverses(s0, bands).map((b) => b.id), ['finance', 'ia', 'geopolitique', 'sport']);
+  const s1 = setOrder(s0, ['sport', 'ia', 'inconnu']);
+  assert.deepEqual(orderedUniverses(s1, bands).map((b) => b.id), ['sport', 'ia', 'finance', 'geopolitique']);
+});
+
+test('une date de dernière visite corrompue est ignorée', async () => {
+  const { loadState: load } = await import('../js/state.js');
+  assert.equal(load(memory(JSON.stringify({ lastVisit: {} }))).lastVisit, null);
+  assert.equal(load(memory(JSON.stringify({ lastVisit: 'pas une date' }))).lastVisit, null);
+  assert.equal(load(memory(JSON.stringify({ lastVisit: '2026-09-27T06:12:00Z' }))).lastVisit, '2026-09-27T06:12:00Z');
 });
