@@ -55,7 +55,8 @@ function animateIn() {
 // ---- Routeur ----
 let routeToken = 0;
 
-async function route() {
+// keepScroll : réaffichage sur place (réglages, données arrivées après coup) sans remonter ni fermer le panneau.
+async function route({ keepScroll = false } = {}) {
   const hash = location.hash || '#/';
   const moved = hash.startsWith('#/d/') ? `#/u/${REDIRECT[decodeURIComponent(hash.slice(4).split('/')[0])] ?? hash.slice(4).split('/')[0]}` : null;
   if (moved) { history.replaceState(null, '', moved); return route(); }
@@ -63,7 +64,7 @@ async function route() {
   const stale = () => token !== routeToken;   // une navigation plus récente a eu lieu pendant un chargement
   const show = (html) => { if (!stale()) $main.innerHTML = html; };
   ctx.now = Date.now();
-  closePanel();
+  if (!keepScroll) closePanel();
   try {
     if (hash.startsWith('#/u/')) {
       const [id, sub = null] = hash.slice(4).split('/').map(decodeURIComponent);
@@ -96,7 +97,7 @@ async function route() {
   if (stale()) return;
   $nav.innerHTML = navHtml(hash);
   $tabbar.innerHTML = navHtml(hash);
-  if (!hash.startsWith('#/s/')) window.scrollTo(0, 0);
+  if (!keepScroll && !hash.startsWith('#/s/')) window.scrollTo(0, 0);
   animateIn();
 }
 
@@ -105,9 +106,13 @@ function renderRadar() {
 }
 
 // ---- Panneau d'aperçu d'une entité ----
+// Le reste de la page devient inerte pendant l'aperçu : le focus clavier reste dans le panneau (dialogue modal).
+const BACKGROUND = ['band', 'main', 'radar', 'tabbar'].map($).concat([document.querySelector('.top')]);
+const setBackgroundInert = (on) => BACKGROUND.forEach((el) => el?.toggleAttribute('inert', on));
 let lastFocus = null;
 async function openPanel(id) {
-  lastFocus = document.activeElement;
+  if ($panel.hidden) lastFocus = document.activeElement;
+  setBackgroundInert(true);
   $panel.hidden = false;
   $scrim.hidden = false;
   document.body.classList.add('panel-open');
@@ -124,6 +129,7 @@ function closePanel() {
   if ($panel.hidden) return;
   $panel.hidden = true;
   $scrim.hidden = true;
+  setBackgroundInert(false);
   document.body.classList.remove('panel-open');
   lastFocus?.focus?.();
 }
@@ -138,16 +144,21 @@ function toggleFollowButtons(id) {
     b.textContent = on ? '✓ Suivi' : '+ Suivre';
   }
   renderRadar();
+  ensureSearch().then(renderRadar);      // premier suivi : l'index des actualités n'était pas encore chargé
 }
 
-function moveUniverse(id, dir) {
+async function moveUniverse(id, dir) {
   const order = orderedUniverses(ctx.state, ctx.home.today ?? []).map((b) => b.id);
   const i = order.indexOf(id);
   const j = i + dir;
   if (i < 0 || j < 0 || j >= order.length) return;
   [order[i], order[j]] = [order[j], order[i]];
   persist(setOrder(ctx.state, order));
-  route();
+  await route({ keepScroll: true });
+  const details = $main.querySelector('details.settings');
+  if (details) details.open = true;
+  const buttons = [dir, -dir].map((d) => $main.querySelector(`[data-action="move"][data-universe="${CSS.escape(id)}"][data-dir="${d}"]`));
+  buttons.find((b) => b && !b.disabled)?.focus();
 }
 
 document.addEventListener('click', (e) => {
@@ -182,6 +193,7 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('input', (e) => {
   if (e.target.id !== 'q') return;
   $('results').innerHTML = resultsHtml(ctx, e.target.value);
+  for (const el of $('results').querySelectorAll('.data')) el.classList.add('in');   // sinon masqués par l'animation d'apparition
   history.replaceState(null, '', `#/s/${encodeURIComponent(e.target.value)}`);
 });
 
@@ -217,7 +229,7 @@ async function init() {
   $band.innerHTML = bandHtml(band);
   if (ctx.state.follows.length) await ensureSearch();
   renderRadar();
-  if (/^#\/u\/(finance|sport)/.test(location.hash)) route();       // les blocs de données arrivent après le premier affichage
+  if (/^#\/u\/(finance|sport)/.test(location.hash)) route({ keepScroll: true });   // blocs de données arrivés après le premier affichage
 }
 
 // Application installable et lecture hors ligne ; sans support ou en cas d'échec, le site fonctionne normalement.

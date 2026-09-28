@@ -13,6 +13,7 @@ function sanitize(raw) {
   for (const k of ['follows', 'favorites']) if (!Array.isArray(s[k])) s[k] = [];
   // Vigie 2 : on suit des entités du catalogue (« company:nvidia ») ; les anciens suivis par nom sont ignorés.
   s.follows = s.follows.filter((x) => typeof x === 'string' && ENTITY_ID.test(x));
+  if (typeof s.lastVisit !== 'string' || Number.isNaN(Date.parse(s.lastVisit))) s.lastVisit = null;
   const p = isPlainObject(s.prefs) ? s.prefs : {};
   s.prefs = {
     theme: THEMES.includes(p.theme) ? p.theme : 'auto',

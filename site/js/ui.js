@@ -76,7 +76,7 @@ export function bandHtml(band) {
   const items = band?.items ?? [];
   if (!items.length) return '';
   const run = items.map(bandItem).join('');
-  return `<div class="band-track"><div class="band-run">${run}</div><div class="band-run" aria-hidden="true">${run}</div></div>`;
+  return `<div class="band-track"><div class="band-run">${run}</div><div class="band-run" aria-hidden="true" inert>${run}</div></div>`;
 }
 
 // ---- Panneau d'aperçu d'une entité ----

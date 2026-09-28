@@ -47,7 +47,7 @@ button { font: inherit; color: inherit; }
   border-bottom: 1px solid var(--line); font-size: .8rem; mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent); }
 .band::-webkit-scrollbar { display: none; }
 .band-track { display: flex; width: max-content; height: 100%; animation: marquee 90s linear infinite; }
-.band:hover .band-track, .band.paused .band-track { animation-play-state: paused; }
+.band:hover .band-track, .band:focus-within .band-track, .band.paused .band-track { animation-play-state: paused; }
 .band-run { display: flex; align-items: center; }
 .bi { display: inline-flex; align-items: center; gap: 6px; padding: 0 16px; height: 34px; white-space: nowrap; text-decoration: none;
   border-right: 1px solid var(--line); }

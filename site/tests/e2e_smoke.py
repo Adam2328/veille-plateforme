@@ -41,8 +41,12 @@ with sync_playwright() as p:
             page.wait_for_selector(".universe")
             check(f"{label} : univers {u}", page.locator(".universe .tabs a").count() >= 2)
         page.goto(BASE + "#/u/sport/foot")
-        page.wait_for_selector(".universe")
-        check(f"{label} : sous-thème football actif", page.locator('.tabs a[aria-current="page"]').inner_text().strip() == "Football")
+        try:   # la page Sport précédente a déjà un .universe : on attend l'onglet actif du nouveau rendu
+            page.wait_for_function("document.querySelector('.tabs a[aria-current=\"page\"]')?.textContent.trim() === 'Football'", timeout=5000)
+            foot_ok = True
+        except Exception:
+            foot_ok = False
+        check(f"{label} : sous-thème football actif", foot_ok)
         page.goto(BASE + "#/d/football/mercato")
         page.wait_for_selector(".universe")
         check(f"{label} : ancienne adresse redirigée", "#/u/sport/foot" in page.url)
@@ -60,16 +64,36 @@ with sync_playwright() as p:
         pill.click()
         page.wait_for_selector("#panel .pactions")
         check(f"{label} : panneau d’aperçu de « {name} »", page.locator("#panel h2").inner_text().strip() == name)
+        for _ in range(20):
+            page.keyboard.press("Tab")
+        check(f"{label} : le focus reste dans le panneau", page.evaluate("document.getElementById('panel').contains(document.activeElement)"))
         page.locator("#panel [data-action=follow]").click()
         check(f"{label} : suivre depuis le panneau", page.locator("#panel [data-action=follow]").get_attribute("aria-pressed") == "true")
+        if label == "bureau":
+            page.wait_for_timeout(1500)
+            check(f"{label} : le Radar montre les actualités du premier suivi", page.locator("#radar .plist li").count() > 0)
         page.locator("#panel a.btn.primary").click()
         page.wait_for_selector("article.entity")
         check(f"{label} : fiche entité ouverte", page.locator("article.entity h1").inner_text().strip() == name)
         page.keyboard.press("Control+k")
         page.wait_for_selector("#q")
         page.fill("#q", "nvidia")
-        page.wait_for_timeout(300)
+        page.wait_for_timeout(600)
         check(f"{label} : recherche d’entité", page.locator('#results [data-entity="company:nvidia"]').count() == 1)
+        check(f"{label} : résultats visibles pendant la frappe",
+              page.evaluate("getComputedStyle(document.querySelector('#results .data')).opacity") == "1")
+        page.goto(BASE + "#/")
+        page.wait_for_selector(".uband")
+        page.locator("details.settings summary").click()
+        page.locator('[data-action="move"][data-universe="ia"][data-dir="-1"]').scroll_into_view_if_needed()
+        before = page.evaluate("scrollY")
+        page.locator('[data-action="move"][data-universe="ia"][data-dir="-1"]').click()
+        page.wait_for_timeout(500)
+        order = page.evaluate("[...document.querySelectorAll('.uband')].map((s) => s.className.split('u-')[1])")
+        check(f"{label} : réordonner garde la place, les réglages ouverts et le focus",
+              order[0] == "ia" and page.evaluate("scrollY") > before - 200 and before > 200
+              and page.evaluate("document.querySelector('details.settings').open")
+              and page.evaluate("document.activeElement?.dataset?.universe") == "ia")
         page.goto(BASE + "#/")
         page.wait_for_selector(".uband")
         page.locator('[data-action="theme-cycle"]').click()

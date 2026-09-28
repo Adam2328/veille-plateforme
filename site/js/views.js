@@ -22,7 +22,11 @@ export const viewError = (message, canRetry = false) =>
   `<div class="err"><p>${esc(message)}</p>${canRetry ? '<button type="button" class="btn" data-action="retry">Réessayer</button>' : ''}</div>`;
 
 // ---- Aujourd'hui ----
-const since = (iso) => parisTime(iso).replace(':', ' h ');
+// « 08 h 12 » le jour même, « le mer. 24 sept. à 08 h 12 » sinon (un retour après plusieurs jours ne doit pas tromper).
+const since = (iso, now) => {
+  const time = parisTime(iso).replace(':', ' h ');
+  return fmtDate(iso) === fmtDate(new Date(now).toISOString()) ? time : `le ${fmtDate(iso)} à ${time}`;
+};
 
 function settings(ctx, bands) {
   const order = bands.map((b, i) => `<li><span>${esc(b.name)}</span>
@@ -41,7 +45,7 @@ export function viewToday(ctx) {
   const { fresh, updated } = countChanges(ctx.state, shown);
   const n = fresh + updated;
   const counter = n
-    ? `<p class="counter"><span class="dot"></span>${plural(n, 'nouveauté')}${ctx.since ? ` depuis ${esc(since(ctx.since))}` : ''} <button type="button" class="link" data-action="mark-all">Tout marquer comme vu</button></p>`
+    ? `<p class="counter"><span class="dot"></span>${plural(n, 'nouveauté')}${ctx.since ? ` depuis ${esc(since(ctx.since, ctx.now))}` : ''} <button type="button" class="link" data-action="mark-all">Tout marquer comme vu</button></p>`
     : '<p class="counter calm">Rien de nouveau depuis votre dernière visite.</p>';
   const sections = bands.map((b) => {
     const evs = b.ids.map((id) => ctx.home.events[id]).filter(Boolean);

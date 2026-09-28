@@ -127,3 +127,8 @@ test('un événement archivé (ancien lien d’alerte) s’affiche en fiche cour
   assert.ok(!html.includes('javascript:') && !html.includes('<img'));
   assert.match(viewArchived({ ...e, url: 'https://ex.com/a' }), /href="https:\/\/ex\.com\/a"[^>]*noopener/);
 });
+
+test('une dernière visite d’un autre jour est datée, pas seulement l’heure', () => {
+  const html = viewToday(ctx({ since: '2026-09-24T06:12:00Z' }));
+  assert.match(html, /depuis le jeu\. 24 sept\. à 08 h 12/);
+});

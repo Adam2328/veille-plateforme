@@ -59,3 +59,8 @@ test('la constellation place au plus 12 voisins, reliés à leur fiche, relation
   assert.match(svg, /<title>produit<\/title>/);
   assert.equal(constellation({ ...PAGE, relations: [] }, ENTS), '');
 });
+
+test('la copie du bandeau qui sert au défilement est inerte (hors du parcours clavier)', () => {
+  const html = bandHtml({ items: [item()] }, NOW);
+  assert.match(html, /<div class="band-run" aria-hidden="true" inert>/);
+});

@@ -48,7 +48,7 @@ test('loadState : mauvais types corrigés sans exception', () => {
   assert.deepEqual(s.seen, {});
   assert.deepEqual(s.follows, []);
   assert.deepEqual(s.weights, {});
-  assert.equal(s.lastVisit, 'd');
+  assert.equal(s.lastVisit, null);                 // date invalide : ignorée
 });
 
 test('saveState renvoie false si l’écriture échoue et true sinon', () => {
@@ -91,4 +91,11 @@ test('setTheme, setOrder et orderedUniverses', async () => {
   assert.deepEqual(orderedUniverses(s0, bands).map((b) => b.id), ['finance', 'ia', 'geopolitique', 'sport']);
   const s1 = setOrder(s0, ['sport', 'ia', 'inconnu']);
   assert.deepEqual(orderedUniverses(s1, bands).map((b) => b.id), ['sport', 'ia', 'finance', 'geopolitique']);
+});
+
+test('une date de dernière visite corrompue est ignorée', async () => {
+  const { loadState: load } = await import('../js/state.js');
+  assert.equal(load(memory(JSON.stringify({ lastVisit: {} }))).lastVisit, null);
+  assert.equal(load(memory(JSON.stringify({ lastVisit: 'pas une date' }))).lastVisit, null);
+  assert.equal(load(memory(JSON.stringify({ lastVisit: '2026-09-27T06:12:00Z' }))).lastVisit, '2026-09-27T06:12:00Z');
 });
