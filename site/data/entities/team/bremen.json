@@ -1,1 +1,1 @@
-{"generated_at":"2026-09-27T17:57:23+00:00","entity":{"id":"team:bremen","name":"Bremen","type":"team","type_label":"Équipe","universes":["sport"]},"description":null,"image":null,"facts":[],"relations":[],"events":[]}
+{"generated_at":"2026-10-08T11:44:25+00:00","entity":{"id":"team:bremen","name":"Bremen","type":"team","type_label":"Équipe","universes":["sport"]},"description":null,"image":null,"facts":[],"relations":[{"id":"team:dortmund","name":"Borussia Dortmund","type":"team","label":"souvent cité avec","origin":"cooccurrence","weight":3}],"events":[]}
